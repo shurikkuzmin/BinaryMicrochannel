@@ -9,8 +9,8 @@
 #include <vector>
 
 //Domain size
-const int NY=9;
-const int NX=101;
+const int NY=31;
+const int NX=201;
 
 //Time steps
 const int N=1000;
@@ -29,7 +29,7 @@ double rho_outlet=1.0;
 double phase_inlet=1.0;
 double phase_outlet=1.0;
 
-double force_x=0.001;
+double force_x=0.0001;
 double force_y=0.000;
 
 //Binary-liquid parameters
@@ -139,7 +139,7 @@ void init()
     for(int iX=0;iX<NX;iX++)
 		for(int iY=0; iY<NY; iY++)
 		{
-			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=2) && (iY<=NY-3) )
+			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=5) && (iY<=NY-6) )
             {
                 phase[iX][iY]=-1.0;
             }
@@ -583,9 +583,9 @@ void update_guo_walls()
 		ux[iX][NY-1]=0.0;
 		uy[iX][NY-1]=0.0;
 
-        //guo_binary_construction(iX);
+        guo_binary_construction(iX);
         //guo_hydrodynamics_mixed_construction(iX);
-        guo_hydrodynamics_construction(iX);
+        //guo_hydrodynamics_construction(iX);
 	}
 
 
@@ -620,13 +620,46 @@ void update_bounce_back()
 
 		rho[iX][0]=1.0;
 		rho[iX][NY-1]=1.0;
-		phase[iX][0]=0.5;
-		phase[iX][NY-1]=0.5;
+		//phase[iX][0]=0.5;
+		//phase[iX][NY-1]=0.5;
 		ux[iX][0]=0.0;ux[iX][NY-1]=0.0;
 		uy[iX][0]=0.0;uy[iX][NY-1]=0.0;
 	}
-
 }
+
+void update_half_bounce_back()
+{
+	//BB nodes density and velocity specification
+	for(int iX=0;iX<NX;iX++)
+	{
+		int iXtop=(iX+1+NX)%NX;
+		int iXbottom=(iX-1+NX)%NX;
+
+		f2[iX][0][2]=f2[iX][1][4];
+		f2[iX][0][5]=f2[iXtop][1][7];
+		f2[iX][0][6]=f2[iXbottom][1][8];
+
+		f2[iX][NY-1][4]=f2[iX][NY-2][2];
+		f2[iX][NY-1][7]=f2[iXbottom][NY-2][5];
+		f2[iX][NY-1][8]=f2[iXtop][NY-2][6];
+
+		//Equilibrium values for the phase field
+		g2[iX][0][2]=weights[2]*phase[iX][0];
+		g2[iX][0][5]=weights[5]*phase[iX][0];
+		g2[iX][0][6]=weights[6]*phase[iX][0];
+
+		g2[iX][NY-1][4]=weights[4]*phase[iX][NY-1];
+		g2[iX][NY-1][7]=weights[7]*phase[iX][NY-1];
+		g2[iX][NY-1][8]=weights[8]*phase[iX][NY-1];
+
+
+		rho[iX][0]=1.0;
+		rho[iX][NY-1]=1.0;
+		ux[iX][0]=0.0;ux[iX][NY-1]=0.0;
+		uy[iX][0]=0.0;uy[iX][NY-1]=0.0;
+	}
+}
+
 
 
 int main(int argc, char* argv[])
@@ -640,8 +673,9 @@ int main(int argc, char* argv[])
 	{
 
         collide_bulk();
-        //update_bounce_back();
-        update_guo_walls();
+        //update_half_bounce_back();
+        update_bounce_back();
+        //update_guo_walls();
 
 		//Streaming
 		for(int iX=0;iX<NX;iX++)
