@@ -9,7 +9,7 @@ from matplotlib import cm
 
 
 if __name__=="__main__":
-    array=numpy.loadtxt("./tmp/phase000300.dat")
+    array=numpy.loadtxt("./tmp/phase001800.dat")
     
     ny=31
     nx=201

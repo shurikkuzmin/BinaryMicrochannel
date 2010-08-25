@@ -13,8 +13,8 @@ const int NY=31;
 const int NX=201;
 
 //Time steps
-const int N=3;
-const int NOUTPUT=1;
+const int N=2000;
+const int NOUTPUT=200;
 
 //Fields and populations
 double f[NX][NY][9], f2[NX][NY][9], feq[NX][NY][9], g[NX][NY][9], g2[NX][NY][9],geq[NX][NY][9];
@@ -24,7 +24,7 @@ double rho[NX][NY],ux[NX][NY],uy[NX][NY],phase[NX][NY];
 double laplace[NX][NY],gradx[NX][NY],grady[NX][NY];
 
 //Pressure boundary conditions
-double rho_inlet=1.003;
+double rho_inlet=1.1;
 double rho_outlet=1.0;
 double phase_inlet=1.0;
 double phase_outlet=1.0;
@@ -38,7 +38,7 @@ double kconst=0.04;
 double gammaconst=1.0;
 
 //Wall wettability parameter
-double wall_gradient=0.5;
+double wall_gradient=0.0;
 
 //BGK relaxation parameter
 double omega=1.0;
@@ -453,11 +453,12 @@ void guo_binary_construction(int iY)
 	double gradx_temp=gradx[1][iY];
 	double grady_temp=grady[1][iY];
 
-    if ((iY==1)||(iY==NY-2))
-    {
-        std::cout.precision(10);
-        std::cout<<gradx_temp<<" "<<grady_temp<<" "<<laplace_temp<<"\n";
-    }
+//    if ((iY==1)||(iY==NY-2))
+//    {
+//        std::cout.precision(10);
+//        std::cout<<gradx_temp<<" "<<grady_temp<<" "<<laplace_temp<<"\n";
+//        std::cout<<"Velocities"<<ux_temp<<" "<<uy_temp<<"\n";
+//    }
 
 
 	double pressure_bulk=dense_temp/3.0+aconst*(-0.5*phase_square+3.0/4.0*phase_square*phase_square)-kconst*phase_temp*laplace_temp;
@@ -476,7 +477,7 @@ void guo_binary_construction(int iY)
 			+kconst*(wxx[1]*gradx_temp*gradx_temp+wyy[1]*grady_temp*grady_temp+wxy[1]*gradx_temp*grady_temp);
     feq[0][iY][5]=weights[5]*long_rho_term[5]
 			+kconst*(wxx[5]*gradx_temp*gradx_temp+wyy[5]*grady_temp*grady_temp+wxy[5]*gradx_temp*grady_temp);
-	feq[0][iY][8]=3.0*weights[8]*long_rho_term[8]
+	feq[0][iY][8]=weights[8]*long_rho_term[8]
 			+kconst*(wxx[8]*gradx_temp*gradx_temp+wyy[8]*grady_temp*grady_temp+wxy[8]*gradx_temp*grady_temp);
 
     geq[0][iY][1]=weights[1]*long_phase_term[1];
@@ -519,7 +520,7 @@ void guo_binary_construction(int iY)
 			+kconst*(wxx[3]*gradx_temp*gradx_temp+wyy[3]*grady_temp*grady_temp+wxy[3]*gradx_temp*grady_temp);
     feq[NX-1][iY][6]=weights[6]*long_rho_term[6]
 			+kconst*(wxx[6]*gradx_temp*gradx_temp+wyy[6]*grady_temp*grady_temp+wxy[6]*gradx_temp*grady_temp);
-	feq[NX-1][iY][7]=3.0*weights[7]*long_rho_term[7]
+	feq[NX-1][iY][7]=weights[7]*long_rho_term[7]
 			+kconst*(wxx[7]*gradx_temp*gradx_temp+wyy[7]*grady_temp*grady_temp+wxy[7]*gradx_temp*grady_temp);
 
     geq[NX-1][iY][3]=weights[3]*long_phase_term[3];
@@ -593,7 +594,7 @@ int main(int argc, char* argv[])
 	{
 
         collide_bulk();
-        //guo_pressure();
+        guo_pressure();
 
         {
   			std::stringstream filewritepopulations;
@@ -603,8 +604,8 @@ int main(int argc, char* argv[])
 
             filewritepopulations<<"pop"<<std::string(6-counterconvert.str().size(),'0')<<counter;
 
-            for (int iPop=0;iPop<9;iPop++)
-                writepopulationslice(filewritepopulations.str(),iPop);
+//            for (int iPop=0;iPop<9;iPop++)
+//                writepopulationslice(filewritepopulations.str(),iPop);
         }
 
         update_bounce_back();
