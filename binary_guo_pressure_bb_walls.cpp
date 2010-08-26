@@ -9,12 +9,12 @@
 #include <vector>
 
 //Domain size
-const int NY=31;
-const int NX=201;
+const int NY=51;
+const int NX=601;
 
 //Time steps
-const int N=2000;
-const int NOUTPUT=200;
+const int N=30000;
+const int NOUTPUT=1000;
 
 //Fields and populations
 double f[NX][NY][9], f2[NX][NY][9], feq[NX][NY][9], g[NX][NY][9], g2[NX][NY][9],geq[NX][NY][9];
@@ -24,7 +24,7 @@ double rho[NX][NY],ux[NX][NY],uy[NX][NY],phase[NX][NY];
 double laplace[NX][NY],gradx[NX][NY],grady[NX][NY];
 
 //Pressure boundary conditions
-double rho_inlet=1.1;
+double rho_inlet=1.01803;
 double rho_outlet=1.0;
 double phase_inlet=1.0;
 double phase_outlet=1.0;
@@ -36,6 +36,8 @@ double force_y=0.000;
 double aconst=0.04;
 double kconst=0.04;
 double gammaconst=1.0;
+double tau_liq=3.0;
+double tau_gas=0.9;
 
 //Wall wettability parameter
 double wall_gradient=0.0;
@@ -166,7 +168,7 @@ void init()
     for(int iX=0;iX<NX;iX++)
 		for(int iY=0; iY<NY; iY++)
 		{
-			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=5) && (iY<=NY-6) )
+			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=15) && (iY<=NY-16) )
             {
                 phase[iX][iY]=-1.0;
             }
@@ -185,22 +187,22 @@ void init()
 				phase[iX][iY]=phase_outlet;
 			}
 
-			if (iY==0)
-			{
-				//First-order accuracy
-				phase[iX][iY]=phase[iX][iY+1]-wall_gradient;
-                //Second-order accuracy
-                //phase[iX][iY]=(4.0*phase[iX][iY+1]-phase[iX][iY+2]-2.0*wall_gradient)/3.0;
-			}
-
-			if (iY==NY-1)
-			{
-			    //First-order accuracy
-			    phase[iX][iY]=phase[iX][iY-1]-wall_gradient;
-			    //Second-order accuracy
-                //phase[iX][iY]=(4.0*phase[iX][iY-1]-phase[iX][iY-2]-2.0*wall_gradient)/3.0;
-            }
 		}
+
+    //Wall gradients stuff needs to be calculated outside the loop
+    for(int iX=0;iX<NX;iX++)
+    {
+		//First-order accuracy
+		phase[iX][0]=phase[iX][1]-wall_gradient;
+        //Second-order accuracy
+        //phase[iX][iY]=(4.0*phase[iX][iY+1]-phase[iX][iY+2]-2.0*wall_gradient)/3.0;
+
+		//First-order accuracy
+		phase[iX][NY-1]=phase[iX][NY-2]-wall_gradient;
+		//Second-order accuracy
+        //phase[iX][iY]=(4.0*phase[iX][iY-1]-phase[iX][iY-2]-2.0*wall_gradient)/3.0;
+    }
+
 
 	//Bulk nodes initialization
 	for(int iX=1;iX<NX-1;iX++)
@@ -284,6 +286,7 @@ void init()
 		}
 	}
     //Inlet and outlet nodes initialization
+    //TODO:: Do it according BC conditions
     for(int iY=1;iY<NY-1;iY++)
 	{
 		rho[0][iY]=rho_inlet;
@@ -411,11 +414,13 @@ void collide_bulk()
 			feq[iX][iY][0]=dense_temp-sum;
 			geq[iX][iY][0]=phase_temp-sum_phase;
 
+            double tau_temp=tau_gas+(phase_temp+1.0)/2.0*(tau_liq-tau_gas);
+            double omega_temp=1.0/tau_temp;
 
 			for(int k=0; k < 9; k++)
 			{
-				f2[iX][iY][k]=f[iX][iY][k]*(1.0-omega)+omega*feq[iX][iY][k]+force[k];
-				g2[iX][iY][k]=g[iX][iY][k]*(1.0-omega)+omega*geq[iX][iY][k];
+				f2[iX][iY][k]=f[iX][iY][k]*(1.0-omega_temp)+omega_temp*feq[iX][iY][k]+force[k];
+				g2[iX][iY][k]=g[iX][iY][k]*(1.0-omega_temp)+omega_temp*geq[iX][iY][k];
 			}
 
 
@@ -484,13 +489,17 @@ void guo_binary_construction(int iY)
     geq[0][iY][5]=weights[5]*long_phase_term[5];
     geq[0][iY][8]=weights[8]*long_phase_term[8];
 
-	f2[0][iY][1]=feq[0][iY][1]+(1.0-omega)*(f[1][iY][1]-feq[1][iY][1]);
-	f2[0][iY][5]=feq[0][iY][5]+(1.0-omega)*(f[1][iY][5]-feq[1][iY][5]);
-	f2[0][iY][8]=feq[0][iY][8]+(1.0-omega)*(f[1][iY][8]-feq[1][iY][8]);
+	double tau_temp=tau_gas+(phase_temp+1.0)/2.0*(tau_liq-tau_gas);
+	double omega_temp=1.0/tau_temp;
 
-	g2[0][iY][1]=geq[0][iY][1]+(1.0-omega)*(g[1][iY][1]-geq[1][iY][1]);
-	g2[0][iY][5]=geq[0][iY][5]+(1.0-omega)*(g[1][iY][5]-geq[1][iY][5]);
-	g2[0][iY][8]=geq[0][iY][8]+(1.0-omega)*(g[1][iY][8]-geq[1][iY][8]);
+
+	f2[0][iY][1]=feq[0][iY][1]+(1.0-omega_temp)*(f[1][iY][1]-feq[1][iY][1]);
+	f2[0][iY][5]=feq[0][iY][5]+(1.0-omega_temp)*(f[1][iY][5]-feq[1][iY][5]);
+	f2[0][iY][8]=feq[0][iY][8]+(1.0-omega_temp)*(f[1][iY][8]-feq[1][iY][8]);
+
+	g2[0][iY][1]=geq[0][iY][1]+(1.0-omega_temp)*(g[1][iY][1]-geq[1][iY][1]);
+	g2[0][iY][5]=geq[0][iY][5]+(1.0-omega_temp)*(g[1][iY][5]-geq[1][iY][5]);
+	g2[0][iY][8]=geq[0][iY][8]+(1.0-omega_temp)*(g[1][iY][8]-geq[1][iY][8]);
 
     //Outlet part
     phase_temp=phase[NX-1][iY];
@@ -527,13 +536,17 @@ void guo_binary_construction(int iY)
     geq[NX-1][iY][6]=weights[6]*long_phase_term[6];
     geq[NX-1][iY][7]=weights[7]*long_phase_term[7];
 
-	f2[NX-1][iY][3]=feq[NX-1][iY][3]+(1.0-omega)*(f[NX-2][iY][3]-feq[NX-2][iY][3]);
-	f2[NX-1][iY][6]=feq[NX-1][iY][6]+(1.0-omega)*(f[NX-2][iY][6]-feq[NX-2][iY][6]);
-	f2[NX-1][iY][7]=feq[NX-1][iY][7]+(1.0-omega)*(f[NX-2][iY][7]-feq[NX-2][iY][7]);
+	tau_temp=tau_gas+(phase_temp+1.0)/2.0*(tau_liq-tau_gas);
+	omega_temp=1.0/tau_temp;
 
-	g2[NX-1][iY][3]=geq[NX-1][iY][3]+(1.0-omega)*(g[NX-2][iY][3]-geq[NX-2][iY][3]);
-	g2[NX-1][iY][6]=geq[NX-1][iY][6]+(1.0-omega)*(g[NX-2][iY][6]-geq[NX-2][iY][6]);
-	g2[NX-1][iY][7]=geq[NX-1][iY][7]+(1.0-omega)*(g[NX-2][iY][7]-geq[NX-2][iY][7]);
+
+	f2[NX-1][iY][3]=feq[NX-1][iY][3]+(1.0-omega_temp)*(f[NX-2][iY][3]-feq[NX-2][iY][3]);
+	f2[NX-1][iY][6]=feq[NX-1][iY][6]+(1.0-omega_temp)*(f[NX-2][iY][6]-feq[NX-2][iY][6]);
+	f2[NX-1][iY][7]=feq[NX-1][iY][7]+(1.0-omega_temp)*(f[NX-2][iY][7]-feq[NX-2][iY][7]);
+
+	g2[NX-1][iY][3]=geq[NX-1][iY][3]+(1.0-omega_temp)*(g[NX-2][iY][3]-geq[NX-2][iY][3]);
+	g2[NX-1][iY][6]=geq[NX-1][iY][6]+(1.0-omega_temp)*(g[NX-2][iY][6]-geq[NX-2][iY][6]);
+	g2[NX-1][iY][7]=geq[NX-1][iY][7]+(1.0-omega_temp)*(g[NX-2][iY][7]-geq[NX-2][iY][7]);
 
 }
 
@@ -589,7 +602,6 @@ int main(int argc, char* argv[])
     matrix_init();
     init();
 
-
 	for(int counter=0;counter<=N;counter++)
 	{
 
@@ -604,8 +616,8 @@ int main(int argc, char* argv[])
 
             filewritepopulations<<"pop"<<std::string(6-counterconvert.str().size(),'0')<<counter;
 
-//            for (int iPop=0;iPop<9;iPop++)
-//                writepopulationslice(filewritepopulations.str(),iPop);
+            //for (int iPop=0;iPop<9;iPop++)
+            //    writepopulationslice(filewritepopulations.str(),iPop);
         }
 
         update_bounce_back();

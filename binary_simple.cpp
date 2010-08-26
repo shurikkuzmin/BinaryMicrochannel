@@ -9,30 +9,29 @@
 #include <vector>
 
 //Domain size
-const int NY=9;
-const int NX=101;
+const int NY=51;
+const int NX=601;
 
 //Time steps
-const int N=1000;
-const int NOUTPUT=100;
+const int N=20000;
+const int NOUTPUT=1000;
 
 //Fields and populations
 double f[NX][NY][9], f2[NX][NY][9], g[NX][NY][9], g2[NX][NY][9];
 double rho[NX][NY],ux[NX][NY],uy[NX][NY],phase[NX][NY];
 
 //Pressure boundary conditions
-double rho_inlet=1.003;
-double rho_outlet=1.0;
 double phase_inlet=1.0;
 double phase_outlet=1.0;
 
-double force_x=0.001;
+double force_x=0.00001;
 double force_y=0.000;
 
 //Binary-liquid parameters
 double aconst=0.04;
 double kconst=0.04;
 double gammaconst=1.0;
+double wall_gradient=0.0;
 
 //BGK relaxation parameter
 double omega=1.0;
@@ -82,7 +81,7 @@ void matrix_init()
 
 void writedensity(std::string const & fName)
 {
-	std::string fullName = "./tmp/" + fName+ ".dat";
+	std::string fullName = "./tmp2/" + fName+ ".dat";
 	std::ofstream fout(fullName.c_str());
 	fout.precision(10);
 
@@ -97,7 +96,7 @@ void writedensity(std::string const & fName)
 
 void writephase(std::string const & fName)
 {
-	std::string fullName = "./tmp/" + fName+ ".dat";
+	std::string fullName = "./tmp2/" + fName+ ".dat";
 	std::ofstream fout(fullName.c_str());
 	fout.precision(10);
 
@@ -113,7 +112,7 @@ void writephase(std::string const & fName)
 
 void writevelocity(std::string const & fName)
 {
-	std::string fullName = "./tmp/" + fName+ ".dat";
+	std::string fullName = "./tmp2/" + fName+ ".dat";
 	std::ofstream fout(fullName.c_str());
 	fout.precision(10);
 
@@ -133,7 +132,7 @@ void init()
     for(int iX=0;iX<NX;iX++)
 		for(int iY=0; iY<NY; iY++)
 		{
-			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=2) && (iY<=NY-3) )
+			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=10) && (iY<=NY-11) )
             {
                 phase[iX][iY]=-1.0;
             }
@@ -142,18 +141,21 @@ void init()
                 phase[iX][iY]=1.0;
             }
 
-			if (iX==0)
+			if (iY==0)
 			{
-				phase[iX][iY]=phase_inlet;
+				//First-order accuracy
+				phase[iX][iY]=phase[iX][iY+1]-wall_gradient;
+                //Second-order accuracy
+                //phase[iX][iY]=(4.0*phase[iX][iY+1]-phase[iX][iY+2]-2.0*wall_gradient)/3.0;
 			}
 
-			if (iX==NX-1)
+			if (iY==NY-1)
 			{
-				phase[iX][iY]=phase_outlet;
-			}
-
-			if ((iY==0)||(iY==NY-1))
-				phase[iX][iY]=0.5;
+			    //First-order accuracy
+			    phase[iX][iY]=phase[iX][iY-1]-wall_gradient;
+			    //Second-order accuracy
+                //phase[iX][iY]=(4.0*phase[iX][iY-1]-phase[iX][iY-2]-2.0*wall_gradient)/3.0;
+            }
 
 		}
 
@@ -267,13 +269,26 @@ void init()
 void collide_bulk()
 {
     //The phase field should be calculated prior the laplacians
-    for(int iX=1;iX<NX-1;iX++)
+    for(int iX=0;iX<NX;iX++)
         for(int iY=1;iY<NY-1;iY++)
 		{
             phase[iX][iY]=0.0;
             for(int iPop=0;iPop<9;iPop++)
    				phase[iX][iY]+=g[iX][iY][iPop];
 		}
+
+    //The phase of the BB nodes
+    for(int iX=0;iX<NX;iX++)
+    {
+		//First-order accuracy
+		phase[iX][0]=phase[iX][1]-wall_gradient;
+        //Second-order accuracy
+        //phase[iX][iY]=(4.0*phase[iX][iY+1]-phase[iX][iY+2]-2.0*wall_gradient)/3.0;
+        //First-order accuracy
+		phase[iX][NY-1]=phase[iX][NY-2]-wall_gradient;
+		//Second-order accuracy
+        //phase[iX][iY]=(4.0*phase[iX][iY-1]-phase[iX][iY-2]-2.0*wall_gradient)/3.0;
+    }
 
     for(int iX=0;iX<NX;iX++)
         for(int iY=1;iY<NY-1;iY++)
