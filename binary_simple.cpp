@@ -5,15 +5,18 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
 #include <cmath>
 #include <vector>
 
 //Domain size
 const int NY=51;
-const int NX=601;
+const int NX=751;
 
+int width=10;
 //Time steps
-const int N=20000;
+const int N=40000;
 const int NOUTPUT=1000;
 
 //Fields and populations
@@ -24,7 +27,7 @@ double rho[NX][NY],ux[NX][NY],uy[NX][NY],phase[NX][NY];
 double phase_inlet=1.0;
 double phase_outlet=1.0;
 
-double force_x=0.00001;
+double force_x=0.000006;
 double force_y=0.000;
 
 //Binary-liquid parameters
@@ -32,6 +35,9 @@ double aconst=0.04;
 double kconst=0.04;
 double gammaconst=1.0;
 double wall_gradient=0.0;
+
+double tau_gas=0.7;
+double tau_liq=2.5;
 
 //BGK relaxation parameter
 double omega=1.0;
@@ -132,7 +138,7 @@ void init()
     for(int iX=0;iX<NX;iX++)
 		for(int iY=0; iY<NY; iY++)
 		{
-			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=10) && (iY<=NY-11) )
+			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=width) && (iY<=NY-width-1) )
             {
                 phase[iX][iY]=-1.0;
             }
@@ -141,23 +147,22 @@ void init()
                 phase[iX][iY]=1.0;
             }
 
-			if (iY==0)
-			{
-				//First-order accuracy
-				phase[iX][iY]=phase[iX][iY+1]-wall_gradient;
-                //Second-order accuracy
-                //phase[iX][iY]=(4.0*phase[iX][iY+1]-phase[iX][iY+2]-2.0*wall_gradient)/3.0;
-			}
-
-			if (iY==NY-1)
-			{
-			    //First-order accuracy
-			    phase[iX][iY]=phase[iX][iY-1]-wall_gradient;
-			    //Second-order accuracy
-                //phase[iX][iY]=(4.0*phase[iX][iY-1]-phase[iX][iY-2]-2.0*wall_gradient)/3.0;
-            }
-
 		}
+
+    //Phase gradients should be calculated outside the main loop
+    for(int iX=0;iX<NX;iX++)
+    {
+        //First-order accuracy
+		phase[iX][0]=phase[iX][1]-wall_gradient;
+        //Second-order accuracy
+        //phase[iX][iY]=(4.0*phase[iX][iY+1]-phase[iX][iY+2]-2.0*wall_gradient)/3.0;
+
+	    //First-order accuracy
+	    phase[iX][NY-1]=phase[iX][NY-2]-wall_gradient;
+	    //Second-order accuracy
+        //phase[iX][iY]=(4.0*phase[iX][iY-1]-phase[iX][iY-2]-2.0*wall_gradient)/3.0;
+
+    }
 
 	//Bulk nodes initialization
 	for(int iX=0;iX<NX;iX++)
@@ -357,11 +362,14 @@ void collide_bulk()
 			feqeq[0]=dense_temp-sum;
 			geqeq[0]=phase_temp-sum_phase;
 
+            double tau_temp=tau_gas+(phase_temp+1.0)/2.0*(tau_liq-tau_gas);
+            double omega_temp=1.0/tau_temp;
+
 
 			for(int k=0; k < 9; k++)
 			{
-				f2[iX][iY][k]=f[iX][iY][k]*(1.0-omega)+omega*feqeq[k]+force[k];
-				g2[iX][iY][k]=g[iX][iY][k]*(1.0-omega)+omega*geqeq[k];
+				f2[iX][iY][k]=f[iX][iY][k]*(1.0-omega_temp)+omega_temp*feqeq[k]+force[k];
+				g2[iX][iY][k]=g[iX][iY][k]*(1.0-omega_temp)+omega_temp*geqeq[k];
 			}
 
 
@@ -397,8 +405,8 @@ void update_bounce_back()
 
 		rho[iX][0]=1.0;
 		rho[iX][NY-1]=1.0;
-		phase[iX][0]=0.5;
-		phase[iX][NY-1]=0.5;
+		//phase[iX][0]=0.5;
+		//phase[iX][NY-1]=0.5;
 		ux[iX][0]=0.0;ux[iX][NY-1]=0.0;
 		uy[iX][0]=0.0;uy[iX][NY-1]=0.0;
 	}
@@ -408,6 +416,11 @@ void update_bounce_back()
 
 int main(int argc, char* argv[])
 {
+
+    if (argc!=1)
+        width=atoi(argv[1]);
+
+    std::cout<<"Width="<<width<<"\n";
 
     matrix_init();
     init();

@@ -1,6 +1,7 @@
 //This file is intended to try to use Zou-He pressure BC for both fields.
 
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -10,10 +11,10 @@
 
 //Domain size
 const int NY=51;
-const int NX=601;
+const int NX=751;
 
 //Time steps
-const int N=30000;
+const int N=40000;
 const int NOUTPUT=1000;
 
 //Fields and populations
@@ -24,7 +25,7 @@ double rho[NX][NY],ux[NX][NY],uy[NX][NY],phase[NX][NY];
 double laplace[NX][NY],gradx[NX][NY],grady[NX][NY];
 
 //Pressure boundary conditions
-double rho_inlet=1.01803;
+double rho_inlet=1.0135;
 double rho_outlet=1.0;
 double phase_inlet=1.0;
 double phase_outlet=1.0;
@@ -36,14 +37,15 @@ double force_y=0.000;
 double aconst=0.04;
 double kconst=0.04;
 double gammaconst=1.0;
-double tau_liq=3.0;
-double tau_gas=0.9;
+double tau_liq=2.5;
+double tau_gas=0.7;
 
 //Wall wettability parameter
 double wall_gradient=0.0;
 
 //BGK relaxation parameter
 double omega=1.0;
+int width=10;
 
 //Magic Irina's parameters
 double omegaginzburg=8.0*(2.0-omega)/(8.0-omega);
@@ -168,7 +170,7 @@ void init()
     for(int iX=0;iX<NX;iX++)
 		for(int iY=0; iY<NY; iY++)
 		{
-			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=15) && (iY<=NY-16) )
+			if ( (iX>=(NX-1)/3) && (iX<=2*(NX-1)/3) && (iY>=width) && (iY<=NY-width-1) )
             {
                 phase[iX][iY]=-1.0;
             }
@@ -598,6 +600,11 @@ void update_bounce_back()
 
 int main(int argc, char* argv[])
 {
+
+    if (argc!=1)
+        width=atoi(argv[1]);
+
+    std::cout<<"Width="<<width<<"\n";
 
     matrix_init();
     init();
