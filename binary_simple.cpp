@@ -16,8 +16,8 @@ const int NX=751;
 
 int width=10;
 //Time steps
-const int N=40000;
-const int NOUTPUT=1000;
+int N=40000;
+int NOUTPUT=1000;
 
 //Fields and populations
 double f[NX][NY][9], f2[NX][NY][9], g[NX][NY][9], g2[NX][NY][9];
@@ -418,8 +418,15 @@ int main(int argc, char* argv[])
 {
 
     if (argc!=1)
+    {
         width=atoi(argv[1]);
-
+	int ratio=atoi(argv[2]);
+	force_x=0.000006/(ratio*ratio);
+	//NY=49*ratio+2;
+	//NX=49*ratio*25+1;
+	N=40000*ratio;
+	NOUTPUT=1000*ratio;
+    }
     std::cout<<"Width="<<width<<"\n";
 
     matrix_init();
