@@ -422,12 +422,12 @@ int main(int argc, char* argv[])
     if (argc!=1)
     {
         width=atoi(argv[1]);
-	int ratio=atoi(argv[2]);
-	force_x=0.000006/(ratio*ratio);
-	//NY=49*ratio+2;
-	//NX=49*ratio*25+1;
-	N=40000*ratio;
-	NOUTPUT=1000*ratio;
+        int ratio=atoi(argv[2]);
+        force_x=0.000006/(ratio*ratio);
+        //NY=49*ratio+2;
+        //NX=49*ratio*25+1;
+        N=100000*ratio;
+        NOUTPUT=1000*ratio;
     }
     std::cout<<"Width="<<width<<"\n";
 
