@@ -138,7 +138,7 @@ void init()
     for(int iX=0;iX<NX;iX++)
 		for(int iY=0; iY<NY; iY++)
 		{
-			if ( (iX>=(NX-1)/4) && (iX<=3*(NX-1)/4) && (iY>=width) && (iY<=NY-width-1) )
+			if ( (iX>=(NX-1)/3) && (iX<=2*(NX-1)/3) && (iY>=width) && (iY<=NY-width-1) )
             {
                 phase[iX][iY]=-1.0;
             }
@@ -421,15 +421,18 @@ int main(int argc, char* argv[])
 
     if (argc!=1)
     {
-        width=atoi(argv[1]);
-        int ratio=atoi(argv[2]);
-        force_x=0.000006/(ratio*ratio);
+        width=int(atof(argv[1]));
+        force_x=atof(argv[2]);
         //NY=49*ratio+2;
         //NX=49*ratio*25+1;
-        N=100000*ratio;
-        NOUTPUT=1000*ratio;
+        N=int(1020*NY);
+        NOUTPUT=int(51*NY);
     }
+    std::cout.precision(10);
     std::cout<<"Width="<<width<<"\n";
+    std::cout<<"N="<<N<<"\n";
+    std::cout<<"Noutput="<<NOUTPUT<<"\n";
+    std::cout<<"Force="<<force_x<<"\n";
 
     matrix_init();
     init();

@@ -8,8 +8,11 @@ def Run_Simulations():
     print os.getcwd()
     grid_ny=[314,210,158,127,106,98,85]
     grid_nx=[4681,3121,2341,1876,1561,1441,1246]
+    thickness=[0.04, 0.06, 0.08, 0.1, 0.12, 0.13, 0.15]
+    capillary=[0.03, 0.05, 0.08, 0.1, 0.2, 0.4, 0.6, 0.8, 1.0]
+    
     #os.mkdir("temp")
-    for i in range(1, 5):
+    for i in range(0, 7):
         dir_temp=str(grid_ny[i])
         os.mkdir(dir_temp)
         os.chdir(dir_temp)
@@ -20,18 +23,10 @@ def Run_Simulations():
         sed=subprocess.Popen(cmd+" binary_simple.cpp > binary_simple_out.cpp", shell=True)
         sed.wait()
         print os.getcwd()
-        comp=subprocess.Popen("g++ -O3 binary_simple_out.cpp -o main.out")
+        comp=subprocess.Popen("g++ -O3 binary_simple_out.cpp -o main.out", shell=True)
         comp.wait()
-        subprocess.Popen("./main.out "+str(6*i)+" "+str(i)+" &")
-        os.chdir("..")
-        os.chdir("Pressure")
-        os.mkdir("tmp")
-        sed=subprocess.Popen(cmd+" binary_guo_pressure_bb_walls.cpp > binary_guo_pressure_bb_walls_out.cpp",  shell=True)
-        sed.wait()
-        comp=subprocess.Popen("g++ -O3 binary_guo_pressure_bb_walls_out.cpp -o main.out")
-        comp.wait()
-        subprocess.Popen("./main.out "+str(6*i)+" "+str(i)+" &")
-        os.chdir("..")
+        #subprocess.Popen("./main.out "+str(thickness[i]*(grid_ny[i]-2))+" "+str(0.28812*capillary[i]/((grid_ny[i]-2)*(grid_ny[i]-2))+" &")
+        
         os.chdir("..")
 
 def Get_Zero(prof, factor):
@@ -82,6 +77,7 @@ def Analyze_Velocities():
 
 
 if __name__=="__main__":
-    Analyze_Simulations()    
+    Run_Simulations()
+    #Analyze_Simulations()    
     #Analyze_Velocities()
-    pylab.show()
+    #pylab.show()
