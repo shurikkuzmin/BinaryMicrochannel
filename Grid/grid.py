@@ -49,17 +49,17 @@ def Analyze_Simulations():
     print os.getcwd()
     
     for i in range(1, 5):
-        dir_temp=str(49*i+2)
+        dir_temp="Proper Grid/"+str(49*i+2)
         os.chdir(dir_temp)
-        os.chdir("Force")
+        #os.chdir("Force")
         pylab.figure()
         name="phase"+(1-(i*40000)/100000)*"0"+str(40000*i)+".dat"
         array=numpy.loadtxt(name)
         pylab.imshow(array)
         pylab.figure()
-        pylab.plot(array[:, 600*i])
-        pylab.savefig("grid_phase_prof_"+str(49*i)+".eps", dpi=300)
-        Get_Zero(array[:, 600*i], i)
+        pylab.plot(array[:, 520*i])
+        #pylab.savefig("grid_phase_prof_"+str(49*i)+".eps", dpi=300)
+        Get_Zero(array[:, 520*i], i)
         #extrapolator=UnivariateSpline(array[0:(49*i+2)/2, 600*i], numpy.arange(0, (49*i+2)/2),  k=2)
         #print extrapolator(0)
 
@@ -69,21 +69,21 @@ def Analyze_Velocities():
     print os.getcwd()
     
     for i in range(1, 5):
-        dir_temp=str(49*i+2)
+        dir_temp="Proper Grid/"+str(49*i+2)
         os.chdir(dir_temp)
-        os.chdir("Force")
+        #os.chdir("Force")
         name="velocity"+(1-(i*40000)/100000)*"0"+str(40000*i)+".dat"
         array=numpy.loadtxt(name)
-        prof=array[:,100]
+        prof=array[:,520*i]
         pylab.figure()
         pylab.imshow(array)
         pylab.figure()
-        pylab.plot(array[:, 100])
+        pylab.plot(array[:, 520*i])
         print prof[len(prof)/2]
         os.chdir("../..")
 
 
 if __name__=="__main__":
-    #Analyze_Simulations()    
-    Analyze_Velocities()
+    Analyze_Simulations()    
+    #Analyze_Velocities()
     pylab.show()
