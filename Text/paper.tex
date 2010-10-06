@@ -5,21 +5,76 @@
 \usepackage[numbers]{natbib}
 \usepackage{color}
 
-\begin{document}
-\section{Introduction}
-The Taylor flow which has analytical solution for low Capillary numbers
-\cite{bretherton} is the attractive benchmark for the diffusion interface
-models. The film width needed to be resolved is proportional to $Ca^{2/3}$
-which is for small capillary numbers can reach numbers from $0.001$ to $0.01$.
-When it comes to the resolution of the film thickness the diffusion interface
-should be resolved in such way as to have negligible effect on physics in the
-film. The mass transfer which exists in the small film drops the bubble driven
-pressure to proportionality $Ca^{2/3}$ \cite{kreutzer-pressure-drop} instead of
-linear drop as in Poiesuille driven flows.
+\title{The binary liquid model for gravity-driven microchannel simulations}
+\date{\today}
 
-The goal of this paper is to give the answer as to how to choose parameters and
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The motion towards exploration of nano- and microscale phenomena brings new
+challenges to simulation tools. The continuous physics approach is limited on
+those scales, therefore such methods as Molecular Dynamics (MD) or Lattice
+Boltzmann Method (LBM) become appropriate. This work has aim to
+reproduce the gravity driven microchannel flow of free surface liquid with the
+help of the binary liquid lattice Boltzmann method. In the low capillary number
+$Ca$ region the flow is thoroughly described by Bretherton \cite{bretherton},
+where the deposition film thickness is proportional to $Ca^{2/3}$. The binary
+liquid model is continuous interface multiphase model. Therefore, the issue of
+how to properly resolve the interface to obtain proper correlations holds. In
+the work we address the binary liquid parameters, as mobility $M$, surface
+tension parameter $k$, the free energy constant $A$, grid resolution, to
+properly simulate microchannel flow. The work is valuable for industry and
+researchers willing to simulate Bretherton phenomena.
+\end{abstract}
+
+
+\section{Introduction}
+Taylor/Bretherton \cite{bretherton} flow describes flow of long bubbles in
+microchannels. It was found that the front meniscus film width is proportional
+to $Ca^{2/3}$ for Capillary numbers less than $0.003$. While there are number
+of works which simulate the Bretherton problem with the boundary value method
+\cite{ingham-plates,heil-planar}, the simulation of Bretherton problem is of
+difficulty for diffusion interface methods, where the interface is spread over
+the few grid nodes. In this case the question of proper film width resolution
+arises. While the discontinuous interface models are good to simulate
+non-complicated geometries phenomena, the continuous interface methods are more
+flexible to resolve problem evolving coalescence or droplet breakup. This work
+concentrates on the resolving parameters range of the binary liquid lattice
+Boltzmann method to validate it across the Bretherton problem. 
+
+Lattice Boltzmann method has emerged as successful method to simulate various
+phenomena as hydrodynamics \cite{yu}, thermal-flows
+\cite{karlin-minimalmodels}, micro-flows \cite{ansumali-small-knudsen},
+ferrofluids \cite{kuzmin-aniso}, and multiphase flows
+\cite{swift,Shan-chen:extended}. Based on kinetic nature and as a particle
+method LBM tackles relatively easy complex geometries and the incorporation of
+physics phenomena on the microscopic level, as multiphase models. Most
+multiphase lattice Boltzmann models \cite{swift, Shan-chen:extended} resolve
+the interface in the continuous way. Such representation as it was pointed out
+brings issues with the film thickness resolution versus the interface
+resolution. In other words, when it comes to the resolution of the film
+thickness the diffusion interface should be resolved in such way as to have
+negligible effect on physics in the film. 
+
+This work examines the binary liquids free-energy LBM model \cite{swift}. The
+model simulates binary liquids within the assumption of the uniform overall
+density. Therefore, the question of how to simulate the Bretherton problem
+where two phases are completely of different densities (liquid and gas) is of
+interest. However, the motion of a liquid slug and a bubble in a capillary is
+governed by the capillary number. Therefore, the viscosities ratio not the
+densities ratio is the critical parameter. 
+
+The goal of this paper is to give the answer as to how to choose related to the
+binary liquid model parameters, viscosities ratio and grid
 resolution to obtain the Bretherton/Taylor problem film thickness for the
-diffusion interface model such as the free-energy model \cite{swift}. 
+diffusion interface model. The paper is organized as follows. We briefly
+explain the binary liquid lattice Boltzmann model and summarize literature
+review for the Bretherton problem. Then the parameters involved in the
+simulation are examined and presented in the results section. The paper is
+concluded with main findings.
 
 \section{Benchmark}
 
