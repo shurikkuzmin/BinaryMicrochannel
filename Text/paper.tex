@@ -287,6 +287,7 @@ x } ,
 By taking the Poiseuille profile one can estimate the body force through the
 capillary number and grid resolution:
 \begin{equation}
+\label{poiseuille:velocity:center}
 \begin{aligned}
 &\frac{\mathrm{d}P}{\mathrm{d}x}=\frac{8}{{N_y}^2}\gamma Ca.
 \end{aligned}
@@ -327,7 +328,7 @@ initialization procedure for quite different capillary numbers. In these
 examples we use $k=0.04$ and $A=0.04$ as optimal binary liquid model parameters.
 That explicitly implies the surface tension to be $\sqrt{\frac{8 k
 A}{9}}=0.0377$ and the characteristic length of the interface
-$4\sqrt{\frac{k}{A}}=4$ lattice boltzmann units. For the sake of simplicity and
+$5\sqrt{\frac{k}{A}}=5$ lattice boltzmann units. For the sake of simplicity and
 stability the relaxations parameter for liquid and gas phases are taken as
 $\tau_{liq}=2.5$ and $\tau_{gas}=0.7$. That gives the gas-liquid viscosity ratio
 as $10$.  
@@ -340,12 +341,12 @@ given by equation:
   \end{equation}
   where we assume that $2 H$ or $Ny$ in lattice units is the channel width.
 Therefore one needs to resolve the interface which is around $2$ percent of
-  whole channel width with for instance $8$ lattice units, where $4$ lattice
+  whole channel width with for instance $8$ lattice units, where $5$ lattice
 units occupies the interface width for given. Note that the interface occupies
-$50$ percent of the interface.  Therefore the channel
+$62.5$ percent of the interface.  Therefore the channel
   width is $400$ lattice units. We take the bubble length as $5$ channel widths
-  and the distance between bubble is as $2$ bubble lengths. This will give
-  right away the grid size as $400\mathrm{x}6000$. In terms of computer memory
+  and the distance between bubble is as $2$ bubble lengths. It gives the
+grid size as $400\mathrm{x}6000$. In terms of computer memory
 requirement the calculations with the double precision accuracy demand:
 \begin{equation}
 \begin{aligned}
@@ -424,11 +425,11 @@ widths
 
   The film width for such small Capillary numbers is taken from
   \ref{fig:heil:planar} for Reynolds number $40$ equals to $0.12$. We want to
-  resolve $6\%$ of whole channel width with $12$ lattice units, where $4$
+  resolve $6\%$ of whole channel width with $12$ lattice units, where $5$
 lattice units are related to the interface resolution.  Therefore the channel
   width is $200$ lattice units. We take the bubble length as $5$ channel widths
-  and the distance between slugs we take as $2$ bubble lengths. This will give
-  right away the grid size as $200\mathrm{x}3000$. The velocity can be
+  and the distance between slugs we take as $2$ bubble lengths. That gives
+the grid size as $200\mathrm{x}3000$. The velocity can be
 calculated from the Capillary number as:
   \begin{equation}
   U_{bubble}=0.05 \frac{\gamma}{\mu_{liq}}=0.05 \frac{0.037712}{0.6666}=2.82\,
@@ -462,51 +463,49 @@ biggest assumption. In reality the less viscous bubble will have a slippage
 factor and its velocity is larger than the surrounding liquid velocity. By
 plugging in the obtained velocity back to the capillary number equation the
 larger capillary number can be obtained. While we present the initialization
-tips in reality one needs to take the bubble velocity from the simulations and
-recalculate all the necessary characteristics. 
-
-\subsubsection{The influence of initial film width. Easy parameters to check}
-
-
- Velocity profiles behind the bubble and in the front
-  meniscus can be seen in Fig.
-\ref{fig:velocity:profiles:different:widths:force}
-  and \ref{fig:velocity:profiles:different:widths:pressure} for the force driven
-  and pressure difference driven flows, correspondingly. As one can see average
-  velocity for the bubble and the slug larger than the calculated velocity which
-  should give larger the film. However, the film width for the planar case is
-  different and can have another coefficient in front of the proportionality to
-  $Ca^{2/3}$. Also, the phase gradient is taken as $0$ right now which can have
-  influence on the measurements as well.
-  \begin{figure}
-  \includegraphics[width=0.47\textwidth]{Figures/vel_bubble_force_width_6.eps}
-  \hfill
-  \includegraphics[width=0.47\textwidth]{Figures/vel_bulk_force_width_6.eps}\\
-  \includegraphics[width=0.47\textwidth]{Figures/vel_bubble_force_width_10.eps}
-  \hfill
-  \includegraphics[width=0.47\textwidth]{Figures/vel_bulk_force_width_10.eps}\\
-  \includegraphics[width=0.47\textwidth]{Figures/vel_bubble_force_width_14.eps}
-  \hfill
-  \includegraphics[width=0.47\textwidth]{Figures/vel_bulk_force_width_14.eps}\\
-  \caption{The velocity profiles in bulk and bubble for different initialization
-  parameters as the
-  bubble width $Ny-12$,$Ny-20$ and $Ny-28$.
-  \label{fig:velocity:profiles:different:widths:force}}
-  \end{figure}
-
+tips, in reality one needs to take the bubble velocity from the simulations and
+recalculate all the necessary characteristics or in other words adjust the
+forcing to obtain the desired velocity/capillary number. 
 
 \subsection{Grid refinement}
-To examine the interface width we performed grid refinement for both force and
-pressure difference driven flows. To avoid the effects of rear and front
-menisci the problem is initialized with the film width occupying $12$ percent
-of the channel height. All other parameters are kept the same, that includes
-keeping the same Capillary number and viscosities ratio. Therefore the
-following parameters were utilized: $Ny=51,100,149,198$,corresponding to the
-effective channels widths as $H_{eff}=49,98,147,196$, $Nx=736,1471,2206,2941=15
+To properly estimate the interface resolution one needs to perform the
+convergence study dependance on the grid resolution. All parameters are fixed,
+including a bubble velocity, the capillary number and change the grid
+resolution. Our goal is to know exactly the ratio of the interface width to the
+film thickness where results are not dependant on the grid resolution. 
+
+The example what we want to simulate is the capillary number
+$0.05$. As it was pointed out the film thickness in that case is $6$ percent.
+Note that in the case of half-way bounce-back walls which are used in the
+simulations one needs to calculate the film thickness as: 
+\begin{equation}
+\delta=(\phi_0-0.5)/(N_y-2),
+\end{equation}
+where $\phi_0$ is the grid coordinate where phase field equals to $0$, $N_y-2$
+is related to the effective channel height. Note that it's a big
+simplifications to impose the boundary in the middle beetween the bounce-back
+node and the fluid node. In the case of $\delta=0.06$ the initial grid number
+is $N_y=102$, which gives the horizontal grid number as $N_x-1=15(N_y-2)=1500$.
+The bubble is initialized as rectangular box with coordinates
+$y=7\dots N_y-8$, $x=\frac{N_x}{3}\dots \frac{2 N_x}{3}$ and phase
+$\phi_{bubble}=-1$. All other nodes are initialized with the phase field
+$\phi=1$. The force gradient can be estimated through the Poiseuille
+profile formula, Eq.\ref{poiseuille:velocity:center}, and it equals
+$1.508\,10^{-6}$.
+
+After choosing the reference parameters, the grid refinement needs to keep the
+same the same macroscopic parameters as capillary number and viscosities ratio.
+Therefore the simulations were performed with grid
+numbers $Ny=102,127,152,177,202,227$, corresponding to the
+effective channels widths as $H_{eff}=100,125,150,175$,
+$Nx=1501,1876,2251,2625,3000,3375=15
 H_{eff}$. It is easy to check
-that keeping all liquid viscosities the same yields the following to be
+that keeping all liquid viscosities the same yields the following quantity to
+be a
 constant while doing the grid refinement
-$H^2\frac{\mathrm{d}P}{\mathrm{d}x}=Ny^2\frac{\mathrm{d}P}{\mathrm{d}x}=Const$.
+$H_{eff}^2\frac{\mathrm{d}P}{\mathrm{d}x}=(N_y-2)^2\frac{\mathrm{d}P}{\mathrm{d}
+x } =Const$.
+{\color{red} Michal, please add some results here and description to it as well.
 The results for the force driven flows velocity phase profiles are shown in
 Fig. \ref{fig:grid:profiles}. The corresponding ratios to the effective channel
 width (without bounce-back nodes) is as $0.0809472165313,
@@ -519,29 +518,33 @@ to the $Ca=\frac{\mu_{liq} U_{bubble}}{\gamma}=\frac{\frac{2}{3}\,
 profile. However, if we define Capillary number through the velocity of the
 slug, then the Capillary number will have another value. The velocities of the
 slug are $0.003411444831,0.003412693869,0.003420338754,0.003425757312$ and
-Capillary number defined through these velocities is $0.0602$. Those numbers
-are adequate if we assume that the results presented in
-Fig.\ref{fig:giavedoni:planar} and Fig. \ref{fig:heil:planar} correspond to the
-half of the channel but not the whole channel. 
-
+Capillary number defined through these velocities is $0.0602$. 
+}
 Let us calculate to which extent we need to refine the interface to obtain
 convergent results. The interface itself occupies approximately $5 \xi$, where
 $\xi=\sqrt{k/A}=1$. This interface width divided to the effective channel width
-($5\xi/H_{eff}$) is as follows $0.102,0.051,0.034,0.025$ for the given
-$H_{eff}$. However, the interface width needs to be takes as the ratio with the
-film width which we want to resolve, this ratio $5\xi/H_{film}$ is as follows
-$1.2605,  0.7205,  0.501,  0.3839$. In reality this number is
-a bit overestimated as the interface doesn't fill the influence of the wall and
-it maintains all the macroscopic parameters jumps. Therefore, one needs to
-resolve the interface as $40\%$ of the expected film width.
+($5\xi/H_{eff}$) is as follows {\color{red} Please add new values here
+$0.102,0.051,0.034,0.025$ } for the given
+$H_{eff}$. Let us calculate the interface width ratio to the film thickness as
+$5\xi/H_{film}$ is as follows
+{\color{red} Please add here new values $1.2605,  0.7205,  0.501,  0.3839$}.
+Therefore, one needs to
+resolve the interface as {\color{red} Please give number here $40\%$} of the
+expected film width for simulations to be converged.
+{\color{red} If we need this pictures???
 \begin{figure}
 \includegraphics[width=0.47\textwidth]{Figures/grid_phase_prof_49.eps}\hfill
 \includegraphics[width=0.47\textwidth]{Figures/grid_phase_prof_98.eps}\\
 \includegraphics[width=0.47\textwidth]{Figures/grid_phase_prof_147.eps}\hfill
 \includegraphics[width=0.47\textwidth]{Figures/grid_phase_prof_196.eps}\\
-\caption{Grid refined profiles for the effictive channel widths
+\caption{Do we need these pictures? Grid refined profiles for the effictive
+channel widths
 $H_{eff}=49,98,147,196$.\label{fig:grid:profiles}}
 \end{figure}
+}
+
+\section{Capillary number region}
+
 
 {\color{red} The next step is to perform calculations for different Capillary
 numbers to restore necessary characteristics as it's seen in Fig.
@@ -550,7 +553,7 @@ refinement is done for the gravity driven flows, which can have pretty
 different characteristics in comparison with pressure simulations (unstable
 for the grid refinement - need to adjust parameters)}.
 
-\section{Capillary number region}
+
 This section is devoted to the study of different Capillary number. We refer to
 grid refinement section where we obtained that the interface width should be
 at most $40$ percent of the interface width. For the benchmark results we
