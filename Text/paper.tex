@@ -395,7 +395,7 @@ can easily approximate the physical time step:
 \Delta t = 7.05 \, 10^{-10} \,\mathrm{s}
 \end{equation}
 which is a small time step. The typical simulation needs approximately
-$100,000$ multiplication time steps to come to the steady state solution.
+{\color{red} $100,000$} time steps to come to the steady state solution.
 
  \item[II $\bm{Ca=0.05}$] 
    The parameters in the previous subsection imply very long
@@ -496,10 +496,10 @@ $1.508\,10^{-6}$.
 After choosing the reference parameters, the grid refinement needs to keep the
 same the same macroscopic parameters as capillary number and viscosities ratio.
 Therefore the simulations were performed with grid
-numbers $Ny=102,127,152,177,202,227$, corresponding to the
-effective channels widths as $H_{eff}=100,125,150,175$,
-$Nx=1501,1876,2251,2625,3000,3375=15
-H_{eff}$. It is easy to check
+numbers $N_y=102,127,152,177,202,227$, corresponding to the
+effective channels widths as $H_{eff}=100,125,150,175,200,225$,
+$N_x=1501,1876,2251,2626,3001,3376=15
+H_{eff}+1$. It is easy to check
 that keeping all liquid viscosities the same yields the following quantity to
 be a
 constant while doing the grid refinement
@@ -543,81 +543,121 @@ $H_{eff}=49,98,147,196$.\label{fig:grid:profiles}}
 \end{figure}
 }
 
+\subsection{The influence of the wall gradient}
+Once the procedure of how to resolve the interface gradient is known, we want
+to examine the influence of the phase gradient, i.e. the wettability of the
+wall, to the film thickness. We examined the
+wall gradient influence on
+the standard grid $202\mathrm{x}3001$ and the initial film width as
+{\color{red} Take the value from previous calculations $20$}
+lattice boltzmann units. We examined $11$ different values for the wall
+gradient ranging from $-1$ to $1$. The results are consistent among all the
+wall gradients given that the interface is resolved in the right way. For the
+given wall gradients the values of interface thicknesses are
+{\color{red} Change these numbers $0.0709130255276, 0.0708903443305,
+0.0708661222722,
+0.0708369188112, 0.0707962325316, 0.0707266326981, 0.0705839443249,
+0.0702489349415, 0.0697553433989$}. For the wall gradients $0.8$ and $1.0$ the
+values are NAN. The negative values of the phase gradient are preferable, as
+far as the phase of the liquid adjacent to the wall has the value of $1$. That
+means that the phase values near the wall are above $1$. In case of positive
+gradients the values near the wall are below $1$ and the gradient profile can
+fuse with the values of the gas phase as $-1$, creating the wall stickyness,
+unphysical one. {\color{red} Michal, if you want to add some pictures go ahead
+with it}.
+
+\section{The influence of different viscosities}
+The results obtained earlier are taken for the liquiqs viscosity ratio $10$.
+We performed the same simulations for the liquids viscosity ratio as $20$.
+Parameters were taken as $\tau_{liquid}=4.5$ and $\tau_{bubble}=0.7$. 
+{\color{red} The results showed that blah-blah-blah - I guess will be the same}.
+
 \section{Capillary number region}
+The purpose of this section is to validate the correlations of
+\citet{giavedoni-numerical}, Fig. \ref{fig:giavedoni:planar}, and
+\citet{heil-bretherton}, Fig. \ref{fig:heil:planar}, for the range of capillary
+numbers. Because of limiting computational factors ({\color{red} What is the
+least capillary number which is OK?}) we cannot go to the range of small
+capillary numbers. However, all the other methods were validated across the
+small capilary numbers and extended for the range of capillary numbers from
+$0.005$ to $1.0$. Our goal is to compare the film thickness over the capillary
+range from $0.03$ to $1.0$. 
 
-
-{\color{red} The next step is to perform calculations for different Capillary
-numbers to restore necessary characteristics as it's seen in Fig.
-\ref{fig:giavedoni:planar} and \ref{fig:heil:planar}. Also note that grid
-refinement is done for the gravity driven flows, which can have pretty
-different characteristics in comparison with pressure simulations (unstable
-for the grid refinement - need to adjust parameters)}.
-
-
-This section is devoted to the study of different Capillary number. We refer to
+To perform numerical simulations we refer to
 grid refinement section where we obtained that the interface width should be
-at most $40$ percent of the interface width. For the benchmark results we
+at most {\color{red} $40$} percent of the interface width. For the benchmark
+results we
 suggest the following Capillary numbers as:
 \begin{equation}
-0.03,0.05,0.08,0.1,0.2,0.4,0.6,0.8,1.0
+0.03,0.05,0.08,0.1,0.2,0.4,0.6,0.8,1.0\, .
 \end{equation}
 The corresponding approximate film widths from \cite{giavedoni-numerical} are as
-follows (we take the half width as it's done in the grid refinement section):
+follows:
 $0.04,0.06,0.08,0.1,0.12,0.13,0.15$. $5$ lattice boltzmann units occupy
-$40\%$ of the interface thickness. Therefore the grid size should be as
-following $314\mathrm{x}4681$,$210\mathrm{x}3121$,
+{\color{red} Could be another number $40\%$} of the interface thickness.
+Therefore the grid size should be as
+following {\color{red} Michal, different numbers would be here.
+$314\mathrm{x}4681$,$210\mathrm{x}3121$,
 $158\mathrm{x}2341$, $127\mathrm{x}1876$, $106\mathrm{x}1561$,
-$98\mathrm{x}1441$,$85\mathrm{x}1246$. 
+$98\mathrm{x}1441$,$85\mathrm{x}1246$ Michal, for the larger capillary
+numbers such small grid is not
+appropriate because of the instabilities.
+}.
 
+{\color{red} Probably we don't need the explanations about initialization here,
+just to present results}
 To utilize previous results to properly initialize simulations to run one need
-to do some modifications. The result is that for the grid with $H_{eff}=196$ we
-obtained the film width as $0.0685$ and velocity in the center of the bubble as
-$0.0045$. The force gradient was $6\, 10^{-6} /16$. The predicted Capillary
-number was $0.05$ and the actual one is $0.0795$. But we performed simulations
+to do some modifications. The result is that for the grid with $H_{eff}=200$ we
+obtained the film width as {\color{red} Will be another number $0.0685$} and
+velocity in the center of the bubble as
+{\color{red} Will be another number $0.0045$}. The force gradient was
+{\color{red} Probably the same number $6\, 10^{-6} /16$}. The predicted
+Capillary
+number was $0.05$ and the actual one based on the center velocity calculation is
+{\color{red} Will be another number $0.0795$}. However, we performed simulations
 according the assumed value of $0.05$. Let us perform some correlations to
 calculate how the system needs to be initialized. 
 \begin{equation}
 \begin{aligned}
 &Ca_{lit} \propto U_{slug}\\
-&U_{slug} \propto \frac{\mathrm{d}P}{\mathrm{d}x} Ny^2 
-&Ca_{lit} \propto \frac{\mathrm{d}P}{\mathrm{d} x} Ny^2 \text{ or }\\
-\frac{\mathrm{d}P}{\mathrm{d} x} \propto \frac{Ca_{lit}}{Ny^2}
+&U_{slug} \propto \frac{\mathrm{d}P}{\mathrm{d}x} N_y^2\\ 
+&Ca_{lit} \propto \frac{\mathrm{d}P}{\mathrm{d} x} N_y^2 \text{ or }\\
+&\frac{\mathrm{d}P}{\mathrm{d} x} \propto \frac{Ca_{lit}}{Ny^2},
 \end{aligned}
 \end{equation}
-Therefore the initialized consistent pressure gradients can be taken from
+where the index $lit$ stands for the presented in the literature in
+\cite{giavedoni-numerical,heil-bretherton}. Therefore the initialized consistent
+pressure gradients can be taken from
 previous consistent simulations:
 \begin{equation}
 \frac{\mathrm{d}P}{\mathrm{d} x}=6\,10^{-6}/16 \frac{Ca_{literature}}{0.05}
-\frac{196^2}{Ny^2}=0.28812 \frac{Ca_{literature}}{Ny^2}
+\frac{200^2}{N_y^2}=0.3 \frac{Ca_{literature}}{N_y^2}
 \end{equation}
-Note that $Ny$ is calculated through the expected resolution of the interface
+Note that $N_y$ is calculated through the expected resolution of the interface
 in comparison with the interface thickness which itself is based on
-Capillary number simulations. In terms of time the steady state succesfull
-simulation for the grid $196$ was obtained after $200,000$ steps. The physical
+Capillary number simulations. In terms of time the steady state successful
+simulation for the grid $202\mathrm{x}3001$ was obtained after $200,000$ steps.
+The physical
 time is as follows:
 \begin{equation}
 \begin{aligned}
-&\Delta t=\frac{U_{slug,LB} \Delta X}{U_{phys}} \propto \frac{1}{Ny}\\
-&N_{iter}=200,000 \frac{Ny}{196}\approx 1020 Ny\\
-&N_{output}=51 Ny\\
+&\Delta t=\frac{U_{slug,LB} \Delta X}{U_{phys}} \propto \frac{1}{N_y-2}\\
+&N_{iter}=200,000 \frac{N_y-2}{200}\approx 1000 N_y\\
+%&N_{output}=51 Ny\\
 \end{aligned}
 \end{equation}
 
-Steady simulations were obtained for the following Capillary numbers
-$0.03,0.05,0.08,0.1$ with the film thicknesses as
-$0.0337433850478, 0.063192148642, 0.0799078589211, 0.0891674460655$ which are
+{\color{red} That's why we need better grid for larger Capillary numbers. Steady
+simulations were obtained for the following Capillary numbers
+$0.03,0.05,0.08,0.1$  }with the film thicknesses as
+{\color{red} $0.0337433850478, 0.063192148642, 0.0799078589211,
+0.0891674460655$} which are
 quite close to the predicted one $0.04,0.06,0.08,0.1$. The thing is to identify
 the Capillary numbers associated with those numbers. The velocity in the
 centers are $0.00209258774,0.003826643811,0.006506324324,0.008333889077$. The
 Capillary numbers associated with these velocities are $0.036992074529545796, 
 0.067646144698590829,0.1150166512524845,0.14732373700007995$, which again a bit
-overpredictive but consistent. The bulk liquid velocities for the simulation
-are $0.001947507726,0.003364703007,0.005483194352,0.00687516499$. The capillary
-numbers associated with those velocities are slightly less than with the bubble
-are as follows:$0.034427397986694822, 0.059480107823211698,
-0.096930097721574432, 0.12153689465513355$. We can define the average capillary
-number defined through the bubble capillary and slug capillaries numbers as
-$Ca_{aver}=\frac{Ca_{bubble}+Ca_{slug}}{2}$. The fig.
+overpredictive but consistent. The fig.
 \ref{fig:capillary:simple} represents the thickness against the Capillary
 number which mimics the curve behavior for the Capillary number dependance as
 indicated in Fig. \ref{fig:giavedoni:planar}.
@@ -625,11 +665,17 @@ indicated in Fig. \ref{fig:giavedoni:planar}.
 \includegraphics[width=0.47\textwidth]{Figures/capillary_thickness_simple.eps}
 \hfill
 \includegraphics[width=0.47\textwidth]{Figures/capillary_range.eps}
-\caption{Thickness versus the capillary number for different scalings based on
+\caption{{\color{red} This one to eliminate - just present here
+comparison between our simulations in the longer range of capillary
+numbers and Giavedoni}Thickness versus the capillary
+number for different scalings based on
 the average capillary number. \label{fig:capillary:simple}}
 \end{figure}
- 
+
 \subsection{The influence of the force}
+
+{\color{red} Michal if you find it useful - use this section. My suggestion is
+to eliminate it.}
 \begin{description}
  \item 
 On the grid $198\mathrm{x}2941$ and the initial film width as $20$ units
@@ -642,10 +688,8 @@ capillary number. Unfortunately in the first case only a few simulations are
 stable, i.e.
 $i=1,2$ is stable. The results for the interface thicknesses are
 $0.0700122222668,0.0985152303286$ with the velocities associated as
-$0.004490013864,0.009597299475$ and slug velocities as
-$0.003861354387,0.006350100792$. Those numbers correspond to the bubble
-capillary numbers as $0.079372981271400328, 0.16965788849626481$ and slug
-capillary numbers as $0.068259746790303111, 0.11225498328103167$. The average
+$0.004490013864,0.009597299475$. Those numbers correspond to the bubble
+capillary numbers as $0.079372981271400328, 0.16965788849626481$. The average
 capillary numbers are $0.07381636,0.14095644$. 
 
 \item
@@ -660,135 +704,19 @@ it follows
 $0.0488915027016,0.0538098132568,0.0587100833678,0.0615470184196,
 0.0661331899123$. Bubble velocities are
 $0.002592856205,0.003077834398,0.003562975124,0.004034533823,0.004470657603$.
-Slug velocities are
-$0.002337542358,0.002752687109,0.003158125555,0.003552413499,0.003926980914$.
 Bubble Capillary numbers are $0.04583566,  0.05440894,  0.0629851 , 
-0.07132116, 0.07903081$; slug Capillary numbers are $0.0413223 ,  0.04866109, 
-0.0558283, 0.06279839, 0.06941987$. The average capillary numbers are
-$0.04357898, 0.05153502, 0.0594067, 0.06705977, 0.07422534$.
+0.07132116, 0.07903081$.
 \end{description}
 
-All the range of available Capillary numbers are shown in Fig.
-\ref{fig:capillary:simple}. The figure looks consistent with different
-scalings and provide good results.
+\section{Conclusion}
+The work presents the numerical tips and the benchmark for the
+Bretherton/Taylor problem using the binary liquid lattice Botlzmann method. The
+results show consistency with the already obtained numerical correlations using
+other methods. Though results are specific for the binary liquid lattice
+Botlzmann method but numerical tips and correlations can be used for any
+continuous interface methods. The work is valuable for people simulating
+microchannel flows.
 
-\subsection{The influence of the wall gradient}
-The influence of the wall gradient. We examined the wall gradient influence on
-the standard grid $198\mathrm{x}2941$ and the initial film width as $20$
-lattice boltzmann units. We examined $11$ different values for the wall
-gradient ranging from $-1$ to $1$. The results are consistent among all the
-wall gradients given that the interface is resolved in the right way. For the
-given wall gradients the values of interface thicknesses are
-$0.0709130255276, 0.0708903443305, 0.0708661222722,
-0.0708369188112, 0.0707962325316, 0.0707266326981, 0.0705839443249,
-0.0702489349415, 0.0697553433989$. For the wall gradients $0.8$ and $1.0$ the
-values are NAN. The negative values of the phase gradient are preferable, as
-far as the phase of the liquid adjacent to the wall has the value of $1$. That
-means that the phase values near the wall are above $1$. In case of positive
-gradients the values near the wall are below $1$ and the gradient profile can
-fuse with the values of the gas phase as $-1$, creating the wall stickyness,
-unphysical one.
-
-
-\subsection{The flow driven by the pressure difference}
-The details of imposing pressure boundaries for the binary liquid model is
-given in Section \ref{appendix-pressure}.  
-
-\subsubsection{The influence of initial bubble width. Easy parameters to check}
-Here we impose absolutely the same parameters as for gravity driven flow.
-However instead of pressure gradient one needs to put different densities at
-the inlet and the outlet which can be easily calculated from the pressure
-gradient as follows:
-\begin{equation}
-\begin{aligned}
-&\rho_{inlet}=1+3 Nx \frac{\mathrm{d}P}{\mathrm{d}x}=3\, 750\, 6\,
-10^{-6}=1.0135\\
-&\rho_{outlet}=1.
-\end{aligned}
-\end{equation}
-
-Some pictures after $40000$ steps for the pressure driven flows for different
-initialization of bubble width as $Ny-12$, $Ny-20$, $Ny-28$.
-\begin{figure}
-\includegraphics*[bb=18 350 594 450,
-width=0.97\textwidth]{Figures/pressure_width_6.eps}
-\includegraphics*[bb=18 350 594 450,
-width=0.97\textwidth]{Figures/pressure_width_10.eps}
-\includegraphics*[bb=18 350 594 450,
-width=0.97\textwidth]{Figures/pressure_width_14.eps}
-\caption{The phase plots for different bubble widths as $Ny-12$,$Ny-20$ and
-$Ny-28$.}
-\end{figure}
-\begin{figure}
-\includegraphics[width=0.47\textwidth]{Figures/plane_pressure_width_6.eps}
-\includegraphics[width=0.47\textwidth]{Figures/plane_pressure_width_10.eps}
-\begin{center}
-\includegraphics[width=0.47\textwidth]{Figures/plane_pressure_width_14.eps}
-\end{center}
-\caption{The phase profiles for different initialization parameters as the
-bubble width $Ny-12$,$Ny-20$ and $Ny-28$.
-\label{fig:phase:profiles:different:widths:pressure}}
-\end{figure}
-\begin{figure}
-\includegraphics[width=0.47\textwidth]{Figures/vel_bubble_pressure_width_6.eps}
-\hfill
-\includegraphics[width=0.47\textwidth]{Figures/vel_bulk_pressure_width_6.eps}\\
-\includegraphics[width=0.47\textwidth]{Figures/vel_bubble_pressure_width_10.eps}
-\hfill
-\includegraphics[width=0.47\textwidth]{Figures/vel_bulk_pressure_width_10.eps}\\
-\includegraphics[width=0.47\textwidth]{Figures/vel_bubble_pressure_width_14.eps}
-\hfill
-\includegraphics[width=0.47\textwidth]{Figures/vel_bulk_pressure_width_14.eps}\\
-\caption{The velocity profiles in bulk and bubble for different initialization
-parameters as the
-bubble width $Ny-12$,$Ny-20$ and $Ny-28$.
-\label{fig:velocity:profiles:different:widths:pressure}}
-\end{figure}
-
-
-
-\section{Appendix I. Pressure boundaries conditions}
-\label{appendix-pressure}
-Bulk pressure for the binary liquid model is a function not only of density
-but the phase field as well. Thus, one of the possible ways to fix the pressure
-boundary condition is to fix density and phase at the inleat and at the outlet.
-The pressure difference is introduced through the difference in densities
-keeping phases at the inlet and at the outlet the same. One can introduce the
-pressure difference through the phase, however it's unphysical since the phase
-field is governed by passive advection-diffusion equation, where velocity is
-given from the hydrodynamic simulations.
-
-We examined many different pressure boundaries conditions, including Zou-He BC
-\cite{zouhe-boundary,harting-pressure}, equilibrium conditions for
-the phase field, etc. However, the stable situation was obtained only with the
-boundary conditions by \citeauthor{guo-pressure} \cite{guo-pressure,
-guo-boundary-conditions}. The idea of the boundary conditions is simple: the
-coming populations to domain are decomposed to the equilibrium and
-non-equilibrium part:
-\begin{equation}
-f_i=f_i^{eq}(\rho_{wall},\bm{u}_{wall})+f_i^{neq}.
-\end{equation}
-The incoming population after the collision is changed due to collision:
-\begin{equation}
-f_i=f_i^{eq}(\rho_{wall},\bm{u}_{wall})+f_i^{neq} (1-\omega).
-\end{equation}
-The method is called extrapolation as the wall macroscopic parameters are
-extrapolated from fluid using first or second accuracy numerical stencils. If
-the pressure boundary condition is specified then it specifies $\rho_{wall}$ as
-well extrapolating the wall velocity $\bm{u}_{wall}$ from nearest neighbours.
-The same goes for the velocity boundary conditions, where velocity
-$\bm{u}_{wall}$ is specified and $\rho_{wall}$ is extrapolated from the fluid.
-
-It is pretty straightforward to obtain non-equilibrium contribution from the
-fluid, however the equilibrium for the wall side needs special treatment. If
-one wants to take the hydrodynamic equilibrium, the numerical scheme blows
-up. Therefore, one needs to construct the equilibrium function as it's given
-for the binary liquid model. The binary liquid model equilibrium contains local
-density, local phase and phase laplacians and gradients. The pressure boundary
-conditions specify the local phase and the local density. Therefore, we
-extrapolate not only velocity to construct the equilibrium, but phase laplacian
-and gradients. This situation produces stable simulations to be validated in
-the future. 
 \bibliographystyle{plainnat}
 \bibliography{paper}
 
