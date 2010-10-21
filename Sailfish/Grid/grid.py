@@ -6,17 +6,17 @@ import numpy
  
 def Run_Simulations():
     print os.getcwd()
+    ny=[102,127,152,177,202,227]
+    nx=[1501,1876,152,177,202,227]
+    force_init=6e-6/4;
     #os.mkdir("temp")
-    for i in range(1, 5):
-        dir_temp=str(49*i+2)
+    for i in range(0, len(ny)):
+        dir_temp=str(ny[i])
         os.mkdir(dir_temp)
+        subprocess.call(['cp','binary_microchannel.py',dir_temp+"/"])
         os.chdir(dir_temp)
-        os.mkdir("Pressure")
-        os.mkdir("Force")
-        subprocess.Popen('cp ../../binary_simple.cpp Force/', shell=True)
-        subprocess.Popen('cp ../../binary_guo_pressure_bb_walls.cpp Pressure/', shell=True)
-        os.chdir("Force")
-        os.mkdir("tmp2")
+        subprocess.call(['./binary_microchannel.py','--lat_nx='+str(nx[i]),'--lat_ny='+str(ny[i])],'--bc_wall=halfbb','--force=')
+        
         cmd="sed -e 's/const int NY=[0-9]*;/const int NY="+str(49*i+2)+";/' -e 's/const int NX=[0-9]*;/const int NX="+str(15*49*i+1)+";/'"
         #print cmd
         sed=subprocess.Popen(cmd+" binary_simple.cpp > binary_simple_out.cpp", shell=True)
@@ -84,6 +84,7 @@ def Analyze_Velocities():
 
 
 if __name__=="__main__":
-    Analyze_Simulations()    
+    #Analyze_Simulations()    
     #Analyze_Velocities()
+    Run_Simulations()
     pylab.show()
