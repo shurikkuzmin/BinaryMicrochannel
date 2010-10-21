@@ -304,23 +304,29 @@ gas phase is initialized with $-1$. Though the initialization film thickness
 is not involved in the final result for the front meniscus, Fig.
 \ref{fig:different:initialization:widths}, we keep the initialized film
 thickness as close as possible to the already obtained numerical film
-thicknesses \cite{giavedoni-numerical}. Otherwise, the region where the
-Bretherton phenomena occurs is dillute, which is obviously seen for the
-simulation initialized with the film thickness as $Ny-28$ {\color{red} Michal,
-can you please prepare the simulations with the different initialization. Or
-just delete different thicknesses initialization}.
+thicknesses \cite{giavedoni-numerical}. Otherwise, the simulation time for the
+bubble to obtain a steady-state form increases.
 \begin{figure}
-\includegraphics*[bb=18 350 594 450,width=0.97\textwidth]
-{Figures/force_width_6.eps}
-\includegraphics*[bb=18 350 594 450,
-width=0.97\textwidth]{Figures/force_width_10.eps}
-\includegraphics*[bb=18 350 594 450,
-width=0.97\textwidth]{Figures/force_width_14.eps}
-\caption{\color{red} The phase plots for different bubble widths as
-$Ny-12$,$Ny-20$ and
-$Ny-28$. Michal, could you please prepare nice pictures for
-simulations. Indicate as well the
-grid and time steps\label{fig:different:initialization:widths}}
+\includegraphics*[bb=-20 360 620 430,width=0.97\textwidth]
+{Figures/Init/initbegin12.eps}
+\includegraphics*[bb=-20 360 620 430,
+width=0.97\textwidth]{Figures/Init/initbegin16.eps}
+\includegraphics*[bb=-20 360 620 430,
+width=0.97\textwidth]{Figures/Init/initbegin20.eps}
+\includegraphics*[bb=-20 360 620
+430,width=0.97\textwidth]{Figures/Init/initfinish12.eps}\\
+\includegraphics*[bb=-20 360 620
+430,width=0.97\textwidth]{Figures/Init/initfinish16.eps}\\
+\includegraphics*[bb=-20 360 620
+430,width=0.97\textwidth]{Figures/Init/initfinish20.eps}\\
+\caption{The phase plots for different bubble widths as
+$H_{eff}-12$,$H_{eff}-16$ and
+$H_{eff}-20$. The grid for the simulation is $102\mathrm{x}1501$. The phase
+profiles were obtained after $200000$ time steps. One can see that even the
+system is initialized with different bubble volumes the system comes to the
+shape, where the film thickness is conserved. For the given parameters the
+interface thickness is $0.0615$, $0.0611$, $0.0605$.
+\label{fig:different:initialization:widths}}
 \end{figure}
 
 Here are two different examples presented that can quantitatively show the
