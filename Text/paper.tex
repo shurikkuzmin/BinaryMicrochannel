@@ -586,16 +586,13 @@ Parameters were taken as $\tau_{liquid}=4.5$ and $\tau_{bubble}=0.7$.
 The purpose of this section is to validate the correlations of
 \citet{giavedoni-numerical}, Fig. \ref{fig:giavedoni:planar}, and
 \citet{heil-bretherton}, Fig. \ref{fig:heil:planar}, for the range of capillary
-numbers. Because of limiting computational factors ({\color{red} What is the
-least capillary number which is OK?}) we cannot go to the range of small
+numbers. Because of limiting computational factors as memory and the
+performance we cannot go to the range of small
 capillary numbers. However, all the other methods were validated across the
 small capilary numbers and extended for the range of capillary numbers from
 $0.005$ to $1.0$. Our goal is to compare the film thickness over the capillary
-range from $0.03$ to $1.0$. 
-
-To perform numerical simulations we refer to
-grid refinement section where we obtained that the interface width should be
-at most {\color{red} $40$} percent of the interface width. For the benchmark
+range from $0.03$ to $1.0$.  For the
+benchmark
 results we
 suggest the following Capillary numbers as:
 \begin{equation}
@@ -603,50 +600,42 @@ suggest the following Capillary numbers as:
 \end{equation}
 The corresponding approximate film widths from \cite{giavedoni-numerical} are as
 follows:
-$0.04,0.06,0.08,0.1,0.12,0.13,0.15$. $5$ lattice boltzmann units occupy
-{\color{red} Could be another number $40\%$} of the interface thickness.
-Therefore the grid size should be as
-following {\color{red} Michal, different numbers would be here.
-$314\mathrm{x}4681$,$210\mathrm{x}3121$,
-$158\mathrm{x}2341$, $127\mathrm{x}1876$, $106\mathrm{x}1561$,
-$98\mathrm{x}1441$,$85\mathrm{x}1246$ Michal, for the larger capillary
-numbers such small grid is not
-appropriate because of the instabilities.
-}.
-
-{\color{red} Probably we don't need the explanations about initialization here,
-just to present results}
-To utilize previous results to properly initialize simulations to run one need
-to do some modifications. The result is that for the grid with $H_{eff}=200$ we
-obtained the film width as {\color{red} Will be another number $0.0685$} and
-velocity in the center of the bubble as
-{\color{red} Will be another number $0.0045$}. The force gradient was
-{\color{red} Probably the same number $6\, 10^{-6} /16$}. The predicted
-Capillary
-number was $0.05$ and the actual one based on the center velocity calculation is
-{\color{red} Will be another number $0.0795$}. However, we performed simulations
-according the assumed value of $0.05$. Let us perform some correlations to
-calculate how the system needs to be initialized. 
+\begin{equation}
+0.04,0.06,0.08,0.1,0.12,0.13,0.15\,.
+\end{equation}
+To perform numerical simulations we refer
+to
+grid refinement section where we obtained that the interface width should be
+at most $50$ percent of the interface width. Therefore the grid was chosen as
+$202 \mathrm{x} 3001$. $5$ lattice boltzmann units do not occupy more than $60$
+percent of the effective width. Because the simulation get unstable with
+smaller grids and larger gradients, all the capillary number simulations were
+performed on the grid chosen. To properly initialize the force gradient the
+proportionality law was utilized. For instance, with the forcing
+$6\,10^{-6}/16$ was chosen for the grid to obtain predicted capillary number as
+$0.005$. Therefore, one can obtain the initial forcing for other grids using
+simple correlations: 
 \begin{equation}
 \begin{aligned}
-&Ca_{lit} \propto U_{slug}\\
-&U_{slug} \propto \frac{\mathrm{d}P}{\mathrm{d}x} N_y^2\\ 
+&Ca_{lit} \propto U_{bubble}\\
+&U_{bubble} \propto \frac{\mathrm{d}P}{\mathrm{d}x} N_y^2\\ 
 &Ca_{lit} \propto \frac{\mathrm{d}P}{\mathrm{d} x} N_y^2 \text{ or }\\
-&\frac{\mathrm{d}P}{\mathrm{d} x} \propto \frac{Ca_{lit}}{Ny^2},
+&\frac{\mathrm{d}P}{\mathrm{d} x} \propto \frac{Ca_{lit}}{N_y^2},
 \end{aligned}
 \end{equation}
-where the index $lit$ stands for the presented in the literature in
-\cite{giavedoni-numerical,heil-bretherton}. Therefore the initialized consistent
-pressure gradients can be taken from
-previous consistent simulations:
+where the index $lit$ stands for the predicted capillary number
+\cite{giavedoni-numerical,heil-bretherton}. The grid number $Ny$ is not
+involved as because the simulations are conducted on the same grid.
+Therefore,the pressure gradient can be obtained through the capillary numbers
+ratio:
 \begin{equation}
-\frac{\mathrm{d}P}{\mathrm{d} x}=6\,10^{-6}/16 \frac{Ca_{literature}}{0.05}
-\frac{200^2}{N_y^2}=0.3 \frac{Ca_{literature}}{N_y^2}
+\frac{\mathrm{d}P}{\mathrm{d} x}=6\,10^{-6}/16 \frac{Ca_{lit}}{0.05}
 \end{equation}
-Note that $N_y$ is calculated through the expected resolution of the interface
-in comparison with the interface thickness which itself is based on
-Capillary number simulations. In terms of time the steady state successful
-simulation for the grid $202\mathrm{x}3001$ was obtained after $200,000$ steps.
+The film width is initialized through the capillary numbers ratio as well:
+\begin{equation*}
+w=12 \frac{Ca_{lit}}{0.05}
+\end{equation*}
+The results were obtained after $200,000$ steps.
 The physical
 time is as follows:
 \begin{equation}
