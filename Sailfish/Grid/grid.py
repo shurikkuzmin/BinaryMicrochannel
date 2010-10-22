@@ -7,84 +7,97 @@ import numpy
 def Run_Simulations():
     print os.getcwd()
     ny=[102,127,152,177,202,227]
-    nx=[1501,1876,152,177,202,227]
+    nx=[1501,1876,2251,2626,3001,3376]
     force_init=6e-6/4;
+    init_width=6
     #os.mkdir("temp")
     for i in range(0, len(ny)):
         dir_temp=str(ny[i])
         os.mkdir(dir_temp)
-        subprocess.call(['cp','binary_microchannel.py',dir_temp+"/"])
+        subprocess.call(['cp','bmc.py',dir_temp+"/"])
         os.chdir(dir_temp)
-        subprocess.call(['./binary_microchannel.py','--lat_nx='+str(nx[i]),'--lat_ny='+str(ny[i])],'--bc_wall=halfbb','--force=')
+        ratio=float(ny[i]-2)/100.0
+        width=int(init_width*ratio)
+        subprocess.call(['./bmc.py','--lat_nx='+str(nx[i]),'--lat_ny='+str(ny[i]),'--bc_wall=halfbb',\
+            '--force='+str(force_init/(ratio*ratio)),'--batch','--every=50000','--max_iters='+str(int(200000*ratio)+1),'--output=grid','--iwidth='+str(width)])
         
-        cmd="sed -e 's/const int NY=[0-9]*;/const int NY="+str(49*i+2)+";/' -e 's/const int NX=[0-9]*;/const int NX="+str(15*49*i+1)+";/'"
-        #print cmd
-        sed=subprocess.Popen(cmd+" binary_simple.cpp > binary_simple_out.cpp", shell=True)
-        sed.wait()
-        print os.getcwd()
-        comp=subprocess.Popen("g++ -O3 binary_simple_out.cpp -o main.out")
-        comp.wait()
-        subprocess.Popen("./main.out "+str(6*i)+" "+str(i)+" &")
-        os.chdir("..")
-        os.chdir("Pressure")
-        os.mkdir("tmp")
-        sed=subprocess.Popen(cmd+" binary_guo_pressure_bb_walls.cpp > binary_guo_pressure_bb_walls_out.cpp",  shell=True)
-        sed.wait()
-        comp=subprocess.Popen("g++ -O3 binary_guo_pressure_bb_walls_out.cpp -o main.out")
-        comp.wait()
-        subprocess.Popen("./main.out "+str(6*i)+" "+str(i)+" &")
-        os.chdir("..")
         os.chdir("..")
 
-def Get_Zero(prof, factor):
+def Get_Zero(prof):
     zero=0
     #pylab.figure()
     #pylab.plot(prof)
     for counter in range(0, len(prof)/2):
         if prof[counter]>=0 and prof[counter+1]<0:
             zero=-(prof[counter]*(counter+1)-prof[counter+1]*counter)/(prof[counter+1]-prof[counter])
-    print (zero-0.5)/(49*factor)
+    print (zero-1.5)/(len(prof)-4)
 
 def Analyze_Simulations():
     print os.getcwd()
+    ny=[102,127,152,177,202,227]
+    nx=[1501,1876,2251,2626,3001,3376]
+    style=["bo","rH","c<","y>","bs","g^"]
+    color=["b","r","c","y","b","g"]
+    style_diff=["b-","r:","c-.","y--","b^","g<"]
     
-    for i in range(1, 5):
-        dir_temp="Proper Grid/"+str(49*i+2)
+    fig=pylab.figure()
+
+
+    for i in range(0, len(ny)):
+        dir_temp="Results/"+str(ny[i])
+        ratio=float(ny[i]-2)/100.0
         os.chdir(dir_temp)
         #os.chdir("Force")
-        pylab.figure()
-        name="phase"+(1-(i*40000)/100000)*"0"+str(40000*i)+".dat"
-        array=numpy.loadtxt(name)
-        pylab.imshow(array)
-        pylab.figure()
-        pylab.plot(array[:, 520*i])
+        #pylab.figure()
+        name="grid"+str(200000+i*50000)+".npz"
+        array=numpy.load(name)
+        prof=array['phi'][:,int(1400*ratio)]
+        x=numpy.arange(0.0,float(ny[i]))/ratio
+        #pylab.imshow(array['phi'])
+        #pylab.plot(x[0:20],prof[0:20],color[i],linewidth=3)
+        pylab.plot(x,prof,style_diff[i],markersize=10,linewidth=3)
+        #pylab.figure()
+        #pylab.plot(array[:, 520*i])
         #pylab.savefig("grid_phase_prof_"+str(49*i)+".eps", dpi=300)
-        Get_Zero(array[:, 520*i], i)
+        Get_Zero(prof)
         #extrapolator=UnivariateSpline(array[0:(49*i+2)/2, 600*i], numpy.arange(0, (49*i+2)/2),  k=2)
         #print extrapolator(0)
 
         os.chdir("../..")
+    fig.subplots_adjust(left=0.15,bottom=0.15)  
+    pylab.xticks(fontsize=20)
+    pylab.yticks(fontsize=20)
+    pylab.xlabel(r'''$x$''',fontsize=30)
+    pylab.ylabel(r'''$\phi$''',fontsize=30)
+    labels=[r'''$H_{eff}='''+str(value-2)+r'''$''' for value in ny]
+    pylab.legend(labels)
+    pylab.xlim(xmax=15)
+    pylab.savefig("norm_grid_profs.eps",format="EPS",dpi=300)
+
 
 def Analyze_Velocities():
     print os.getcwd()
-    
-    for i in range(1, 5):
-        dir_temp="Proper Grid/"+str(49*i+2)
+    ny=[102,127,152,177,202,227]
+    nx=[1501,1876,2251,2626,3001,3376]
+
+    for i in range(0, len(ny)):
+        dir_temp="Results/"+str(ny[i])
+        ratio=float(ny[i]-2)/100.0
         os.chdir(dir_temp)
         #os.chdir("Force")
-        name="velocity"+(1-(i*40000)/100000)*"0"+str(40000*i)+".dat"
-        array=numpy.loadtxt(name)
-        prof=array[:,520*i]
-        pylab.figure()
-        pylab.imshow(array)
-        pylab.figure()
-        pylab.plot(array[:, 520*i])
+        name="grid"+str(200000+50000*i)+".npz"
+        array=numpy.load(name)
+        ux=array['v'][0]
+        #print ux.shape
+        prof=ux[:,int(1400*ratio)]
+        #pylab.figure()
+        #pylab.plot(prof)
         print prof[len(prof)/2]
         os.chdir("../..")
 
 
 if __name__=="__main__":
     #Analyze_Simulations()    
-    #Analyze_Velocities()
-    Run_Simulations()
-    pylab.show()
+    Analyze_Velocities()
+    #Run_Simulations()
+    #pylab.show()

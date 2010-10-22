@@ -31,8 +31,8 @@ class FESim(lbm.BinaryFluidFreeEnergy):
     filename = 'fe_seperation_2d'
 
     def __init__(self, geo_class, defaults={}):
-        settings = {'verbose': True, 'lat_nx': 736,
-                    'lat_ny': 51+10, 'grid': 'D2Q9',
+        settings = {'verbose': True, 'lat_nx': 1501,
+                    'lat_ny': 102+2, 'grid': 'D2Q9',
                     'kappa': 0.04, 'Gamma': 1.0, 'A': 0.04,
                     'scr_scale': 1,
                     'tau_a': 2.5, 'tau_b': 0.7, 'tau_phi': 1.0,

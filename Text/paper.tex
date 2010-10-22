@@ -491,10 +491,12 @@ simulations one needs to calculate the film thickness as:
 \end{equation}
 where $\phi_0$ is the grid coordinate where phase field equals to $0$, $N_y-2$
 is related to the effective channel height. Note that it's a big
-simplifications to impose the boundary in the middle beetween the bounce-back
-node and the fluid node. In the case of $\delta=0.06$ the initial grid number
+simplification to impose the boundary in the middle beetween the bounce-back
+node and the fluid node which give rise to the viscosity dependent location of
+the wall \cite{ginzburg-multireflection}. In the case of $\delta=0.06$ the
+initial grid number
 is $N_y=102$, which gives the horizontal grid number as $N_x-1=15(N_y-2)=1500$.
-The bubble is initialized as rectangular box with coordinates
+The bubble is initialized as a rectangular box with coordinates
 $y=7\dots N_y-8$, $x=\frac{N_x}{3}\dots \frac{2 N_x}{3}$ and phase
 $\phi_{bubble}=-1$. All other nodes are initialized with the phase field
 $\phi=1$. The force gradient can be estimated through the Poiseuille
@@ -512,44 +514,36 @@ that keeping all liquid viscosities the same yields the following quantity to
 be a
 constant while doing the grid refinement
 $H_{eff}^2\frac{\mathrm{d}P}{\mathrm{d}x}=(N_y-2)^2\frac{\mathrm{d}P}{\mathrm{d}
-x } =Const$.
-{\color{red} Michal, please add some results here and description to it as well.
-The results for the force driven flows velocity phase profiles are shown in
-Fig. \ref{fig:grid:profiles}. The corresponding ratios to the effective channel
-width (without bounce-back nodes) is as $0.0809472165313,
-0.0708111118485, 0.0678483852412, 0.0664499716904$. One can see
-that for the channel widths as $149,198$, the results are convergent. The
-velocities in the center of the bubble are $0.004176469553,
-0.00401004133, 0.003969909065, 0.00394134433$, which corresponds
-to the $Ca=\frac{\mu_{liq} U_{bubble}}{\gamma}=\frac{\frac{2}{3}\,
-0.0045}{0.03771}=0.069$, which is slightly higher when for the assumed
-profile. However, if we define Capillary number through the velocity of the
-slug, then the Capillary number will have another value. The velocities of the
-slug are $0.003411444831,0.003412693869,0.003420338754,0.003425757312$ and
-Capillary number defined through these velocities is $0.0602$. 
-}
-Let us calculate to which extent we need to refine the interface to obtain
-convergent results. The interface itself occupies approximately $5 \xi$, where
-$\xi=\sqrt{k/A}=1$. This interface width divided to the effective channel width
-($5\xi/H_{eff}$) is as follows {\color{red} Please add new values here
-$0.102,0.051,0.034,0.025$ } for the given
-$H_{eff}$. Let us calculate the interface width ratio to the film thickness as
-$5\xi/H_{film}$ is as follows
-{\color{red} Please add here new values $1.2605,  0.7205,  0.501,  0.3839$}.
-Therefore, one needs to
-resolve the interface as {\color{red} Please give number here $40\%$} of the
-expected film width for simulations to be converged.
-{\color{red} If we need this pictures???
+x } = Const$. We performed a number of simulations for the prescribed grids.
+The unified scaled profiles are shown in Fig. \ref{fig:grid:profiles}. One can
+see the visual results convergence for $H_{eff}\geq 175$. The calculated widths
+are $0.0606$,$0.0618$,$0.0617$,$0.0629$,$0.0624$,$0.0624$. We accept the
+convergent results for grids larger than $H_{eff}=175$. However, one can see
+that imposing proper initialization technique, large enough time and the wall
+wettability reveal results which are different only in 3rd digit even for
+underresolved film widths. To calculate how good the interface thickness is
+resolved the interface thickness to the film width thickness is calculated.The
+interface itself occupies approximately $5 \xi$, where
+$\xi=\sqrt{k/A}=1$. Let us calculate the interface width ratio to the film
+thickness as
+$5\xi/H_{film}$ is as follows $0.824$, $0.646$,  $0.539$, $0.453$,
+$0.400$, $0.355$. Therefore, one needs to
+resolve the interface as $40-50$ percent of the
+expected film width for simulations to be converged. We further examine the
+velocities in the center of the bubble to calculate the Capillary number. The
+calculated numbers are $0.0041$, $0.0041$,$0.0040$,$0.0040$,$0.0041$,$0.0039$.
+This corresponds to the average capillary number as $0.07$, which is slightly
+larger than the expected capillary number. The corresponding error can be
+attributed to the density and viscosity ratio which is much larger in the
+Bretherton problem.
 \begin{figure}
-\includegraphics[width=0.47\textwidth]{Figures/grid_phase_prof_49.eps}\hfill
-\includegraphics[width=0.47\textwidth]{Figures/grid_phase_prof_98.eps}\\
-\includegraphics[width=0.47\textwidth]{Figures/grid_phase_prof_147.eps}\hfill
-\includegraphics[width=0.47\textwidth]{Figures/grid_phase_prof_196.eps}\\
-\caption{Do we need these pictures? Grid refined profiles for the effictive
+\includegraphics[width=0.97\textwidth]{Figures/Grid/norm_grid_profs.eps}
+\caption{Grid refined profiles for the effictive
 channel widths
-$H_{eff}=49,98,147,196$.\label{fig:grid:profiles}}
+$H_{eff}=100,125,150,175,200,225$.One can see
+convergent results even for the underresolved film
+thickness.\label{fig:grid:profiles}}
 \end{figure}
-}
 
 \subsection{The influence of the wall gradient}
 The results should not depend on the wall wettability. Wettability is defined
