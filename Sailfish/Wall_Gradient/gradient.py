@@ -27,7 +27,7 @@ def Analyze_Simulations():
     print os.getcwd()
     gradient=[-1.0,-0.8,-0.6,-0.4,-0.2,0.0,0.2,0.4,0.6,0.8,1.0]
     str_gradient=['-10','-8','-6','-4','-2','0','2','4','6','8','10']
-    style=["bo","r+","g--","k-.","c<-.","y>","bs","g^","r^-"]
+    style=["bo","rH","g--","k-.","c<-.","y>","bs","g^","rD"]
     fig=pylab.figure()
     for i in range(0, len(str_gradient)-2):
         dir_temp="Results/Grad"+str_gradient[i]
@@ -48,9 +48,10 @@ def Analyze_Simulations():
         
         #pylab.plot(array[:, 520*i])
         #pylab.savefig("grid_phase_prof_"+str(49*i)+".eps", dpi=300)
-        #Get_Zero(array['phi'][:, 1300])
+        Get_Zero(array['phi'][:, 2000])
         #extrapolator=UnivariateSpline(array[0:(49*i+2)/2, 600*i], numpy.arange(0, (49*i+2)/2),  k=2)
         #print extrapolator(0)
+        
         os.chdir("../..")
     fig.subplots_adjust(left=0.15)
     pylab.xlabel(r'''$x$''',fontsize=30)

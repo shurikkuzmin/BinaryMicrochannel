@@ -401,7 +401,9 @@ can easily approximate the physical time step:
 \Delta t = 7.05 \, 10^{-10} \,\mathrm{s}
 \end{equation}
 which is a small time step. The typical simulation needs approximately
-{\color{red} $100,000$} time steps to come to the steady state solution.
+$100000-300000$ time steps to come to the steady state solution giving the
+physical time simulation around $10^{-5}--10^{-4}\,\mathrm{s}$, which is
+probably not enough to find desired correlations.
 
  \item[II $\bm{Ca=0.05}$] 
    The parameters in the previous subsection imply very long
@@ -560,19 +562,18 @@ We examined $11$ different values for the wall
 gradient ranging from $-1$ to $1$. The results are consistent among all the
 wall gradients given that the interface is resolved in the right way. For the
 given wall gradients the values of interface thicknesses are
-{\color{red} Change these numbers $0.0709130255276, 0.0708903443305,
-0.0708661222722,
-0.0708369188112, 0.0707962325316, 0.0707266326981, 0.0705839443249,
-0.0702489349415, 0.0697553433989$}. For the wall gradients $0.8$ and $1.0$ the
+$0.0633$,$0.0634$,$0.0634$,$0.0634$,$0.0634$,$0.0634$,$0.0633$,$0.0632$,
+$0.0631$. The results are different in 4th digit. For the wall gradients $0.8$
+and $1.0$ the
 simulations are unstable. One can see the simulated profiles in Fig.
 \ref{fig:gradients:profiles} The negative values of the phase gradient are
 preferable, as
 far as the phase of the liquid adjacent to the wall has the value of $1$. That
-means that the phase values near the wall are above $1$. In case of positive
+means that the phase values near the wall are above $1$ and do not interact
+with the bubble which has phase value $-1$.  In case of positive
 gradients the values near the wall are below $1$ and the gradient profile can
 fuse with the values of the gas phase as $-1$, creating the wall stickyness,
-unphysical one. {\color{red} Michal, if you want to add some pictures go ahead
-with it}.
+unphysical one.
 \begin{figure}
 \includegraphics[width=0.97\textwidth]{Figures/Wall/phase_grad_profiles.eps}
 \caption{Phase profiles for different wall gradients. One can see if the width
