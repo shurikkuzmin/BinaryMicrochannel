@@ -329,7 +329,7 @@ interface thickness is $0.0615$, $0.0611$, $0.0605$.
 \label{fig:different:initialization:widths}}
 \end{figure}
 
-Here are two different examples presented that can quantitatively show the
+Here two different examples are presented that can quantitatively show the
 initialization procedure for quite different capillary numbers. In these
 examples we use $k=0.04$ and $A=0.04$ as optimal binary liquid model parameters.
 That explicitly implies the surface tension to be $\sqrt{\frac{8 k
@@ -550,13 +550,13 @@ $H_{eff}=49,98,147,196$.\label{fig:grid:profiles}}
 }
 
 \subsection{The influence of the wall gradient}
-Once the procedure of how to resolve the interface gradient is known, we want
-to examine the influence of the phase gradient, i.e. the wettability of the
-wall, to the film thickness. We examined the
-wall gradient influence on
-the standard grid $202\mathrm{x}3001$ and the initial film width as
-{\color{red} Take the value from previous calculations $20$}
-lattice boltzmann units. We examined $11$ different values for the wall
+The results should not depend on the wall wettability. Wettability is defined
+through the phase gradient \cite{pooley-contact}, $\partial_n \phi$. This
+section is to examine the wall gradient influence on simulations. We take large
+enough resolution for simulations to be consistent. Simulation domain was
+chosen as $177\mathrm{x}2626$ and the initial film width as
+$12$ lattice boltzmann units, which correspond to the predicted film thickness.
+We examined $11$ different values for the wall
 gradient ranging from $-1$ to $1$. The results are consistent among all the
 wall gradients given that the interface is resolved in the right way. For the
 given wall gradients the values of interface thicknesses are
@@ -564,14 +564,23 @@ given wall gradients the values of interface thicknesses are
 0.0708661222722,
 0.0708369188112, 0.0707962325316, 0.0707266326981, 0.0705839443249,
 0.0702489349415, 0.0697553433989$}. For the wall gradients $0.8$ and $1.0$ the
-values are NAN. The negative values of the phase gradient are preferable, as
+simulations are unstable. One can see the simulated profiles in Fig.
+\ref{fig:gradients:profiles} The negative values of the phase gradient are
+preferable, as
 far as the phase of the liquid adjacent to the wall has the value of $1$. That
 means that the phase values near the wall are above $1$. In case of positive
 gradients the values near the wall are below $1$ and the gradient profile can
 fuse with the values of the gas phase as $-1$, creating the wall stickyness,
 unphysical one. {\color{red} Michal, if you want to add some pictures go ahead
 with it}.
-
+\begin{figure}
+\includegraphics[width=0.97\textwidth]{Figures/Wall/phase_grad_profiles.eps}
+\caption{Phase profiles for different wall gradients. One can see if the width
+is properly resolved then the wettability of the wall doesn't play any role
+affecting the film thickness.
+\label{fig:gradients:profiles}
+}
+\end{figure}
 \section{The influence of different viscosities}
 The results obtained earlier are taken for the liquiqs viscosity ratio $10$.
 We performed the same simulations for the liquids viscosity ratio as $20$.
