@@ -90,7 +90,7 @@ def Analyze_Simulations():
     print capillaries
     print velocities
     pylab.loglog(capillaries,widths,"go-",linewidth=3,markersize=10)
-    pylab.loglog(giavedoni[:,0],giavedoni[:,1],"bD-",linewidth=3,markersize=10)
+    pylab.loglog(giavedoni[:,0],giavedoni[:,1]/2.0,"bD-",linewidth=3,markersize=10)
     pylab.loglog(capillary_theor,width_theor,"ys--",linewidth=3,markersize=10)
     pylab.xlim(0.02,1.1)
     numpy.savetxt("capillary.dat",zip(capillaries,widths))
