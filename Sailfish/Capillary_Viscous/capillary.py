@@ -132,7 +132,7 @@ def Analyze_Velocities():
 
 
 if __name__=="__main__":
-    Analyze_Simulations()    
+    #Analyze_Simulations()    
     #Analyze_Velocities()
-    #Run_Simulations()
+    Run_Simulations()
     pylab.show()

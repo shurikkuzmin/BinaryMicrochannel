@@ -576,11 +576,6 @@ affecting the film thickness.
 \label{fig:gradients:profiles}
 }
 \end{figure}
-\section{The influence of different viscosities}
-The results obtained earlier are taken for the liquiqs viscosity ratio $10$.
-We performed the same simulations for the liquids viscosity ratio as $20$.
-Parameters were taken as $\tau_{liquid}=4.5$ and $\tau_{bubble}=0.7$. 
-{\color{red} The results showed that blah-blah-blah - I guess will be the same}.
 
 \section{Capillary number region}
 The purpose of this section is to validate the correlations of
@@ -590,13 +585,13 @@ numbers. Because of limiting computational factors as memory and the
 performance we cannot go to the range of small
 capillary numbers. However, all the other methods were validated across the
 small capilary numbers and extended for the range of capillary numbers from
-$0.005$ to $1.0$. Our goal is to compare the film thickness over the capillary
-range from $0.03$ to $1.0$.  For the
+$0.005$ to $10.0$. Our goal is to compare the film thickness over the capillary
+range from $0.03$ to $0.8$, which is a computationally reasonable task.  For the
 benchmark
 results we
 suggest the following Capillary numbers as:
 \begin{equation}
-0.03,0.05,0.08,0.1,0.2,0.4,0.6,0.8,1.0\, .
+0.03,0.05,0.08,0.1,0.2,0.4,0.6,0.8\, .
 \end{equation}
 The corresponding approximate film widths from \cite{giavedoni-numerical} are as
 follows:
@@ -624,7 +619,7 @@ simple correlations:
 \end{aligned}
 \end{equation}
 where the index $lit$ stands for the predicted capillary number
-\cite{giavedoni-numerical,heil-bretherton}. The grid number $Ny$ is not
+\cite{giavedoni-numerical,heil-bretherton}. The grid number $N_y$ is not
 involved as because the simulations are conducted on the same grid.
 Therefore,the pressure gradient can be obtained through the capillary numbers
 ratio:
@@ -635,77 +630,20 @@ The film width is initialized through the capillary numbers ratio as well:
 \begin{equation*}
 w=12 \frac{Ca_{lit}}{0.05}
 \end{equation*}
-The results were obtained after $200,000$ steps.
-The physical
-time is as follows:
-\begin{equation}
-\begin{aligned}
-&\Delta t=\frac{U_{slug,LB} \Delta X}{U_{phys}} \propto \frac{1}{N_y-2}\\
-&N_{iter}=200,000 \frac{N_y-2}{200}\approx 1000 N_y\\
-%&N_{output}=51 Ny\\
-\end{aligned}
-\end{equation}
-
-{\color{red} That's why we need better grid for larger Capillary numbers. Steady
-simulations were obtained for the following Capillary numbers
-$0.03,0.05,0.08,0.1$  }with the film thicknesses as
-{\color{red} $0.0337433850478, 0.063192148642, 0.0799078589211,
-0.0891674460655$} which are
-quite close to the predicted one $0.04,0.06,0.08,0.1$. The thing is to identify
-the Capillary numbers associated with those numbers. The velocity in the
-centers are $0.00209258774,0.003826643811,0.006506324324,0.008333889077$. The
-Capillary numbers associated with these velocities are $0.036992074529545796, 
-0.067646144698590829,0.1150166512524845,0.14732373700007995$, which again a bit
-overpredictive but consistent. The fig.
-\ref{fig:capillary:simple} represents the thickness against the Capillary
-number which mimics the curve behavior for the Capillary number dependance as
-indicated in Fig. \ref{fig:giavedoni:planar}.
+The results were obtained after $200,000$ steps. Film thicknesses were obtained as $0.042$,$0.066$, $0.085$, $0.077$, $0.123$, $0.153$, $0.164$, $0.173$ with the bubble center velocities as $0.0022$, $0.0041$, $0.0068$, $0.0055$, $0.0185$, $0.0388$, $0.0592$, $0.0782$. Based on the obtained center velocities the capillary numbers 
+are formed as $0.039$,$0.072$,$0.120$,$0.098$,$0.328$,$0.686$,$1.046$,$1.383$. Those capillary numbers are overpredicted but the obtained lengths are overpredicted as well due to the improper body force imposement. 
+We extracted data from \cite{giavedoni-numerical,heil-bretherton} and compared it with the simulation. The results are shown in Fig. \ref{fig:capillary:comparison}.
 \begin{figure}
-\includegraphics[width=0.47\textwidth]{Figures/capillary_thickness_simple.eps}
-\hfill
-\includegraphics[width=0.47\textwidth]{Figures/capillary_range.eps}
-\caption{{\color{red} This one to eliminate - just present here
-comparison between our simulations in the longer range of capillary
-numbers and Giavedoni}Thickness versus the capillary
-number for different scalings based on
-the average capillary number. \label{fig:capillary:simple}}
+\includegraphics[width=0.97\textwidth]{Figures/Capillary/capillaries_comparison.eps}
+\caption{The comparison between simulation results and results from \cite{giavedoni-numerical} and \cite{heil-bretherton}. One can see the reasonable agreement. The film thickness against the capillary number range is presented.\label{fig:capillary:comparison}}
 \end{figure}
 
-\subsection{The influence of the force}
+\section{The influence of different viscosities}
+The results obtained earlier are taken for the liquiqs viscosity ratio $10$.
+We performed the same simulations for the liquids viscosity ratio as $20$.
+Parameters were taken as $\tau_{liquid}=4.5$ and $\tau_{bubble}=0.7$. 
+{\color{red} The results showed that blah-blah-blah - I guess will be the same}.
 
-{\color{red} Michal if you find it useful - use this section. My suggestion is
-to eliminate it.}
-\begin{description}
- \item 
-On the grid $198\mathrm{x}2941$ and the initial film width as $20$ units
-the
-influence of the force is studied. $16$ different values of force are examined,
-which have the following expression $\frac{0.000006}{16} i$, where $i=1 \dots
-16$. The system is allowed to come to the equilibrium after $200,000$ steps. The
-goal is to study the influence of the force on the velocity and therefore the
-capillary number. Unfortunately in the first case only a few simulations are
-stable, i.e.
-$i=1,2$ is stable. The results for the interface thicknesses are
-$0.0700122222668,0.0985152303286$ with the velocities associated as
-$0.004490013864,0.009597299475$. Those numbers correspond to the bubble
-capillary numbers as $0.079372981271400328, 0.16965788849626481$. The average
-capillary numbers are $0.07381636,0.14095644$. 
-
-\item
-On the grid $394\mathrm{x}5881$ and the initial film width as $20+4 i$,where
-$i=1 \dots 5$ units the
-influence of the force is studied. The force is scheduled as
-$\frac{0.000006}{128}+i \frac{0.000006}{640}$.The intention is to cover the
-calculation of the Capillary numbers in the range $0.03,0.035,0.04,0.045,0.05$. 
-$5$ different values of force are examined. The system is allowed to come to the
-equilibrium after $400,000-40,000 i$ steps. The associated thicknesses were as
-it follows
-$0.0488915027016,0.0538098132568,0.0587100833678,0.0615470184196,
-0.0661331899123$. Bubble velocities are
-$0.002592856205,0.003077834398,0.003562975124,0.004034533823,0.004470657603$.
-Bubble Capillary numbers are $0.04583566,  0.05440894,  0.0629851 , 
-0.07132116, 0.07903081$.
-\end{description}
 
 \section{Conclusion}
 The work presents the numerical tips and the benchmark for the
