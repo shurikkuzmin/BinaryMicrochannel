@@ -41,8 +41,9 @@ def Analyze_Simulations():
     capillary_str=["3","5","8","10","20","40","60","80","100"]
     width_theor=[0.04,0.06,0.08,0.1,0.12,0.13,0.15,0.16,0.17]
 
-    exam=[2000,2200,2600,2500,1100,950,600,350,350]
-    good=[0,1,2,3,4,5,6,7]
+    #exam=[2000,2200,2600,2500,1100,950,600,350,350] Old values
+    exam=[2000,2100,2200,2400,100,1600,200,1600,350]
+    good=[0,1,2,3,4,5,6,7,8]
     #style=["bo","rH","c<","y>","bs","g^"]
     #color=["b","r","c","y","b","g"]
     #style_diff=["b-","r:","c-.","y--","b^","g<"]
@@ -52,7 +53,10 @@ def Analyze_Simulations():
     velocities=[]
     
     #read the giavedoni data (not precise though)
-    giavedoni=genfromtxt("planarcasesolution.csv",delimiter=',',dtype=float)[1:]
+    #giavedoni=genfromtxt("planarcasesolution.csv",delimiter=',',dtype=float)[1:]
+    
+    #read old data
+    capillary_not_viscous=numpy.loadtxt("../Capillary/capillary.dat")
 
 
     for i in range(0, len(capillary_theor)):
@@ -80,20 +84,19 @@ def Analyze_Simulations():
         #pylab.plot(array[:, 520*i])
         #pylab.savefig("grid_phase_prof_"+str(49*i)+".eps", dpi=300)
         #Get_Zero(prof)
-        #extrapolator=UnivariateSpline(array[0:(49*i+2)/2, 600*i], numpy.arange(0, (49*i+2)/2),  k=2)
-        #print extrapolator(0)
 
         os.chdir("../..")
     
     fig=pylab.figure()
-    capillaries=numpy.array(velocities)*(2.0/3.0)/math.sqrt(8.0*0.04*0.04/9.0)
+    capillaries=numpy.array(velocities)*(4.0/3.0)/math.sqrt(8.0*0.04*0.04/9.0)
     print "Widths=",widths
     print "Capillaries=",capillaries
     print "Velocities",velocities
     
     pylab.loglog(capillaries,widths,"go-",linewidth=3,markersize=10)
-    pylab.loglog(giavedoni[:,0],giavedoni[:,1]/2.0,"bD-",linewidth=3,markersize=10)
-    pylab.loglog(capillary_theor,width_theor,"ys--",linewidth=3,markersize=10)
+    pylab.loglog(capillary_not_viscous[:,0],capillary_not_viscous[:,1],"bD-",linewidth=3,markersize=10)
+    #pylab.loglog(giavedoni[:,0],giavedoni[:,1]/2.0,"bD-",linewidth=3,markersize=10)
+    #pylab.loglog(capillary_theor,width_theor,"ys--",linewidth=3,markersize=10)
     pylab.xlim(0.02,1.1)
     pylab.ylim(ymin=0.01)
     numpy.savetxt("capillary.dat",zip(capillaries,widths))
@@ -105,9 +108,9 @@ def Analyze_Simulations():
     pylab.ylabel(r'''$\delta$''',fontsize=30)
     
     #labels=[r'''$H_{eff}='''+str(value-2)+r'''$''' for value in ny]
-    pylab.legend(["Simulations","Giavedoni","Heil"],loc=4)
+    pylab.legend([r'''$\frac{\mu_{liq}}{\mu_{gas}}=20$''',r'''$\frac{\mu_{liq}}{\mu_{gas}}=10$'''])
     #pylab.xlim(xmax=15)
-    pylab.savefig("capillaries_comparison.eps",format="EPS",dpi=300)
+    pylab.savefig("capillaries_viscous.eps",format="EPS",dpi=300)
 
 
 def Analyze_Velocities():
@@ -132,7 +135,7 @@ def Analyze_Velocities():
 
 
 if __name__=="__main__":
-    #Analyze_Simulations()    
+    Analyze_Simulations()    
     #Analyze_Velocities()
-    Run_Simulations()
+    #Run_Simulations()
     pylab.show()
