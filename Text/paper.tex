@@ -7,8 +7,8 @@
 
 \title{The binary liquid model for gravity-driven microchannel simulations}
 \date{\today}
-
-
+\newcommand{\Ca}{\mathrm{Ca}}
+\newcommand{\todo}[1]{{\color{red}#1}}
 \begin{document}
 
 \maketitle
@@ -16,18 +16,18 @@
 \begin{abstract}
 The motion towards exploration of nano- and microscale phenomena brings new
 challenges to simulation tools. The continuous physics approach is limited on
-those scales, therefore such methods as Molecular Dynamics (MD) or Lattice
-Boltzmann Method (LBM) become appropriate. This work has aim to
-reproduce the gravity driven microchannel flow of free surface liquid with the
-help of the binary liquid lattice Boltzmann method. In the low capillary number
-$Ca$ region the flow is thoroughly described by Bretherton \cite{bretherton},
-where the deposition film thickness is proportional to $Ca^{2/3}$. The binary
-liquid model is continuous interface multiphase model. Therefore, the issue of
-how to properly resolve the interface to obtain proper correlations holds. In
-the work we address the binary liquid parameters, as mobility $M$, surface
-tension parameter $k$, the free energy constant $A$, grid resolution, to
-properly simulate microchannel flow. The work is valuable for industry and
-researchers willing to simulate Bretherton phenomena.
+those scales, and methods such as Molecular Dynamics (MD) or the Lattice
+Boltzmann Method (LBM) become more appropriate. This work aims to
+reproduce the gravity driven microchannel flow of a free surface liquid with the
+help of the free-energy binary liquid lattice Boltzmann method. In the low capillary number
+$\Ca$ regime, the flow is thoroughly described by Bretherton \cite{bretherton},
+where the deposition film thickness is proportional to $\Ca^{2/3}$. The binary
+liquid model we use is a continuous-interface multiphase model, which presents
+the question of how to properly resolve the interface to obtain proper correlations \todo{between what?}.
+In this work we investigate how the binary liquid model parameters and the grid resolution
+need to be adjusted to properly simulate microchannel flows.  The presented results
+should be of interest for industrial applications and to researchers simulating
+Bretherton phenomena.
 \end{abstract}
 
 
