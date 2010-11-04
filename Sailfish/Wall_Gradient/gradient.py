@@ -63,24 +63,51 @@ def Analyze_Simulations():
 
 def Analyze_Velocities():
     print os.getcwd()
-    
-    for i in range(1, 5):
-        dir_temp="Proper Grid/"+str(49*i+2)
+    gradient=[-1.0,-0.8,-0.6,-0.4,-0.2,0.0,0.2,0.4,0.6,0.8,1.0]
+    str_gradient=['-10','-8','-6','-4','-2','0','2','4','6','8','10']
+    style=["bo","rH","g--","k-.","c<-.","y>","bs","g^","rD"]
+    fig=pylab.figure()
+    velocities=[]
+    for i in range(0, len(str_gradient)-2):
+        dir_temp="Results/Grad"+str_gradient[i]
         os.chdir(dir_temp)
-        #os.chdir("Force")
-        name="velocity"+(1-(i*40000)/100000)*"0"+str(40000*i)+".dat"
-        array=numpy.loadtxt(name)
-        prof=array[:,520*i]
-        pylab.figure()
-        pylab.imshow(array)
-        pylab.figure()
-        pylab.plot(array[:, 520*i])
-        print prof[len(prof)/2]
+        name="grad180000.npz"
+        array=numpy.load(name)
+        ny=array['phi'].shape[0]
+        nx=array['phi'].shape[1]
+        #fig=pylab.figure(figsize=(11,1.5))
+        #pylab.imshow(array['phi'])
+        #pylab.plot(array['phi'][0:22,2000],style[i],linewidth=3,markersize=10)
+        #pylab.yticks([0,25,50,75,100])
+        #pylab.savefig("../../initfinish"+str(width[i])+".eps",format="EPS",dpi=70)
+        velocities.append(array['v'][0][ny/2,2000])
+        #fig_init=pylab.figure(figsize=(11,1.5))
+        #array_init=numpy.load("init000000.npz")
+        #pylab.imshow(array_init['phi'])
+        #pylab.yticks([0,25,50,75,100])
+        #pylab.savefig("../../initbegin"+str(width[i])+".eps",format="EPS",dpi=70)
+        
+        #pylab.plot(array[:, 520*i])
+        #pylab.savefig("grid_phase_prof_"+str(49*i)+".eps", dpi=300)
+        #Get_Zero(array['phi'][:, 2000])
+        #extrapolator=UnivariateSpline(array[0:(49*i+2)/2, 600*i], numpy.arange(0, (49*i+2)/2),  k=2)
+        #print extrapolator(0)
+        
         os.chdir("../..")
+    pylab.plot(gradient[:-2],velocities,"bH-",markersize=12)
+    pylab.ylim(0.0,0.005)
+    fig.subplots_adjust(left=0.18,bottom=0.15)
+    pylab.xlabel( r'''$\partial_n\phi$''',fontsize=30)
+    pylab.ylabel(r'''$u_x$''',fontsize=30)
+    #pylab.legend([r'''$\partial_n\phi=$'''+r'''$'''+str(x)+r'''$''' for x in gradient[:-2]])
+    pylab.xticks(fontsize=20)
+    pylab.yticks(fontsize=20)
+    #pylab.savefig("velocities_grad_profiles.eps",format="EPS",dpi=300)
+    print numpy.std(velocities)/numpy.mean(velocities)
 
 
 if __name__=="__main__":
-    Analyze_Simulations()    
-    #Analyze_Velocities()
+    #Analyze_Simulations()    
+    Analyze_Velocities()
     #Run_Simulations()
     pylab.show()

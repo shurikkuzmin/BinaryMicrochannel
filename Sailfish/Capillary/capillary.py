@@ -112,23 +112,24 @@ def Analyze_Simulations():
 def Analyze_Bubble():
     from numpy import genfromtxt
     print os.getcwd()
-    capillary_theor=[0.03,0.05,0.08,0.1,0.2,0.4,0.6,0.8]
-    capillary_str=["3","5","8","10","20","40","60","80"]
+    capillary_theor=numpy.array([0.03,0.05,0.08,0.1,0.2,0.4,0.6,0.8])
+    capillary_str=numpy.array(["3","5","8","10","20","40","60","80"])
     width_theor=[0.04,0.06,0.08,0.1,0.12,0.13,0.15,0.16]
 
     exam=[2000,2200,2600,2500,1100,950,600,350]
     good=[0,1,2,3,4,5,6,7]
-    good_value=[1,2,3]
-    #style=["bo","rH","c<","y>","bs","g^"]
+    good_value=[1,2,4]
+    style=["b-.","r--","c."]
+    labels=[r'''$Ca='''+ca+r'''$''' for ca in numpy.array(capillary_theor[good_value],dtype=str)]
     #color=["b","r","c","y","b","g"]
     #style_diff=["b-","r:","c-.","y--","b^","g<"]
     
     #fig=pylab.figure()
-    low=[1509,1864,1747]
-    high=[2554,2900,2724]
+    low=[1509,1865,381]
+    high=[2554,2900,1427]
     widths=[]
     velocities=[]
-    pylab.figure()
+    fig=pylab.figure()
     for counter,value in enumerate(good_value):
         dir_temp="Results/"+capillary_str[value]
         #ratio=float(ny[i]-2)/100.0
@@ -163,36 +164,24 @@ def Analyze_Bubble():
         #print extrapolator(0)
         
         #pylab.figure()
-        pylab.plot(thicknesses)
-        pylab.ylim(ymin=0.0,ymax=0.5)
-
-
+        pylab.plot(thicknesses,style[counter],linewidth=3)
 
         os.chdir("../..")
     
-    #fig=pylab.figure()
-    #capillaries=numpy.array(velocities)*(2.0/3.0)/math.sqrt(8.0*0.04*0.04/9.0)
-    #print "Widths=",widths
-    #print "Capillaries=",capillaries
-    #print "Velocities",velocities
-    
-    #pylab.loglog(capillaries,widths,"go-",linewidth=3,markersize=10)
-    #pylab.loglog(giavedoni[:,0],giavedoni[:,1]/2.0,"bD-",linewidth=3,markersize=10)
-    #pylab.loglog(capillary_theor,width_theor,"ys--",linewidth=3,markersize=10)
-    #pylab.xlim(0.02,1.1)
-    #pylab.ylim(ymin=0.01)
-    #numpy.savetxt("capillary.dat",zip(capillaries,widths))
-    
-    #fig.subplots_adjust(left=0.15,bottom=0.15)  
-    #pylab.xticks(fontsize=20)
-    #pylab.yticks(fontsize=20)
-    #pylab.xlabel(r'''$Ca$''',fontsize=30)
-    #pylab.ylabel(r'''$\delta$''',fontsize=30)
+    pylab.ylim(ymin=0.0,ymax=0.5)
+    pylab.xlim(xmax=1050)
+
+    pylab.legend(labels)
+    fig.subplots_adjust(left=0.15,bottom=0.15)  
+    pylab.xticks(fontsize=20)
+    pylab.yticks(fontsize=20)
+    pylab.xlabel(r'''$x$''',fontsize=30)
+    pylab.ylabel(r'''$\delta$''',fontsize=30)
     
     #labels=[r'''$H_{eff}='''+str(value-2)+r'''$''' for value in ny]
     #pylab.legend(["Simulations","Giavedoni","Heil"],loc=4)
     #pylab.xlim(xmax=15)
-    #pylab.savefig("capillaries_comparison.eps",format="EPS",dpi=300)
+    pylab.savefig("bubble_length.eps",format="EPS",dpi=300)
 
 
 

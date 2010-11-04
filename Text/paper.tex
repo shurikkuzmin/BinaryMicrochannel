@@ -576,6 +576,19 @@ affecting the film thickness.
 \label{fig:gradients:profiles}
 }
 \end{figure}
+Another question which arises is the influence of the wall gradient on the bubble velocity and the
+capillary number accordingly. The shear stress controlled by the wall phase gradient changes the
+effective velocity near the wall, thus changing the bubble velocity as well.
+One can see that if the film thickness is resolved properly the influence of the wall gradient can
+be neglected. Fig. \ref{fig:velocities:wall:gradient} shows the center bubble velocity for different
+gradients. The average relative error around the mean velocity is $0.1\%$. 
+\begin{figure}
+\includegraphics[width=0.97\textwidth]{Figures/Wall/velocities_grad_profiles.eps}
+\caption{The center bubble velocity versus the phase gradient. One can neglect the influence of
+the wall once the film is properly resolved.
+\label{fig:velocities:wall:gradient}
+}
+\end{figure}
 
 \subsection{Capillary number region}
 The purpose of this section is to validate the correlations of
@@ -640,7 +653,21 @@ We extracted data from \cite{giavedoni-numerical,heil-bretherton} and compared i
 
 
 \subsection{The film variation over the bubble}
-Though this section 
+This section is intended to show the qualitative variation of the film thickness over the bubble.
+Though there are simulations for the bubble length simulations for the two-dimensional case, due to
+the presentation of data it is hard to extract numerical data. One can see bubble lengths
+variations for the two-dimensional simulations for the range of capillary numbers in Fig.
+\ref{fig:sehgal:bubble:length}.
+\begin{figure}
+\includegraphics[width=0.47\textwidth]{Figures/Bubble/bubble_length.eps}\hfill
+\includegraphics[width=0.47\textwidth]{Figures/Bubble/bubble_sehgal.eps}\\
+\caption{The qualitative comparison for the film thickness across
+the bubble length. Right (courtesy of \citet{sehgal-microchannel}),
+left (present simulations).\label{fig:sehgal:bubble:length}}
+\end{figure}
+One can see the qualitative agreement, i.e. the thickness increases towards the front meniscus and
+rapidly decreases towards the rear meniscus. This shape sometimes is called as a "bullet" shape.
+
 
 \subsection{The influence of different viscosities}
 The results obtained earlier are taken for the liquiqs viscosity ratio $10$.
