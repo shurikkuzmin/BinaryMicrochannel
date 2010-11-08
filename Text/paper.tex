@@ -23,7 +23,8 @@ help of the free-energy binary liquid lattice Boltzmann method. In the low capil
 $\Ca$ regime, the flow is thoroughly described by Bretherton \cite{bretherton},
 with the deposition film thickness proportional to $\Ca^{2/3}$. The binary
 liquid model we use is a continuous-interface multiphase model, which presents
-the question of how to properly resolve the interface to obtain proper correlations \todo{between what?}.
+the question of how to properly resolve the interface in comparison with the film thickness to
+obtain Bretherton correlations.
 In this work we investigate how the binary liquid model parameters and the grid resolution
 need to be adjusted to properly simulate microchannel flows.  The presented results
 should be of interest for industrial applications and to researchers simulating
@@ -56,7 +57,7 @@ multiphase lattice Boltzmann models \cite{swift, Shan-chen:extended} resolve
 the interface in a continuous way. Such a representation
 brings issues with the film thickness resolution versus the interface
 resolution. In other words, when it comes to the resolution of the film
-thickness the diffusion \todo{diffusive?} interface should be resolved in such a way as to have
+thickness the diffusive interface should be resolved in such a way as to have
 negligible effect on the physics of the film.
 
 This work examines the binary liquid free-energy LB model \cite{swift}. The
@@ -195,8 +196,7 @@ phase with $\phi=1$ and a so-called gas phase with $\phi=-1$. The
 relaxation time is taken to depend linearly on the relaxation
 times $\tau_{\mathrm{gas}}$ and $\tau_{\mathrm{liq}}$:
 $\tau=\tau_{\mathrm{gas}}+\frac{\phi+1}{2}\tau_{\mathrm{liq}}$.
-The surface tension in the framework of the binary liquid model is $\sqrt{8 k A}{9}$ \todo{is this right?  should the 9 be in the
-denominator?  is not, perhaps put before the root?}.
+The surface tension in the framework of the binary liquid model is $\sqrt{\frac{8 k A}{9}}$.
 
 \section{Lattice Boltzmann benchmark}
 To properly simulate and to compare simulation results with the data
@@ -213,11 +213,12 @@ influence of spurious currents.
  \item The wettability coefficient which in principle can control the
 dynamic angle and the menisci appearance \cite{pagonabarraga-finger} should not
 influence the overall solution.
- \item The free-energy model examined in the work is single density, two
+ \item The free-energy model examined in the work is a single density, two
 viscosities model. The classical Bretherton problem is a free-interface problem
-where the film thickness is established by itself. The viscosity ratio should
-be large, as indicated in \cite{pagonabarraga-fingers}, however no studies
-address this issue. \todo{what's the conclusion of the impact of this issue to our paper then?}
+where the film thickness is established by itself. Thus, the viscosity and density ratios for the
+Bretherton problem should
+be large. However, in terms of the lattice Boltzmann free-energy framework those issues are not
+addressed and will be studied in the current work.
   \item The Bretherton problem addresses bubble flow driven by a pressure
 difference, not a body force.  It is however relatively difficult to impose a
 pressure difference in the framework of the binary liquid model, as two
@@ -233,9 +234,9 @@ framework where one needs to calculate Laplacians near the boundaries.
 Although one can apply certain finite difference stencils
 \cite{arnold-boundary,hunt-boundary} developed specifically for curved boundaries,
 the analysis of error introduced by the boundary conditions becomes an issue.
-Our benchmark is therefore done is for an axis-symmetric case. \todo{since this paper
-is about a 2d flow, which we already said in the intro, what is the point of discussing
-curve boundaries which are only an issue in 3d?}
+Our benchmark is therefore done is for a plane-symmetric case in the two-dimensional case. We do
+not address the axis-symmetric two-dimensional case since it implies the derivation of additional
+mass and force terms for the square based LBM grid \cite{halliday-circular}.
 \end{itemize}
 Given all the concerns and challenges, the suggested lattice Boltzmann framework
 is a two-dimensional flow driven by a body force.  An analytical
@@ -347,15 +348,13 @@ given by the equation:
   \begin{equation}
   \frac{h_{\infty}}{H}=1.3375 \Ca^{2/3}=0.03899,
   \end{equation}
-  where we assume that $2 H$ or $N_y$ is the channel width in lattice units.
+  where we assume that $2 H$ or $N_y$ is the channel width in lattice units. Thus, the film
+thickness occupies around $2$ percent of the whole channel height. Let us impose that $8$ lattice
+units are required to resolve  $2$ percent of the channel. Note that $5$ out of $8$ lattice units
+($62.5$ percent) are used to resolve the phase interface. Therefore the channel width is $400$
+lattice units.
 
-\todo{Therefore one needs to resolve the interface which is around $2$ percent of
-the  whole channel width with, for instance $8$ lattice units, where $5$ lattice
-units occupies the interface width for given. Note that the interface occupies
-$62.5$ percent of the interface. -- these two sentences need to be rewritten for clarity}  Therefore the channel
-  width is $400$ lattice units.
-
-  We take the bubble length as $5$ channel widths
+We take the bubble length as $5$ channel widths
   and the distance between bubbles is $2$ bubble lengths. This gives a
 grid size of $400 \times 6000$. In terms of computer memory
 requirements, the calculations with double precision accuracy demand:
@@ -367,7 +366,7 @@ populations}\\
 &\times\,400\,\times\,6000\approx 345 \mathrm{MB}. 
 \end{aligned}
 \end{equation}
-Even with this naive assumption for the $50$ percent resolution of the film
+Even with this naive assumption for the $62.5$ percent resolution of the film
 width in comparison with the interface width, one can get the memory
 requirement of $345 \mathrm{MB}$. 
 
@@ -379,15 +378,7 @@ After resolving the interface one can  calculate the
   \end{equation}
   where $\mu_{\mathrm{slug}}=1/3 (2.5-0.5)=0.6666$.
   This velocity implies the following pressure gradient calculated from the
-  Poiseuille flow solution: \todo{maybe add a ref, to this eq. from the previous section?}
-  \begin{equation}
-  \begin{aligned}
-  &U_{\mathrm{bubble}}=\frac{H^2}{8\mu} \frac{\mathrm{d}P}{\mathrm{d}x}=\frac{N_y^2}{8/3
-  (\tau_{\mathrm{liq}}-1/2)}\frac{\mathrm{d}P}{\mathrm{d}x}\\
-  &\frac{\mathrm{d}P}{\mathrm{d}x}=\frac{8}{N_y^2}\gamma Ca
-  \end{aligned}
-  \end{equation}
-  The pressure gradient is then:
+  Poiseuille flow solution, Eq. \ref{poiseuille:velocity:center}: 
   \begin{equation}
   \begin{aligned}
   \frac{\mathrm{d}P}{\mathrm{d}x}=9.42 \cdot 10^{-9}.
@@ -407,7 +398,7 @@ can easily approximate the physical time step:
 which is quote small. A typical simulation needs approximately
 $100000-300000$ time steps to come to the steady state solution giving the
 physical time simulation around $10^{-5}-10^{-4}\,\mathrm{s}$, which is
-probably not enough to find the desired correlations. \todo{correlations between what?}
+probably not enough to find the desired physics correlations taken place on macroscopic time level.
 
  \item[II $\bm{Ca=0.05}$] 
    The parameters in the previous subsection imply very long
@@ -434,10 +425,8 @@ which
   \ref{fig:heil:planar}, and for Reynolds number $40$ equals $0.12$. We want to
   resolve $6\%$ of whole channel width with $12$ lattice units, where $5$
 lattice units are related to the interface resolution.  Therefore the channel
-  width is $200$ lattice units. We take the bubble length as $5$ channel widths
-  with distance between slugs being $2$ bubble lengths \todo{this I think is the 3rd
-  time this particular geometry is mentioned in this paper, perhaps just skip it in this place?}. That gives
-the grid size of $200 \times 3000$. The velocity can be
+  width is $200$ lattice units. Therefore using the assumptions for the benchmark 
+the grid size is $200 \times 3000$. The velocity can be
 calculated from the Capillary number as:
   \begin{equation}
   U_{\mathrm{bubble}}=0.05 \frac{\gamma}{\mu_{\mathrm{liq}}}=0.05 \frac{0.037712}{0.6666}=2.82\cdot
@@ -484,8 +473,7 @@ film thickness where results are not dependant on the grid resolution.
 
 We illustrate the procedure in more detail for the capillary number
 $0.05$. As it was pointed out earlier, the film thickness in that case is $6$ percent.
-Note that in the case of the half-way bounce-back walls \todo{the bounce-back
-proceduce was not described earlier in this paper} which are used in the
+Note that in the case of the half-way bounce-back walls \cite{yu} which are used in the
 simulations one needs to calculate the film thickness as:
 \begin{equation}
 \delta=(\phi_0-0.5)/(N_y-2),
@@ -639,11 +627,13 @@ the corresponding bubble center velocities $0.0022$, $0.0041$, $0.0068$, $0.0055
 $0.0185$, $0.0388$, $0.0592$, $0.0782$. Based on the obtained center velocities,
 the capillary numbers are calculated as
 $0.039$,$0.072$,$0.120$,$0.098$,$0.328$,$0.686$,$1.046$,$1.383$. These
-capillary numbers are overpredicted but the obtained lengths are overpredicted
-as well due to the improper body force imposement \todo{what is improper about? do you refer
-to the fact that the Poiseuille should not be sued here?}.  We extracted data from
+capillary numbers are overpredicted but the obtained widths are overpredicted
+as well due to the improper body force imposement, because the assumption of Poiseuille flow is not
+valid. If one needs to obtain the desired capillary number, the shooting method for the forcing is
+necessary starting as the Poiseuille pressure gradient force as the initial condition. We extracted
+data from
 \cite{giavedoni-numerical,heil-bretherton} and compared it the results of our
-simulations, which is shown in Fig. \ref{fig:capillary:comparison}.
+simulations, which are shown in Fig. \ref{fig:capillary:comparison}.
 \begin{figure}
 \includegraphics[width=0.97\textwidth]{Figures/Capillary/capillaries_comparison.eps}
 \caption{A comparison between simulation results and results from
