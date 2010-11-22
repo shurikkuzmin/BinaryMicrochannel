@@ -22,7 +22,7 @@ def Get_Zero(prof):
     for counter in range(0, len(prof)/2):
         if prof[counter]>=0 and prof[counter+1]<0:
             zero=-(prof[counter]*(counter+1)-prof[counter+1]*counter)/(prof[counter+1]-prof[counter])
-    print (zero-1.5)/(len(prof)-4)
+    print (zero-0.5)/(len(prof)-2)
 
 def Analyze_Simulations():
     print os.getcwd()
@@ -33,14 +33,19 @@ def Analyze_Simulations():
         name="init180000.npz"
         array=numpy.load(name)
         fig=pylab.figure(figsize=(11,1.5))
-        pylab.imshow(array['phi'])
-        pylab.yticks([0,25,50,75,100])
+        pylab.imshow(array['phi'],cmap="gray",extent=[0.0,15.0,0.0,1.0])
+        pylab.yticks([0.0,0.5,1.0])
+        #pylab.axis([0.0,15.0,0.0,1.0])
         pylab.savefig("../../initfinish"+str(width[i])+".eps",format="EPS",dpi=70)
         
         fig_init=pylab.figure(figsize=(11,1.5))
         array_init=numpy.load("init000000.npz")
-        pylab.imshow(array_init['phi'])
-        pylab.yticks([0,25,50,75,100])
+        pylab.imshow(array_init['phi'],cmap="gray",extent=[0.0,15.0,0.0,1.0])
+        #pylab.axis([0.0,15.0,0.0,1.0])
+        #pylab.xlim(0.0,15.0)
+        #pylab.ylim(0.0,1.0)
+
+        pylab.yticks([0.0,0.5,1.0])
         pylab.savefig("../../initbegin"+str(width[i])+".eps",format="EPS",dpi=70)
         
         #pylab.plot(array[:, 520*i])
