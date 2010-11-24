@@ -21,7 +21,7 @@ def Get_Zero(prof):
     for counter in range(0, len(prof)/2):
         if prof[counter]>=0 and prof[counter+1]<0:
             zero=-(prof[counter]*(counter+1)-prof[counter+1]*counter)/(prof[counter+1]-prof[counter])
-    print (zero-1.5)/(len(prof)-4)
+    print (zero-0.5)/(len(prof)-2.0)
 
 def Analyze_Simulations():
     print os.getcwd()
@@ -36,7 +36,11 @@ def Analyze_Simulations():
         array=numpy.load(name)
         #fig=pylab.figure(figsize=(11,1.5))
         #pylab.imshow(array['phi'])
-        pylab.plot(array['phi'][0:22,2000],style[i],linewidth=3,markersize=10)
+        prof=array['phi'][:,2000]
+        prof_domain=prof[1:len(prof)-1]
+        x_delta=1.0/len(prof_domain)
+        x=numpy.arange(0.5*x_delta,1.0,x_delta)
+        pylab.plot(x,prof_domain,style[i],linewidth=3,markersize=10)
         #pylab.yticks([0,25,50,75,100])
         #pylab.savefig("../../initfinish"+str(width[i])+".eps",format="EPS",dpi=70)
         
@@ -53,8 +57,9 @@ def Analyze_Simulations():
         #print extrapolator(0)
         
         os.chdir("../..")
-    fig.subplots_adjust(left=0.15)
-    pylab.xlabel(r'''$x$''',fontsize=30)
+    fig.subplots_adjust(left=0.15,bottom=0.15)
+    pylab.xlim(xmax=0.141)
+    pylab.xlabel(r'''$\delta$''',fontsize=30)
     pylab.ylabel(r'''$\phi$''',fontsize=30)
     pylab.legend([r'''$\partial_n\phi=$'''+r'''$'''+str(x)+r'''$''' for x in gradient[:-2]])
     pylab.xticks(fontsize=20)
@@ -103,6 +108,7 @@ def Analyze_Velocities():
     pylab.xticks(fontsize=20)
     pylab.yticks(fontsize=20)
     #pylab.savefig("velocities_grad_profiles.eps",format="EPS",dpi=300)
+    print velocities
     print numpy.std(velocities)/numpy.mean(velocities)
 
 

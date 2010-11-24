@@ -97,7 +97,7 @@ def Analyze_Simulations():
     pylab.loglog(capillary_not_viscous[:,0],capillary_not_viscous[:,1],"bD-",linewidth=3,markersize=10)
     #pylab.loglog(giavedoni[:,0],giavedoni[:,1]/2.0,"bD-",linewidth=3,markersize=10)
     #pylab.loglog(capillary_theor,width_theor,"ys--",linewidth=3,markersize=10)
-    pylab.xlim(0.02,1.1)
+    pylab.xlim(0.02,2.5)
     pylab.ylim(ymin=0.01)
     numpy.savetxt("capillary.dat",zip(capillaries,widths))
     

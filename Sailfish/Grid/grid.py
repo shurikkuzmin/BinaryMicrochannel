@@ -30,7 +30,7 @@ def Get_Zero(prof):
     for counter in range(0, len(prof)/2):
         if prof[counter]>=0 and prof[counter+1]<0:
             zero=-(prof[counter]*(counter+1)-prof[counter+1]*counter)/(prof[counter+1]-prof[counter])
-    print (zero-1.5)/(len(prof)-4)
+    print (zero-0.5)/(len(prof)-2)
 
 def Analyze_Simulations():
     print os.getcwd()
@@ -52,10 +52,13 @@ def Analyze_Simulations():
         name="grid"+str(200000+i*50000)+".npz"
         array=numpy.load(name)
         prof=array['phi'][:,int(1400*ratio)]
+        prof_domain=prof[1:len(prof)-1]
+        delta_x=1.0/float(ny[i]-2)
+        x_domain=numpy.arange(0.5*delta_x,1.0,delta_x)
         x=numpy.arange(0.0,float(ny[i]))/ratio
         #pylab.imshow(array['phi'])
         #pylab.plot(x[0:20],prof[0:20],color[i],linewidth=3)
-        pylab.plot(x,prof,style_diff[i],markersize=10,linewidth=3)
+        pylab.plot(x_domain,prof_domain,style_diff[i],markersize=10,linewidth=3)
         #pylab.figure()
         #pylab.plot(array[:, 520*i])
         #pylab.savefig("grid_phase_prof_"+str(49*i)+".eps", dpi=300)
@@ -67,11 +70,11 @@ def Analyze_Simulations():
     fig.subplots_adjust(left=0.15,bottom=0.15)  
     pylab.xticks(fontsize=20)
     pylab.yticks(fontsize=20)
-    pylab.xlabel(r'''$x$''',fontsize=30)
+    pylab.xlabel(r'''$\delta$''',fontsize=30)
     pylab.ylabel(r'''$\phi$''',fontsize=30)
-    labels=[r'''$H_{eff}='''+str(value-2)+r'''$''' for value in ny]
+    labels=[r'''$H_{\mathrm{eff}}='''+str(value-2)+r'''$''' for value in ny]
     pylab.legend(labels)
-    pylab.xlim(xmax=15)
+    pylab.xlim(xmax=0.15)
     pylab.savefig("norm_grid_profs.eps",format="EPS",dpi=300)
 
 
@@ -97,7 +100,7 @@ def Analyze_Velocities():
 
 
 if __name__=="__main__":
-    #Analyze_Simulations()    
+    Analyze_Simulations()    
     Analyze_Velocities()
     #Run_Simulations()
-    #pylab.show()
+    pylab.show()
