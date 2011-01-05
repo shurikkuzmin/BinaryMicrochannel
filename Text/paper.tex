@@ -126,7 +126,7 @@
 \ead{deskin@slb.com}
 \author[schlum]{F.~Mostowfi}
 \ead{fmostowfi@slb.com}
-\address[google]{Google, Zurich, Switzerland}
+\address[google]{Google Switzerland GmbH, Brandschenkestrasse 110, 8002 Zurich, Switzerland}
 \address[uofa]{Chemical and Materials Engineering, University of Alberta\\ 7th Floor, ECERF, 9107
 116 St, Edmonton, Alberta, T6G
 2V4 Canada}
@@ -138,17 +138,17 @@ This work shows that the free-energy binary liquid lattice Boltzmann method is a
 reproduce the gravity driven microchannel flow of a gas bubble through liquid. In the regime of low
 capillary
 numbers
-$\Ca$ (defined in Eq. \ref{capillary:number:definition}), the flow is thoroughly described by
+$\Ca$ (defined in Eq.~\ref{capillary:number:definition}), the flow is thoroughly described by
 Bretherton \cite{bretherton},
 with the deposition film thickness proportional to $\Ca^{2/3}$. However, there are deviations
-from the Bretherton correlation for $Ca\geq 0.005$, studied experimentally and numerically. This
-work aims to examine the lattice Boltzmann binary liquid model feasibility to obtain valid results
-for a bubble flow in liquid for a range of $Ca$ number. The binary
+from the Bretherton correlation for $\Ca\geq 0.005$, studied experimentally and numerically. This
+work aims to examine the applicability of the lattice Boltzmann binary liquid model to simulations
+of bubble flow in liquids for a range of $\Ca$ numbers. The binary
 liquid model is a continuous-interface multiphase model allowing to properly resolve the interface.
 It was found that the interface thickness needs to be $50$
-percent of the film thickness for simulation to give convergent results. While
-the convergence criteria is fulfilled the results are in a good agreement with the
-numerical simulations of \citet{giavedoni-numerical} in the range of $Ca$ from $0.01$ to $1$. 
+percent of the film thickness for the simulation to give convergent results. When
+the convergence criterion is fulfilled, the results are in a good agreement with the
+numerical simulations of \citet{giavedoni-numerical} in the range of $\Ca$ from $0.01$ to $1$. 
 \end{abstract}
 
 \begin{keyword}
@@ -195,7 +195,7 @@ Ca=\frac{\mu_{liq} U_{bubble}}{\gamma},
 where $\mu_{liq}$ is the liquid viscosity, $U_{bubble}$ is the bubble velocity, and
 $\gamma$ is the surface tension between gas and liquid.
 
-While there are number
+While there are a number
 of works which simulate the Bretherton problem by the boundary value approach
 \cite{ingham-plates,heil-bretherton}, those methods are of limited applicability for problems
 involving complex geometries, free interface motion, or for problems involving coalescence and/or
@@ -203,7 +203,7 @@ droplet breakup. The continuous interface models are more flexible for those kin
 However, if the interface is spread over several grid nodes, the question of
 proper film resolution in comparison with the interface resolution arises.  This work is focused on
 resolving the parameter range of the binary liquid lattice
-Boltzmann method to validate it in the range of capillary numbers.
+Boltzmann method to validate it for a range of capillary numbers.
 
 The lattice Boltzmann method has emerged as a successful method to simulate
 a wide variety of phenomena including hydrodynamics \cite{yu}, thermal flows
@@ -213,10 +213,10 @@ ferrofluids \cite{kuzmin-aniso}, and multiphase flows
 method easily tackles complex geometries and allows incorporation of
 physical phenomena on the microscopic level, as in the case of multiphase models. Most
 multiphase lattice Boltzmann models \cite{swift, Shan-chen:extended} resolve
-the interface using continuous interface methods where the interfaces spans over several grid nodes.
+the interface using continuous interface methods where the interfaces spans several grid nodes.
 Such a representation
 brings issues of the film thickness resolution versus interface
-resolution. Thus, the diffusive interface should be resolved in such a way as to have
+resolution -- the diffuse interface should be resolved in such a way as to have
 negligible effect on the physics of the film.
 
 This work examines the binary liquid free-energy LB model \cite{swift}. The
@@ -377,12 +377,12 @@ To properly simulate and compare simulation results with the data
 published in the literature, one needs to design a numerical benchmark addressing
 the following challenges for the lattice Boltzmann method:
 \begin{itemize}
- \item The diffusive nature of the interface in the multiphase model should not
+ \item The diffuse nature of the interface in the multiphase model should not
 influence the film thickness results. This is obviously achieved only for certain relation of the
 interface resolution related to the film thickness. The same applies to spurious
 currents arising due to surface tension discretization, which
 can influence mass transfer in the thin film, thereby compromising the
-overall solution. Therefore, the diffusive interface should not noticeably affect the film
+overall solution. Therefore, the diffuse interface should not noticeably affect the film
 thickness.
  \item The wettability coefficient which in principle can control the
 dynamic angle and the menisci appearance \cite{pagonabarraga-finger} should not
@@ -400,7 +400,7 @@ inertia effects can be neglected.
   \item The Bretherton problem addresses a bubble flow driven by a pressure
 difference, not a body force. However, to the best authors' knowledge the pressure boundary
 conditions are still not yet developed for the binary liquid model, because it involves the
-treatment of associated gradients and laplacians on the boundary.
+treatment of associated gradients and Laplacians on the boundary.
 This kind of pressure boundary conditions for the binary liquid model is currently
 under development, and preliminary results show that the differences between flows driven by a body
 force and by
@@ -771,7 +771,7 @@ The simulation results should not depend on the wall wettability. Wettability is
 through the phase gradient \cite{pooley-contact}, $\partial_n \phi$.  We took a large
 enough grid resolution in order for simulations to be consistent -- the grid size was
 $177 \times 2626$ and the initial film thickness was
-$12$ lattice boltzmann units, which corresponds to the predicted film thickness.
+$12$ lattice Boltzmann units, which corresponds to the predicted film thickness.
 We examined $11$ different values for the wall
 gradient ranging from $-1$ to $1$. The parameters are summarized in Table
 \ref{table:parameters:wall:gradient}. The results are consistent for all the
@@ -970,7 +970,7 @@ results show good consistency and mutual agreement.\label{fig:capillary:viscous}
 
 \section{Conclusion}
 This work presents numerical tips and a benchmark for the
-Bretherton/Taylor problem using the binary liquid lattice Botlzmann method. To obtain correlations
+Bretherton/Taylor problem using the binary liquid lattice Boltzmann method. To obtain correlations
 we specifically designed the benchmark. The bubble was chosen sufficiently long for the film
 thickness to
 stabilize. Also, we used periodic boundary conditions for scheme robustness. Thus, the bubble
@@ -983,7 +983,7 @@ independent on inertia. Also, we examined the influence of grid resolution on th
 that if the phase interface is resolved as $50$ percent of the simulated film thickness, the
 simulations
 are convergent. Though  our results are specific to the binary liquid lattice
-Botlzmann method, the numerical hints and procedures can be used for any
+Boltzmann method, the numerical hints and procedures can be used for any
 continuous interface method. 
 \bibliographystyle{model1-num-names}
 \bibliography{paper}
