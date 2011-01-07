@@ -106,7 +106,7 @@ def Analyze_Simulations():
     pylab.ylabel(r'''$\delta$''',fontsize=30)
     
     #labels=[r'''$H_{eff}='''+str(value-2)+r'''$''' for value in ny]
-    pylab.legend(["Giavedoni","Heil","Simulations"],loc=4)
+    pylab.legend(["Giavedoni","Heil","This work"],loc=4)
     #pylab.xlim(xmax=15)
     pylab.savefig("capillaries_comparison.eps",format="EPS",dpi=300)
 
@@ -216,8 +216,8 @@ def Analyze_Velocities():
 
 if __name__=="__main__":
     
-    #Analyze_Simulations()    
+    Analyze_Simulations()    
     #Analyze_Velocities()
     #Run_Simulations()
-    Analyze_Bubble()
+    #Analyze_Bubble()
     pylab.show()
