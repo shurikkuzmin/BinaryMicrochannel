@@ -124,7 +124,7 @@
 \ead{deskin@slb.com}
 \author[schlum]{F.~Mostowfi}
 \ead{fmostowfi@slb.com}
-\author[uofa]{J.~Derksen}
+\author[uofa]{J.J.~Derksen}
 \ead{jos@ualberta.ca}
 \address[uofa]{Chemical and Materials Engineering, University of Alberta\\ 7th Floor, ECERF, 9107
 116 St, Edmonton, Alberta, T6G
@@ -748,7 +748,7 @@ attributed to the Poiseuille profile body force initialization.% and the
 \includegraphics[width=0.97\textwidth]{Figures/Grid/norm_grid_profs.eps}
 \caption{Grid-refined profiles for the effective
 channel widths
-$H_{\mathrm{eff}}=100,125,150,175,200,225$.$\delta$ is scaled on $H_\mathrm{eff}$ and $\delta=0$
+$H_{\mathrm{eff}}=100,125,150,175,200,225$.$\delta$ is scaled on $H_{\mathrm{eff}}$ and $\delta=0$
 corresponds to the wall location. The profiles were taken at $x=14$ (nondimensional coordinates).
 Capillary number is $\Ca=0.05$. The capillary number obtained from simulations $\Ca=0.07$. 
 %One can seeconvergent results even for the underresolved film
@@ -950,12 +950,12 @@ $U_{b}$.
 
 \subsection{The film variation over the bubble}
 
-Next, we investigated the qualitative variation of the film thickness over the bubble length.
+Next, we investigated the variation of the film thickness over the bubble length.
 The comparison for the thickness variation is presented in Fig.~\ref{fig:sehgal:bubble:length}.
 \begin{figure}
 \includegraphics[width=0.47\textwidth]{Figures/Bubble/bubble_sehgal.eps}\hfill
 \includegraphics[width=0.47\textwidth]{Figures/Bubble/bubble_length.eps}\\
-\caption{The qualitative comparison for the film thickness across
+\caption{A qualitative comparison for the film thickness across
 the bubble length. Left (courtesy of \citet{sehgal-microchannel}),
 right (present simulations); $x$ is scaled to $H_{\mathrm{eff}}$
 and increases in the flow direction.\label{fig:sehgal:bubble:length}}
@@ -964,24 +964,22 @@ One can see a qualitative agreement, i.e. the thickness increases towards the fr
 rapidly decreases towards the rear meniscus. This shape is sometimes referred to as a "bullet" shape.
 
 \subsection{The influence of different viscosities}
-The results presented above are taken for the liquid viscosity ratio $10$.
-We performed the same simulations for the liquid-gas viscosity ratio of $20$.
+The results presented above are taken for the liquid over gas kinematic viscosity ratio of $10$.
+We performed the same simulations for the liquid over gas viscosity ratio of $20$.
 The relaxation parameters were taken as $\tau_{\mathrm{liquid}}=4.5$ and $\tau_{\mathrm{bubble}}=0.7$. We
 did not find any significant differences from the results presented above. The
 comparison for the liquid film thicknesses is presented in Fig.
 \ref{fig:capillary:viscous}. The results validate our assumption that in
-the low capillary flow regime the density ratio does not affect the film thickness,
-and that the gas-liquid viscosity ratio of the order $10$ is sufficient to obtain results
+the low capillary flow regime that the sufficiently high gas over liquid viscosity ratio ($\geq 10$) is sufficient to obtain results
 consistent with the literature data.
 \begin{figure}
 \includegraphics[width=0.97\textwidth]{Figures/Capillary_Viscous/capillaries_viscous.eps}
 \caption{The film thicknesses versus capillary number for
-$\frac{\mu_{\mathrm{liq}}}{\mu_{\mathrm{gas}}}=10$ and $\frac{\mu_{\mathrm{liq}}}{\mu_{\mathrm{gas}}}=20$. The
-results show good consistency and mutual agreement.\label{fig:capillary:viscous}}
+$\frac{\mu_{\mathrm{liq}}}{\mu_{\mathrm{gas}}}=10$ and $\frac{\mu_{\mathrm{liq}}}{\mu_{\mathrm{gas}}}=20$. \label{fig:capillary:viscous}}
 \end{figure}
 
 \section{Conclusion}
-This work presents numerical tips and a benchmark for the
+This work presents numerical studies of the
 Bretherton/Taylor problem using the binary liquid lattice Boltzmann method. The bubble was chosen sufficiently long for the film
 thickness to
 stabilize, and periodic boundary conditions were used to keep the simulations robust.  A bubble
@@ -990,10 +988,12 @@ the mutual influence of neighboring bubbles. The computational
 results in terms of capillary number dependence and shape of the bubbles show consistency with the
 previously published data. Surprisingly, with large enough viscosity ratio the results are
 independent of any inertial effects.  An examination of the influence of grid resolution on the results allowed
-us to determine that the phase interface should be resolved as at least $50$ percent of the simulated film thickness
-in order for the simulations to be convergent. Though our results are specific to the binary liquid lattice
+us to determine that the phase interface should be resolved as at least $50$ percent of the film thickness
+in order for the simulations to be grid independent. Though our results are specific to the binary liquid lattice
 Boltzmann method, the numerical hints and procedures can be used for any
 continuous interface method.
+\section{Acknowledgement}
+A.~Kuzmin wants to thank Schlumberger for their financial support.
 \bibliographystyle{model1-num-names}
 \bibliography{paper}
 %\bibliographystyle{unsrtnat}
