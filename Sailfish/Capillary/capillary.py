@@ -50,7 +50,9 @@ def Analyze_Simulations():
     #fig=pylab.figure()
     widths=[]
     velocities=[]
-    
+    velocities_real=[]
+    re_real=[]
+    widths_real=[]
     #read the giavedoni data (not precise though)
     giavedoni=genfromtxt("planarcasesolution.csv",delimiter=',',dtype=float)[1:]
 
@@ -64,6 +66,8 @@ def Analyze_Simulations():
         name="capillary200000.npz"
         array=numpy.load(name)
         prof=array['phi'][:,exam[i]]
+        dims=array['phi'].shape
+        
         #x=numpy.arange(0.0,float(ny[i]))/ratio
         #pylab.imshow(array['phi'])
     
@@ -71,8 +75,22 @@ def Analyze_Simulations():
             #pylab.plot(prof)
             widths.append(Get_Zero(prof))
             vel=array['v'][0]
+            center=array['phi'][dims[0]/2,:]
+           
+            z1 = numpy.min(numpy.where(center < 0.0))
+            z2 = numpy.max(numpy.where(center < 0.0))
+            if z1==0:
+                z2=numpy.min(numpy.where(center>0.0))+dims[1]
+                z1=numpy.max(numpy.where(center>0.0))
+            print z1,z2
+            
+            prof_real=array['phi'][:,((z1+z2)/2)%dims[1]]
+            widths_real.append(Get_Zero(prof_real))     
+
             vel_prof=vel[:,exam[i]]
             velocities.append(vel_prof[len(vel_prof)/2])
+            velocities_real.append(vel[dims[0]/2,z2%dims[1]])
+            re_real.append(vel[dims[0]/2,z2%dims[1]]*dims[0]/(2.0/3.0))
         
         #pylab.plot(x[0:20],prof[0:20],color[i],linewidth=3)
         #pylab.plot(x,prof,style_diff[i],markersize=10,linewidth=3)
@@ -87,9 +105,16 @@ def Analyze_Simulations():
     
     fig=pylab.figure()
     capillaries=numpy.array(velocities)*(2.0/3.0)/math.sqrt(8.0*0.04*0.04/9.0)
+    capillaries_real=numpy.array(velocities_real)*(2.0/3.0)/math.sqrt(8.0*0.04*0.04/9.0)
+
     print "Widths=",widths
+    print "Widths_real=",widths_real
     print "Capillaries=",capillaries
-    print "Velocities",velocities
+    print "Capillaries_real=",capillaries_real    
+    print "Velocities=",velocities
+    print "Velocities_real=",velocities_real
+    print "Reynolds=",re_real
+
     
     pylab.loglog(giavedoni[:,0],giavedoni[:,1]/2.0,"bD-",linewidth=3,markersize=10)
     pylab.loglog(capillary_theor,width_theor,"ys--",linewidth=3,markersize=10)
@@ -110,6 +135,27 @@ def Analyze_Simulations():
     #pylab.xlim(xmax=15)
     pylab.savefig("capillaries_comparison.eps",format="EPS",dpi=300)
 
+    #Another figure
+    fig=pylab.figure()    
+    pylab.loglog(giavedoni[:,0],giavedoni[:,1]/2.0,"bD-",linewidth=3,markersize=10)
+    pylab.loglog(capillary_theor,width_theor,"ys--",linewidth=3,markersize=10)
+    pylab.loglog(capillaries_real,widths,"go-",linewidth=3,markersize=10)
+
+    pylab.xlim(0.02,1.5)
+    pylab.ylim(ymin=0.01)
+    numpy.savetxt("capillary.dat",zip(capillaries,widths))
+    
+    fig.subplots_adjust(left=0.15,bottom=0.15)  
+    pylab.xticks(fontsize=20)
+    pylab.yticks(fontsize=20)
+    pylab.xlabel(r'''$Ca$''',fontsize=30)
+    pylab.ylabel(r'''$\delta$''',fontsize=30)
+    
+    #labels=[r'''$H_{eff}='''+str(value-2)+r'''$''' for value in ny]
+    pylab.legend(["Giavedoni","Heil","This work"],loc=4)
+    pylab.savefig("capillaries_comparison_real.eps",format="EPS",dpi=300)
+
+    
 def Analyze_Bubble():
     from numpy import genfromtxt
     print os.getcwd()
@@ -128,6 +174,12 @@ def Analyze_Bubble():
     #fig=pylab.figure()
     low=[1509,1865,381]
     high=[2554,2900,1427]
+    
+    #ux=array['v'][0]
+    #center=array['phi'][ny[i]/2,:]
+
+    
+    
     widths=[]
     velocities=[]
     fig=pylab.figure()
@@ -140,7 +192,20 @@ def Analyze_Bubble():
         name="capillary200000.npz"
         array=numpy.load(name)
         thicknesses=[]
-        for coor in range(low[counter],high[counter]):
+        dims=array['phi'].shape        
+        ux=array['v'][0]
+        center=array['phi'][dims[0]/2,:]
+           
+        z1 = numpy.min(numpy.where(center < 0.0))
+        z2 = numpy.max(numpy.where(center < 0.0))
+        if z1==0:
+            z2=numpy.min(numpy.where(center>0.0))+nx[i]
+            z1=numpy.max(numpy.where(center>0.0))
+        print z1,z2
+
+        for coorz in range(z1,z2):
+        #for coor in range(low[counter],high[counter]):
+            coor=coorz%dims[1]
             prof=array['phi'][:,coor]
             thicknesses.append(Get_Zero(prof))
         #prof=array['phi'][:,exam[i]]
@@ -165,6 +230,9 @@ def Analyze_Bubble():
         #print extrapolator(0)
         
         #pylab.figure()
+                
+        print thicknesses[((z1+z2)/2)%dims[1]-z1]        
+        print numpy.std(thicknesses[300:-300])/thicknesses[((z1+z2)/2)%dims[1]-z1]        
         delta_x=15.0/(len(thicknesses)-1)
         x=delta_x*numpy.arange(0,len(thicknesses))*float(len(thicknesses))/3000.0
         pylab.plot(x,thicknesses,style[counter],linewidth=3)
