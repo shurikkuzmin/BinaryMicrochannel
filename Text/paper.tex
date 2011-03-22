@@ -564,56 +564,49 @@ stability, the relaxation times for liquid and gas phases are taken as
 $\tau_{\mathrm{liq}}=2.5$ and $\tau_{\mathrm{gas}}=0.7$, which correspond
 to the liquid over gas kinematic viscosity ratio equal to $10$.
 
-The procedure can be described as follows:
+Overall, the setting simulations procedure can be described in steps as follows:
 \begin{description}
- \item[Capillary number choice] Blah-blah
- \item[Film thickness] You choose film thickness. 
- \item[Grid choice]
- \item[Body force] Blah-blah
-\end{description}
-
-The film thickness for such small capillary numbers \cite{bretherton} is
-given by the equation:
-  \begin{equation}
-  \frac{h_{\infty}}{H_{\mathrm{eff}}}=0.6687 \Ca^{2/3}=0.0194.
-  \end{equation}
-Thus, the film
- occupies about $2$ percent of the whole channel height. Let us impose that $8$ lattice
-units are required to resolve  $2$ percent of the channel. Note that $5$ out of $8$ these lattice
-units
-($62.5$ percent) are used to resolve the phase interface. Therefore the channel width is $400$
-lattice units.
-
-
- The film thickness for such capillary number is taken from Fig.~\ref{fig:heil:planar},
-  and for Reynolds number $40$ equals $0.12$. We want to
-  resolve $6\%$ of the whole channel width with $12$ lattice units, where $5$
-lattice units are related to the interface resolution.  Therefore, the channel
-  width is $200$ lattice units and the grid size is $200 \times 3000$.
-
-We take the bubble length equal to $5$ channel widths
-  and the distance between bubbles as $3$ bubble lengths. This gives a
-grid size of $400 \times 6000$. In terms of computer memory
-requirements, the calculations with double precision accuracy demand:
+ \item[Capillary number] One first needs to be supplied with the capillary number for
+simulations. For the demonstration purposes we chose $\Ca=0.05$. 
+ \item[Film thickness] After the capillary number is prescribed, one needs to approximate the film
+thickness $\delta$. It can be done either by taking correlations from numerical simulations by
+\citet{heil-bretherton} and \citet{giavedoni-numerical} or by using the classical Bretherton
+correlation for small cappillary numbers $\delta=0.6687 \Ca^{2/3}$. In the case of $\Ca=0.05$, the 
+film thickness is taken from {\color{green} Fig.~\ref{fig:heil:planar}},
+  and for Reynolds number $40$ equals $0.06$.  
+\item[Grid choice] After pecifying the film thickness, one needs to choose the associate
+number of nodes to resolve the film thickness. Note that for paremeters indicated above the
+interface thickness is spread over approximately $5$ lattice units. The study of the interface
+resolution to the film thickness, Section \ref{section:grid:refinement}, suggests to choose the
+film thickness to be $2-2.5$ times larger than the interface thickness. Therefore, we want to
+  resolve $6\%$ of the whole channel width with $12$ lattice units.  Thus, the channel
+  width is $200$ lattice units. We take the bubble length equal to $5$ channel widths for the film
+thickness to establish
+  and the distance between bubbles as $3$ bubble lengths to avoid mutual influence of bubbles on
+each other. Thus, the whole grid size is $200 \times 3000$.
+ \item[Velocity] The relaxation parameters are taken to be in the stable range for simulations.
+In the present simulations the viscosity ratio is $\dfrac{\mu_{liq}}{\mu_{gas}}=10$ with the
+correspoding relaxation times $\tau_{liq}=2.5$ and $\tau_{gas}=0.7$. Given the viscosity of the
+liquid one can obtain the velocity of the bubble from the capillary number: 
 \begin{equation}
 \begin{aligned}
-&2\text{ sets of populations } \times \,\, 8\,\, \text{bytes per population
-} \times \,\, 9 \text{
-populations}\\
-&\times\,400\,\times\,6000\approx 345 \mathrm{MB}. 
+&U_{\mathrm{bubble}}=\Ca \frac{\gamma}{\mu_{\mathrm{liq}}}=\Ca \frac{\sqrt{\frac{8 k
+A}{9}}}{\frac{1}{3}(\tau_{\mathrm{liq}}-\frac{1}{2})}\\
+&U_{\mathrm{bubble}}=0.05 \frac{0.0377}{0.6666}=2.82 \cdot10^{-3},
 \end{aligned}
 \end{equation}
-Even with an interface thickness of $62.5$ percent  of the
-film thickness, one gets (in 2D) a memory
-requirement of $345 \mathrm{MB}$. 
+where $\mu_{\mathrm{liq}}=1/3 (2.5-0.5)=0.6666$.
+\item[Body force] 
+  The velocity implies the following pressure gradient calculated from the
+  Poiseuille flow solution:
+  \begin{equation}
+  \begin{aligned}
+  &\frac{\mathrm{d}P}{\mathrm{d}x}=\frac{8}{N_y^2}\gamma \Ca=3.77\cdot10^{-7}.
+  \end{aligned}
+  \end{equation}
 
 After resolving the interface one can  calculate the
   velocity from the capillary number as:
-  \begin{equation}
-  U_{\mathrm{bubble}}=0.005 \frac{\gamma}{\mu_{\mathrm{liq}}}=0.005
-\frac{0.0377}{0.6666}=2.82 \cdot10^{-4},
-  \end{equation}
-  where $\mu_{\mathrm{liq}}=1/3 (2.5-0.5)=0.6666$.
   This velocity implies the following pressure gradient calculated from the
   Poiseuille flow solution, Eq. \ref{poiseuille:velocity:center}: 
   \begin{equation}
@@ -639,6 +632,27 @@ physical time simulation around $10^{-5}-10^{-4}\,\mathrm{s}$, which is
 probably not enough for the physical system to come to the pseudo-steady state.
 
 
+\end{description}
+
+
+
+This gives a
+grid size of $400 \times 6000$. In terms of computer memory
+requirements, the calculations with double precision accuracy demand:
+\begin{equation}
+\begin{aligned}
+&2\text{ sets of populations } \times \,\, 8\,\, \text{bytes per population
+} \times \,\, 9 \text{
+populations}\\
+&\times\,400\,\times\,6000\approx 345 \mathrm{MB}. 
+\end{aligned}
+\end{equation}
+Even with an interface thickness of $62.5$ percent  of the
+film thickness, one gets (in 2D) a memory
+requirement of $345 \mathrm{MB}$. 
+
+
+
    The parameters in the previous subsection imply that long
 computations are required in order for the system to come to equilibrium. The simulation becomes
 longer with a decrease of the
@@ -661,19 +675,6 @@ which
   capillary number $0.05$ ranges from $0.12$ to $0.15$ in a wide Reynolds
   number range (from $0$ to $300$).
 
-  The velocity can be
-calculated from the capillary number as:
-  \begin{equation}
-  U_{\mathrm{bubble}}=0.05 \frac{\gamma}{\mu_{\mathrm{liq}}}=0.05 \frac{0.037712}{0.6666}=2.82\cdot
-  10^{-3}.
-  \end{equation}
-  The velocity implies the following pressure gradient calculated from the
-  Poiseuille flow solution:
-  \begin{equation}
-  \begin{aligned}
-  &\frac{\mathrm{d}P}{\mathrm{d}x}=\frac{8}{N_y^2}\gamma \Ca=3.77\cdot10^{-7}.
-  \end{aligned}
-  \end{equation}
 
 }  
 
@@ -703,6 +704,7 @@ recalculate all the necessary flow characteristics, i.e. adjust the
  applied force to obtain the desired velocity/capillary number.
 
 \subsection{Grid refinement}
+\label{section:grid:refinement}
 To properly estimate the interface resolution one needs to study the convergence as a function of
 the grid resolution. To do that the grid resolution is varied while all remaining parameters,
 including the bubble velocity and the capillary number, are fixed.  Our goal is to determine the 
