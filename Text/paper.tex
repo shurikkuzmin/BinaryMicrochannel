@@ -476,6 +476,7 @@ used for the benchmark.
 
 \section{Results}
 \subsection{The nondimensionalization and initialization procedure}
+\label{section:init}
 We now introduce the procedure of nondimensionalization, as well as
 the initialization technique we used to determine the parameters necessary for
 the simulation. The capillary number defined in Eq.~\ref{capillary:number:definition} governs the
@@ -597,87 +598,70 @@ A}{9}}}{\frac{1}{3}(\tau_{\mathrm{liq}}-\frac{1}{2})}\\
 \end{equation}
 where $\mu_{\mathrm{liq}}=1/3 (2.5-0.5)=0.6666$.
 \item[Body force] 
-  The velocity implies the following pressure gradient calculated from the
-  Poiseuille flow solution:
-  \begin{equation}
-  \begin{aligned}
-  &\frac{\mathrm{d}P}{\mathrm{d}x}=\frac{8}{N_y^2}\gamma \Ca=3.77\cdot10^{-7}.
-  \end{aligned}
-  \end{equation}
-
-After resolving the interface one can  calculate the
-  velocity from the capillary number as:
-  This velocity implies the following pressure gradient calculated from the
-  Poiseuille flow solution, Eq. \ref{poiseuille:velocity:center}: 
-  \begin{equation}
-  \begin{aligned}
-  \frac{\mathrm{d}P}{\mathrm{d}x}=9.42 \cdot 10^{-9}.
-  \end{aligned}
-  \end{equation}
-Note that the velocity is proportional to the physical time step (small velocities imply longer
-running
-simulations):
+Thus, it is desired to obtain the prescribed velocity $U_{\mathrm{bubble}}$ in the simulations. The
+flow in the simulations is conducted by imposing the body force. Thus, the assumption is needed of
+how the body force is connected with the bubble velocity $U_{\mathrm{bubble}}$. We assume that the
+flow is close to the Poiseuille flow:
 \begin{equation}
-\Delta t =\frac{U_{\mathrm{LBM}}}{U_{\mathrm{phys}}} \Delta x ,
+\frac{\mathrm{d}P}{\mathrm{d}x}=\frac{8\mu}{H_{\mathrm{eff}}^2}
+U_{\mathrm{bubble}}=\frac{8}{N_y^2}\gamma \Ca=3.77\times 10^{-7}.  
 \end{equation}
-where, for example, the real velocities in the physical world can reach
-approximately $1$ m/s and the real height up to $1$ mm. In this case one
-can easily approximate the physical time step during one lattice Boltzmann iteration:
-\begin{equation}
-\Delta t = 7.05 \cdot 10^{-10} \,\mathrm{s}
-\end{equation}
-which is small. A typical simulation runs approximately
-$100000-300000$ time steps due to reach steady-state. That gives 
-physical time simulation around $10^{-5}-10^{-4}\,\mathrm{s}$, which is
-probably not enough for the physical system to come to the pseudo-steady state.
-
-
+After imposing the body force the simulations can be run. A typical simulation runs approximately
+$100000-300000$ time steps due to reach steady-state.
+%Note that the velocity is proportional to the physical time step (small velocities imply longer
+%running
+%simulations):
+%\begin{equation}
+%\Delta t =\frac{U_{\mathrm{LBM}}}{U_{\mathrm{phys}}} \Delta x ,
+%\end{equation}
+%where, for example, the real velocities in the physical world can reach
+%approximately $1$ m/s and the real height up to $1$ mm. In this case one
+%can easily approximate the physical time step during one lattice Boltzmann iteration:
+%\begin{equation}
+%\Delta t = 7.05 \cdot 10^{-10} \,\mathrm{s}
+%\end{equation}
+%which is small.  That gives 
+%physical time simulation around $10^{-5}-10^{-4}\,\mathrm{s}$, which is
+%probably not enough for the physical system to come to the pseudo-steady state.
 \end{description}
-
-
-
-This gives a
-grid size of $400 \times 6000$. In terms of computer memory
-requirements, the calculations with double precision accuracy demand:
-\begin{equation}
-\begin{aligned}
-&2\text{ sets of populations } \times \,\, 8\,\, \text{bytes per population
-} \times \,\, 9 \text{
-populations}\\
-&\times\,400\,\times\,6000\approx 345 \mathrm{MB}. 
-\end{aligned}
-\end{equation}
-Even with an interface thickness of $62.5$ percent  of the
-film thickness, one gets (in 2D) a memory
-requirement of $345 \mathrm{MB}$. 
-
-
-
-   The parameters in the previous subsection imply that long
-computations are required in order for the system to come to equilibrium. The simulation becomes
-longer with a decrease of the
-capillary number. Bretherton obtained an analytical solution for the range of low capillary
-numbers $Ca \leq 0.005$. However, many researchers extended it to the range of capillary numbers
+}
+Note that following the prescribed procedure one can see that a computer memory requirements are
+high for small capillary numbers due to large grids to resolve the film thickness. Thus, the
+simulations in the present work cover range of capillary numbers from $0.05$ to $1.0$.
+Although, Bretherton obtained an analytical solution for the range of low capillary
+numbers $Ca \leq 0.005$, many researchers, for example \citet{giavedoni-numerical} and
+\citet{heil-bretherton}, extended it to the range of capillary numbers
 greater than
-$0.005$, and to higher Reynolds numbers. One can refer to figures
-  \ref{fig:giavedoni:planar} and \ref{fig:heil:planar} taken from the work of
-  \citet{giavedoni-numerical} and \citet{heil-bretherton}, who cross validated their
-  simulations against the Bretherton data and each other. Even though the LBM can simulate
-flows with small capillary numbers, i.e. less than $0.005$, the simulation time
-is relatively long. Therefore, in our work we focus on the range of capillary numbers $\Ca$
-employed by the simulations of
-\citet{giavedoni-numerical} who cross validated
+$0.005$, and to higher Reynolds numbers. %One can refer to figures
+%  \ref{fig:giavedoni:planar} and \ref{fig:heil:planar} taken from the work of
+%  \citet{giavedoni-numerical} and \citet{heil-bretherton}, who cross validated their
+% simulations against the Bretherton data and each other.
+%Even though the LBM can simulate
+%flows with small capillary numbers, i.e. less than $0.005$, the simulation time
+%is relatively long. 
+Therefore, the focus of our work on the capillary range larger $\Ca\geq0.05$ is legitimate as far
+as we base it on comparison with already cross validated
 results for all ranges of capillary numbers.  Our intention is
   to show physically correct behavior for moderate $Ca$,
 which
   can be easily and quickly validated on a computer.
-  One can see from Fig.~\ref{fig:heil:planar} that the film thickness for the
-  capillary number $0.05$ ranges from $0.12$ to $0.15$ in a wide Reynolds
-  number range (from $0$ to $300$).
-
-
-}  
-
+%One can see from Fig.~\ref{fig:heil:planar} that the film thickness for the
+%  capillary number $0.05$ ranges from $0.12$ to $0.15$ in a wide Reynolds
+% number range (from $0$ to $300$).
+%This gives a
+%grid size of $400 \times 6000$. In terms of computer memory
+%requirements, the calculations with double precision accuracy demand:
+%\begin{equation}
+%\begin{aligned}
+%&2\text{ sets of populations } \times \,\, 8\,\, \text{bytes per population
+%} \times \,\, 9 \text{
+%populations}\\
+%&\times\,400\,\times\,6000\approx 345 \mathrm{MB}. 
+%\end{aligned}
+%\end{equation}
+%Even with an interface thickness of $62.5$ percent  of the
+%film thickness, one gets (in 2D) a memory
+%requirement of $345 \mathrm{MB}$. 
 \begin{figure}
 \includegraphics[width=0.97\textwidth]{Figures/giavedoni_planar.eps}
 \caption{\citet{giavedoni-numerical} gathered results across the
@@ -692,6 +676,7 @@ are scaled to the half-width of the channel. $h_{0}$ is the film thickness of ai
 the infinite distance from the front meniscus.
 \label{fig:heil:planar}}
 \end{figure}
+
 Note that we base the initialization techniques on correlations for the
 capillary number and the body force. However, in the binary liquid framework
 those correlations are approximations. The strongest assumption is
@@ -701,8 +686,28 @@ substituting the obtained velocity in the capillary number equation, a
 larger capillary number can be obtained. In practice, one needs to take the bubble velocity from the
 simulations and
 recalculate all the necessary flow characteristics, i.e. adjust the
- applied force to obtain the desired velocity/capillary number.
+ applied force to obtain the desired velocity/capillary number. However, simulations show that the
+Poiseuille flow assumptions work reasonably well.
 
+{\color{red}
+Note that the initialization procedure is a good guide of designing the simulations. For example
+for the grid refinement, see Section \ref{section:grid:refinement}, we keep the same velocity
+$U_{\mathrm{bubble}}$ and $\Ca$. This implies the conservation of the quantity
+$H_{\mathrm{eff}}^2\frac{\mathrm{d}P}{\mathrm{d}x}=(N_y-2)^2\frac{\mathrm{d}P}{\mathrm{d}
+x } = \mathrm{const}$. For the designing capillary range simulations, we use a proportionality law
+to initialize body forces knowing results of just one simulation:
+\begin{equation}
+\begin{aligned}
+&\Ca_{\mathrm{lit}} \propto U_{\mathrm{bubble}}\\
+&U_{\mathrm{bubble}} \propto \frac{\mathrm{d}P}{\mathrm{d}x} H_{\mathrm{eff}}^2\\
+&\Ca_{\mathrm{lit}} \propto \frac{\mathrm{d}P}{\mathrm{d} x} H_{\mathrm{eff}}^2 \text{ or }\\
+&\frac{\mathrm{d}P}{\mathrm{d} x} \propto \frac{\Ca_{\mathrm{lit}}}{H_{\mathrm{eff}}^2},
+\end{aligned}
+\end{equation}
+where the subscript ,,lit'' stands for the predicted capillary number
+\cite{giavedoni-numerical,heil-bretherton}. The grid number $N_y$ is not
+involved because all simulations are conducted on the same grid.
+}
 \subsection{Grid refinement}
 \label{section:grid:refinement}
 To properly estimate the interface resolution one needs to study the convergence as a function of
@@ -741,12 +746,14 @@ $\phi=1$. The force gradient can be estimated through the Poiseuille
 profile formula, Eq.~\ref{poiseuille:velocity:center}, and it equals
 $1.508 \cdot 10^{-6}$ lattice units.
 
-After choosing the reference parameters, the grid refinement procedure
-needs to keep the macroscopic parameters constant.  It is easy to check
-that it yields the following quantity to
-be independent of grid size
-$H_{\mathrm{eff}}^2\frac{\mathrm{d}P}{\mathrm{d}x}=(N_y-2)^2\frac{\mathrm{d}P}{\mathrm{d}
-x } = \mathrm{const}$. We performed a number of simulations for the prescribed grids. The
+{\color{red} After choosing the reference parameters, the grid refinement procedure
+needs to keep the macroscopic parameters constant. One can refer to Section \ref{section:init}.}  
+%It is easy to check
+%that it yields the following quantity to
+%be independent of grid size
+%$H_{\mathrm{eff}}^2\frac{\mathrm{d}P}{\mathrm{d}x}=(N_y-2)^2\frac{\mathrm{d}P}{\mathrm{d}
+%x } = \mathrm{const}$. 
+We performed a number of simulations for the prescribed grids. The
 simulation results in terms of grid numbers $N_x$, $N_y$, the film thickness $\delta$, center bubble
 velocity $U_{bubble}$ are summarized in Table \ref{table:parameters:grid:refinement}.
 The unified scaled profiles are shown in Fig. \ref{fig:grid:profiles}. One can
@@ -908,6 +915,7 @@ shape.
 
 
 \subsection{Capillary number region}
+\label{section:capillary:range}
 The purpose of this section is to validate the correlations of
 \citet{giavedoni-numerical} in Fig. \ref{fig:giavedoni:planar} and
 \citet{heil-bretherton} in Fig. \ref{fig:heil:planar} for a range of capillary
@@ -920,19 +928,7 @@ smaller grids and larger gradients, all the capillary number simulations were
 performed on the same grid. To properly initialize the body force, the
 proportionality law was utilized. The forcing
 $6 \cdot 10^{-6}/16$ was chosen to obtain the predicted capillary
-number $0.05$. The forcing for other grids can be obtained using
-simple proportionality relationships:
-\begin{equation}
-\begin{aligned}
-&\Ca_{\mathrm{lit}} \propto U_{\mathrm{bubble}}\\
-&U_{\mathrm{bubble}} \propto \frac{\mathrm{d}P}{\mathrm{d}x} N_y^2\\
-&\Ca_{\mathrm{lit}} \propto \frac{\mathrm{d}P}{\mathrm{d} x} N_y^2 \text{ or }\\
-&\frac{\mathrm{d}P}{\mathrm{d} x} \propto \frac{\Ca_{\mathrm{lit}}}{N_y^2},
-\end{aligned}
-\end{equation}
-where the subscript ,,lit'' stands for the predicted capillary number
-\cite{giavedoni-numerical,heil-bretherton}. The grid number $N_y$ is not
-involved because all simulations are conducted on the same grid.
+number $0.05$. 
 The pressure gradient can be obtained through the capillary number
 ratio:
 \begin{equation}
