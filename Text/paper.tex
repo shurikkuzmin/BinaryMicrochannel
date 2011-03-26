@@ -330,7 +330,8 @@ F_i,&&\text{ collision step}\\
 &f_i(\bm{x}+\bm{c_i},t+1)=f_i^{*}(\bm{x},t),&&\text{ propagation step}, 
 \end{aligned}
 \end{equation}
-where $f_i$ is the probability distribution function in the direction $\bm{c_i}$, $\omega$ is the
+where $f_i$ is the probability distribution function in the direction $\bm{c_i}$,
+{\color{red} $f_i^{q}$ is the equilibrium probability distribution function}, $\omega$ is the
 relaxation parameter, and $F_i$ is the external force population.{\color{red} The force population
 is connected with the force and is implemented in the current work due to work \cite{guo}.} 
 
@@ -350,23 +351,27 @@ p_0 - k \phi \Delta \phi
 +\frac{u_{\alpha}c_{i\alpha}}{c_s^2}+\frac{Q_{i\alpha\beta}u_{\alpha } u_ {
 \beta}}{2 c_s^4}\biggr)\\
 &&&+k\bigl(w_i^{xx} (\partial_x \phi)^2+w_i^{yy} (\partial_y \phi)^2 +w_i^{xy} \partial_x
-\phi \partial_y \phi \bigr), i=1\div8\\
+\phi \partial_y \phi \bigr), 1\leq i \leq 8\\
 &f_0^{eq}&&=\rho-\sum_{i\neq0}{f_i^{eq}}\\
 &g_i^{eq}&&=w_i\left(\Gamma \mu + \frac{\phi c_{i\alpha} u_{i\alpha}}{c_s^2}+\phi
-\frac{Q_{i\alpha\beta}u_{\alpha}u_{\beta}}{2 c_s^4}\right), i=1\div8 \\
+\frac{Q_{i\alpha\beta}u_{\alpha}u_{\beta}}{2 c_s^4}\right), 1\leq i \leq 8 \\
 &g_0^{eq}&&=\phi-\sum_{i\neq0}{g_i^{eq}}\quad,
 \end{aligned}
 \end{equation}
 where $\Gamma$ is the mobility parameter; the chemical potential
 $\mu=-A\phi+A\phi^3-k\Delta\phi$; $k$ is the parameter related to the surface
 tension; $A$ is the parameter of the free-energy model. The bulk pressure
-is expressed as $p_0=c_s^2 \rho +A (-0.5 \phi^2+0.75 \phi^4)$. 
+is expressed as $p_0=c_s^2 \rho +A (-0.5 \phi^2+0.75 \phi^4)$ {\color{red} with
+the sound speed $c_s^2=1/3$}. 
 Parameters specific to the D2Q9 grid are the weights
 $w_i=\left\{\frac{4}{9},\frac{1}{9},\frac{1}{9},\frac{1}{9},\frac{1}{9},
 \frac{1}{36},\frac{1}{36},\frac{1}{36},\frac{1}{36}\right\}$, and the tensor
-$Q_{i\alpha\beta}=c_{i\alpha} c_{i\beta} - c_s^2 \delta_{\alpha\beta}$ with
-the sound speed parameter $c_s^2=1/3$.  The weights related to the
-inclusion of the surface tension coefficient into the equations are as follows:
+$Q_{i\alpha\beta}=c_{i\alpha} c_{i\beta} - c_s^2 \delta_{\alpha\beta}$.  
+{\color{red}
+Other weights 
+%related to the
+%inclusion of the surface tension coefficient into the equations 
+are as follows:}
 $w^{xx}_{1-2}=w^{yy}_{3-4}=1/3$, $w^{xx}_{3-4}=w^{yy}_{1-2}=-1/6$,
 $w^{xx}_{5-8}=w^{yy}_{5-8}=-1/24$, $w^{xy}_{1-4}=0$, $w^{xy}_{5-6}=1/4$ and
 $w^{xy}_{7-8}=-1/4$. The set of equations (\ref{set:equilibrium:binary}) restores the
@@ -386,9 +391,16 @@ where $\nu=c_s^2 (\tau-1/2)$ is the viscosity,
 $M=\Gamma(\tau_{\phi}-1/2)$ is the mobility parameter, and $\tau=\frac{1}{\omega}$ and $\tau_{\phi}$
 are the relaxation parameters of density and phase fields, {\color{red}
 $P_{\alpha\beta}=\Bigl(p_0-k\phi \Delta \phi -\frac{k}{2}|\nabla \phi|^2\Bigr)\delta_{\alpha\beta}
-+ k \partial_{\alpha} \phi \partial_{\beta} \phi$  \cite{pooley-contact}.} 
++ k \partial_{\alpha} \phi \partial_{\beta} \phi$  \cite{pooley-contact}.The interface tension value
+in the framework of the binary liquid model is $\gamma=\sqrt{\frac{8 k
+A}{9}}$. The inclusion of the interface tension to the momentum flux tensor is done through the
+coefficients $k$, $A$ and weights $w_i^{\alpha\beta}$.
 
-The system allows the separation of the liquid
+Note that the first equation of system \ref{standard:implementation} simulates the continuity and
+the Navier-Stokes equations, first two equations in (\ref{binary:fluid:system}). The second equation
+of system \ref{standard:implementation} simulates the phase governing equation, third equation in
+(\ref{binary:fluid:system}).} The system (\ref{binary:fluid:system}) allows the separation of the
+liquid
 phase with $\phi=1$ and a so-called gas phase with $\phi=-1$. The
 relaxation time is taken as linearly dependent on the relaxation
 times $\tau_{\mathrm{gas}}$ and $\tau_{\mathrm{liq}}$:
@@ -396,10 +408,23 @@ $\tau=\tau_{\mathrm{gas}}+\frac{\phi+1}{2}(\tau_{\mathrm{liq}}-\tau_{\mathrm{gas
 to change viscosity from the gas viscosity
 $\nu_{\mathrm{gas}}=\frac{1}{3}\Bigl(\tau_{\mathrm{gas}}-\frac{1}{2}\Bigr)$ to the liquid viscosity
 $\nu_{\mathrm{liq}}=\frac{1}{3}\Bigl(\tau_{\mathrm{liq}}-\frac{1}{2}\Bigr)$ while phase changes
-accordingly.The surface tension in the framework of the binary liquid model is $\sqrt{\frac{8 k
-A}{9}}$.
+accordingly.
 
-\section{Lattice Boltzmann benchmark}
+{\color{red}
+While the lattice Boltzmann system has parameters as gas and liquid
+viscosities, the surface tension and etc., those parameters are not the representative and
+proportional quantities of the parameters in a physical system. The parameters of the lattice
+Boltzmann are connected with the physical world's parameters only through the non-dimensional
+numbers governing a physics of the problem. In this case it's a capillary number $\Ca$, which is
+obtained from the physical world and then it is matched through the lattice Boltzmann quantities.
+In fact, one should distinguish the lattice Boltzmann system and the physical system. The set of
+the fluid and phase equations \eqref{binary:fluid:system} is valid in the lattice Boltzmann space
+and in the physical domain. Therefore, one can substitute any quantity, i.e.
+$U_{\mathrm{bubble}}$, in the physical units or in the lattice Boltzmann units as soon as the
+capillary number is matched in the both of worlds.} 
+
+%\section{Lattice Boltzmann benchmark}
+\section{Approach to benchmark}
 To properly simulate and compare simulation results with the data
 published in the literature, one needs to design a numerical benchmark addressing
 the following challenges for the lattice Boltzmann method:
@@ -468,7 +493,7 @@ because of the periodicity of boundary conditions.
 Figure \ref{fig:benchmark:sketch} is a sketch of the geometry
 used for the benchmark.
 \begin{figure}
-\includegraphics[width=0.97\textwidth]{Figures/benchmark.eps}
+\includegraphics[width=0.97\textwidth]{Figures/benchmark_new.eps}
 \caption{The benchmark sketch. $\delta$ corresponds to film thickness. $\xi$ corresponds to the interface thickness. We take the microchannel length to be 15 times larger than its height.
 \label{fig:benchmark:sketch}}
 \end{figure}
@@ -490,7 +515,7 @@ In our simulations we approximate $U_{bubble}$ with the
 Poiseuille profile center velocity, which is given as:
 \begin{equation}
 \begin{aligned}
-U_{\mathrm{bubble}} \approx U_{\mathrm{liq}}=\frac{H_{\mathrm{eff}}^2}{8
+U_{\mathrm{bubble}} \approx \frac{H_{\mathrm{eff}}^2}{8
 \mu_{\mathrm{liq}}}\frac{\mathrm{d}P}{\mathrm{d}x}\\
 U_{\mathrm{bubble}}\approx
 \frac{{(N_y-2)}^2}{\frac{8}{6}(\tau_{\mathrm{liq}}-\frac{1}{2})}\frac{\mathrm{d}P}{\mathrm{d}
@@ -691,11 +716,12 @@ Poiseuille flow assumptions work reasonably well.
 
 {\color{red}
 Note that the initialization procedure is a good guide of designing the simulations. For example
-for the grid refinement, see Section \ref{section:grid:refinement}, we keep the same velocity
+for the grid refinement, Section \ref{section:grid:refinement}, we keep the same velocity
 $U_{\mathrm{bubble}}$ and $\Ca$. This implies the conservation of the quantity
 $H_{\mathrm{eff}}^2\frac{\mathrm{d}P}{\mathrm{d}x}=(N_y-2)^2\frac{\mathrm{d}P}{\mathrm{d}
-x } = \mathrm{const}$. For the designing capillary range simulations, we use a proportionality law
-to initialize body forces knowing results of just one simulation:
+x } = \mathrm{const}$. For the designing capillary range simulations, Section
+\ref{section:capillary:range}, we use a proportionality law to initialize body forces knowing
+results of just one simulation:
 \begin{equation}
 \begin{aligned}
 &\Ca_{\mathrm{lit}} \propto U_{\mathrm{bubble}}\\
@@ -705,8 +731,7 @@ to initialize body forces knowing results of just one simulation:
 \end{aligned}
 \end{equation}
 where the subscript ,,lit'' stands for the predicted capillary number
-\cite{giavedoni-numerical,heil-bretherton}. The grid number $N_y$ is not
-involved because all simulations are conducted on the same grid.
+\cite{giavedoni-numerical,heil-bretherton}. 
 }
 \subsection{Grid refinement}
 \label{section:grid:refinement}
@@ -810,7 +835,7 @@ $3375$&$227$&$0.0664$&$0.0026$&$0.355$&$450000$&$0.91$\\
 of size $N_x \times N_y$. $U_\mathrm{bubble}$ is the velocity of the interface at the fron tip of
 the bubble.  $5\xi$ is the interface thickness. $H_{\mathrm{film}}=\delta (N_y-2)$ is the size of
 the film in
-lattice Boltzmann units. $Ca=0.05$ was taken to initialize the simulation.
+lattice Boltzmann units. $\Ca=0.05$ was taken to initialize the simulation.
 \label{table:parameters:grid:refinement}}
 \end{table}
 
@@ -888,9 +913,9 @@ $\scriptstyle 0.0042$ & $\scriptstyle 0.0042$ & $\scriptstyle \mathrm{N/A}$ &$\s
 \mathrm{N/A}$\\
 \hline
 \end{tabularx}
-\caption{The parameters and results for wall gradient effects on the film thickness. $U_{bubble}$
-stands for the
-center bubble velocity. $\delta$ is the interface thickness. $\partial_n \phi$ is the phase
+\caption{The parameters and results for wall gradient effects on the film thickness.
+$U_{\mathrm{bubble}}$
+stands for the interface velocity. $\delta$ is the film thickness. $\partial_n \phi$ is the phase
 gradient near the wall responsible for hydrophilic and hydrophobic behavior. The results are
 calculated at the middle of the bubble after $200 000$ time iterations. $\Ca=0.05$ was taken to
 initialize the simulations.
@@ -928,15 +953,15 @@ smaller grids and larger gradients, all the capillary number simulations were
 performed on the same grid. To properly initialize the body force, the
 proportionality law was utilized. The forcing
 $6 \cdot 10^{-6}/16$ was chosen to obtain the predicted capillary
-number $0.05$. 
+number $0.05$.  
 The pressure gradient can be obtained through the capillary number
-ratio:
+ratio, Section \ref{section:init}:
 \begin{equation}
 \frac{\mathrm{d}P}{\mathrm{d} x}=6 \cdot 10^{-6}/16 \frac{\Ca_{\mathrm{lit}}}{0.05}
 \end{equation}
 The film thickness is initialized through the ratio of capillary numbers as well:
 \begin{equation*}
-w=12 \frac{\Ca_{\mathrm{lit}}}{0.05}
+12 \frac{\Ca_{\mathrm{lit}}}{0.05}
 \end{equation*}
 The results obtained after $2\cdot10^5$ steps are presented in Table
 \ref{table:parameters:capillary:number}. 
@@ -976,7 +1001,7 @@ the capillary number.\label{fig:capillary:comparison}}
 \begin{table}
 \begin{tabularx}{\textwidth}{|X|X|X|X|X|X|}
 \hline
-$Ca_{\mathrm{lit}}$&$\delta_{\mathrm{lit}}$&$\delta$&$U_{bubble}$&$Ca$&{\color{red}$Re$}\\
+$Ca_{\mathrm{lit}}$&$\delta_{\mathrm{lit}}$&$\delta$&$U_{\mathrm{bubble}}$&$Ca$&{\color{red}$Re$}\\
 \hline
 $0.03$&$0.04$&$0.040$&$0.0014$&$0.026$&$0.449$\\
 \hline
@@ -997,10 +1022,10 @@ $0.8$&$0.16$&$0.172$&$0.0559$&$0.989$&$16.960$\\
 \end{tabularx}
 \caption{The parameters and results for capillary number region simulations.
 $\delta_{\mathrm{lit}}$ is the film thickness with corresponding $\Ca_{\mathrm{lit}}$ taken from
-literature. $\delta_\mathrm{sim}$ is the simulation film thickness with corresponding $\Ca$.
-{\color{red}$U_{bubble}$ is the interface velocity at the center axis.} $\Ca$ is based on
-the measured center bubble velocity
-$U_{bubble}$.
+literature. $\delta$ is the simulation film thickness with corresponding $\Ca$.
+{\color{red}$U_{\mathrm{bubble}}$ is the interface velocity at the center axis.} $\Ca$ is based on
+the measured bubble tip velocity
+$U_{\mathrm{bubble}}$.
 \label{table:parameters:capillary:number}}
 \end{table}
 
