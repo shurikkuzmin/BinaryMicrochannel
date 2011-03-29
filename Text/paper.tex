@@ -154,7 +154,7 @@ Taylor/Bretherton flow in a micro-channel where elongated gas bubbles move throu
 thin liquid films between the bubbles and the channel walls. The numerical scheme has a diffuse
 interface, and a main focus of our work is to assess resolution requirements for correctly resolving
 the liquid film and bubble motion. The simulations are two-dimensional and span a capillary number
-range of $0.03$ to $0.8$ where the capillary number is based on the liquid’s dynamic viscosity, the
+range of $0.05$ to $1.0$ where the capillary number is based on the liquid’s dynamic viscosity, the
 velocity of the bubble, and the interfacial tension. The flow is driven by a body force, and
 periodic boundary conditions apply in the streamwise direction. We obtain grid independent results
 as long as the liquid film thickness is at least two times the width of the diffuse interface, with
@@ -301,7 +301,20 @@ One should acknowledge the works of \citet{pagonabarraga-fingers} on menisci
 in thin films for fingering phenomena. \citet{sehgal-microchannel} performed lattice Boltzmann
 simulations of two-dimensional channel flows for a relatively large capillary numbers, and
 found discrepancies with the classical Bretherton theory, which
-is limited to the low capillary number regime \cite{giavedoni-numerical}.
+is limited to the low capillary number regime \cite{giavedoni-numerical}. Authors didn't take into
+the account recent studies extending microchannel simulations for the capillary numbers
+beyond the Bretherton regime. Thus, limiting comparison with other established CFD methods. Author
+used the Shan-Chen model \cite{Shan-chen:extended} to simulate the multiphase behavior. It is also
+the continuous interface model, but the study of grid dependence is absent.
+
+{\color{red}
+Level set method is represented by a number of works \cite{fukugata-levelset,
+lakehal-micro, carlson-comparison}. While the bubble shapes and  were found in a good agreeement
+with the experiments, the range of studied bubble lengths is confined to $2-3$ channels diameters.
+Thus, the bubble radius changes significantly and cannot be used as classical Bretherton problem
+benchmark. However, the works provide insight to the bubble formation and small bubbles flow in the
+microchannels. Also, \citet{carlson-comparison} found a significant influence of the mutual bubbles
+motion on the flow patterns.} 
 
 Resolving the interface on a fine level for capillary numbers smaller than
 $0.003$ is computationally expensive even in the two-dimensional case
@@ -598,8 +611,10 @@ simulations. For the demonstration purposes we chose $\Ca=0.05$.
 thickness $\delta$. It can be done either by taking correlations from numerical simulations by
 \citet{heil-bretherton} and \citet{giavedoni-numerical} or by using the classical Bretherton
 correlation for small cappillary numbers $\delta=0.6687 \Ca^{2/3}$. In the case of $\Ca=0.05$, the 
-film thickness is taken from {\color{green} Fig.~\ref{fig:heil:planar}},
-  and for Reynolds number $40$ equals $0.06$.  
+film thickness is taken from correlations by \citet{heil-bretherton} 
+%{\color{green}
+%Fig.~\ref{fig:heil:planar}}
+, and for Reynolds number $40$ equals $0.06$.  
 \item[Grid choice] After pecifying the film thickness, one needs to choose the associate
 number of nodes to resolve the film thickness. Note that for paremeters indicated above the
 interface thickness is spread over approximately $5$ lattice units. The study of the interface
@@ -687,20 +702,20 @@ which
 %Even with an interface thickness of $62.5$ percent  of the
 %film thickness, one gets (in 2D) a memory
 %requirement of $345 \mathrm{MB}$. 
-\begin{figure}
-\includegraphics[width=0.97\textwidth]{Figures/giavedoni_planar.eps}
-\caption{\citet{giavedoni-numerical} gathered results across the
-literature for different capillary numbers (reprinted from \cite{giavedoni-numerical}). Results are
-scaled to the half-width of the
-channel. $h_{\infty}$ is the film thickness of air finger at
-the infinite distance from the front meniscus. \label{fig:giavedoni:planar}}
-\includegraphics[width=0.97\textwidth]{Figures/heil-planar.eps}
-\caption{\citet{heil-bretherton} performed simulations for different ranges of
-capillary numbers and Reynolds numbers (reprinted from \cite{heil-bretherton}). Results
-are scaled to the half-width of the channel. $h_{0}$ is the film thickness of air finger at
-the infinite distance from the front meniscus.
-\label{fig:heil:planar}}
-\end{figure}
+%\begin{figure}
+%\includegraphics[width=0.97\textwidth]{Figures/giavedoni_planar.eps}
+%\caption{\citet{giavedoni-numerical} gathered results across the
+%literature for different capillary numbers (reprinted from \cite{giavedoni-numerical}). Results are
+%scaled to the half-width of the
+%channel. $h_{\infty}$ is the film thickness of air finger at
+%the infinite distance from the front meniscus. \label{fig:giavedoni:planar}}
+%\includegraphics[width=0.97\textwidth]{Figures/heil-planar.eps}
+%\caption{\citet{heil-bretherton} performed simulations for different ranges of
+%capillary numbers and Reynolds numbers (reprinted from \cite{heil-bretherton}). Results
+%are scaled to the half-width of the channel. $h_{0}$ is the film thickness of air finger at
+%the infinite distance from the front meniscus.
+%\label{fig:heil:planar}}
+%\end{figure}
 
 Note that we base the initialization techniques on correlations for the
 capillary number and the body force. However, in the binary liquid framework
@@ -927,12 +942,14 @@ initialize the simulations.
 Next, we investigated the variation of the film thickness over the bubble length.
 The comparison for the thickness variation is presented in Fig.~\ref{fig:sehgal:bubble:length}.
 \begin{figure}
-\includegraphics[width=0.47\textwidth]{Figures/Bubble/bubble_sehgal.eps}\hfill
-\includegraphics[width=0.47\textwidth]{Figures/Bubble/bubble_length.eps}\\
+\includegraphics[width=0.5\textwidth]{Figures/Bubble/bubble_sehgal_new.eps}\hfill
+\includegraphics[width=0.5\textwidth]{Figures/Bubble/bubble_length_new.eps}\\
 \caption{A qualitative comparison for the film thickness across
-the bubble length. Left (courtesy of \citet{sehgal-microchannel}),
-right (present simulations); $x$ is scaled to $H_{\mathrm{eff}}$
-and increases in the flow direction.\label{fig:sehgal:bubble:length}}
+the bubble length. {\color{red} Left} (courtesy of \citet{sehgal-microchannel}),
+{\color{red} Right}  (present simulations); $x$ is scaled to $H_{\mathrm{eff}}$
+and increases in the flow direction.{\color{red} The data from
+\cite{sehgal-microchannel} was digitally acquired by the program ``Engauge Digitizer'' and scaled
+to compare with the present simulations.} \label{fig:sehgal:bubble:length}}
 \end{figure}
 One can see a qualitative agreement, i.e. the thickness increases towards the front meniscus and
 rapidly decreases towards the rear meniscus. This shape is sometimes referred as a "bullet"
@@ -942,8 +959,10 @@ shape.
 \subsection{Capillary number region}
 \label{section:capillary:range}
 The purpose of this section is to validate the correlations of
-\citet{giavedoni-numerical} in Fig. \ref{fig:giavedoni:planar} and
-\citet{heil-bretherton} in Fig. \ref{fig:heil:planar} for a range of capillary
+\citet{giavedoni-numerical} %in Fig. \ref{fig:giavedoni:planar} 
+and
+\citet{heil-bretherton} %in Fig. \ref{fig:heil:planar} 
+for a range of capillary
 numbers. Because of limited computational resources, we skip the
 small capillary numbers and make calculations for the range of capillary numbers $0.03-0.8$, which
 is a computationally reasonable task.  To be consistent with the previous sections, we choose the grid to be
@@ -995,7 +1014,10 @@ Fig. \ref{fig:capillary:comparison}).
 \caption{A comparison between simulation results and results of
 \citet{giavedoni-numerical} and \citet{heil-bretherton}. One can see a
 reasonable agreement. The plots depict the film thickness as a function of the
-the capillary number.\label{fig:capillary:comparison}}
+the capillary number. {\color{red} Data from \cite{giavedoni-numerical} was
+extracted with the help of ``Engauge Digital Discretizer software'', data from
+\citet{heil-bretherton} was extracted by hands using a set of curves involving interpolation and
+it's the reason for a data to exhibit a noisy trend.} \label{fig:capillary:comparison}}
 \end{figure}
 
 \begin{table}

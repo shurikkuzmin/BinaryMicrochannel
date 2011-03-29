@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 import subprocess
-import pylab
+#import pylab
 import numpy
 import math
  
@@ -167,7 +167,8 @@ def Analyze_Bubble():
     good=[0,1,2,3,4,5,6,7]
     good_value=[1,2,4]
     style=["b-.","r--","c."]
-    labels=[r'''$Ca='''+ca+r'''$''' for ca in numpy.array(capillary_theor[good_value],dtype=str)]
+    #labels=[r'''$Ca='''+ca+r'''$''' for ca in numpy.array(capillary_theor[good_value],dtype=str)]
+    labels=[]    
     #color=["b","r","c","y","b","g"]
     #style_diff=["b-","r:","c-.","y--","b^","g<"]
     
@@ -236,7 +237,7 @@ def Analyze_Bubble():
         delta_x=15.0/(len(thicknesses)-1)
         x=delta_x*numpy.arange(0,len(thicknesses))*float(len(thicknesses))/3000.0
         pylab.plot(x,thicknesses,style[counter],linewidth=3)
-
+        labels.append(r'''$Ca='''+str(ux[dims[0]/2,z2%dims[1]]*2.0/3.0/math.sqrt(8.0*0.04*0.04/9.0))[0:4]+r'''$''')
         os.chdir("../..")
     
     pylab.ylim(ymin=0.0,ymax=0.5)
@@ -245,7 +246,7 @@ def Analyze_Bubble():
     leg=pylab.legend(labels)
     legtext = leg.get_texts() # all the text.Text instance in the legend
     for text in legtext:
-        text.set_fontsize(30) 
+        text.set_fontsize(20) 
     #set(ltext, fontsize='large') # the legend text fontsize
 
     fig.subplots_adjust(left=0.15,bottom=0.15)  
@@ -259,8 +260,76 @@ def Analyze_Bubble():
     #pylab.xlim(xmax=15)
     pylab.savefig("bubble_length.eps",format="EPS",dpi=300)
 
+def smoothListGaussian(list,strippedXs=False,degree=2):  
+    window=degree*2-1  
+    weight=numpy.array([1.0]*window)  
+    weightGauss=[]  
+    for i in range(window):  
+        i=i-degree+1  
+        frac=i/float(window)  
+        gauss=1/(numpy.exp((4*(frac))**2))  
+        weightGauss.append(gauss)  
+    weight=numpy.array(weightGauss)*weight  
+    smoothed=[0.0]*(len(list)-window)  
+    for i in range(len(smoothed)):  
+        smoothed[i]=sum(numpy.array(list[i:i+window])*weight)/sum(weight)  
+    return smoothed  
 
+def smoothList(list,strippedXs=False,degree=5):  
+    smoothed=[0]*(len(list)-degree+1)  
+    for i in range(len(smoothed)):  
+        smoothed[i]=sum(list[i:i+degree])/float(degree)  
+    return smoothed  
 
+def Analyze_Sehgal_Bubble():
+    from numpy import genfromtxt
+    print os.getcwd()
+    style=["b-.","r--","c."]
+    #labels=[r'''$Ca='''+ca+r'''$''' for ca in numpy.array(capillary_theor[good_value],dtype=str)]
+    labels=[r'''$Ca='''+str(0.0113)+r'''$''',r'''$Ca='''+str(0.07)+r'''$''']   
+    #color=["b","r","c","y","b","g"]
+    #style_diff=["b-","r:","c-.","y--","b^","g<"]
+    
+    #fig=pylab.figure()
+    #low=[1509,1865,381]
+    #high=[2554,2900,1427]
+    
+    #ux=array['v'][0]
+    #center=array['phi'][ny[i]/2,:]
+
+    
+    arr=genfromtxt("Sehgal/ca00113and007.csv",delimiter=',')
+    
+    widths=[]
+    velocities=[]
+    fig=pylab.figure()
+    pylab.plot(arr[:,0]/16.0,arr[:,1]/2.0,'b-.',markersize=9,linewidth=3)
+    pylab.plot(arr[:,0]/16.0,arr[:,2]/2.0,'r--',markersize=9,linewidth=3)
+    #print len(arr[:,0])
+    #print len(smoothList(arr[:,1]))    
+    #pylab.plot(arr[:-4,0],smoothList(arr[:,1]),linewidth=3)    
+    pylab.ylim(ymin=0.0,ymax=0.5)
+    #pylab.xlim(xmax=5.1)
+
+    leg=pylab.legend(labels)
+    legtext = leg.get_texts() # all the text.Text instance in the legend
+    for text in legtext:
+        text.set_fontsize(20) 
+    #set(ltext, fontsize='large') # the legend text fontsize
+
+    fig.subplots_adjust(left=0.15,bottom=0.15)  
+    pylab.xticks(fontsize=20)
+    pylab.yticks(fontsize=20)
+    pylab.xlabel(r'''$x$''',fontsize=30)
+    pylab.ylabel(r'''$\delta$''',fontsize=30)
+    
+    #labels=[r'''$H_{eff}='''+str(value-2)+r'''$''' for value in ny]
+    #pylab.legend(["Simulations","Giavedoni","Heil"],loc=4)
+    #pylab.xlim(xmax=15)
+    pylab.savefig("bubble_sehgal_new.eps",format="EPS",dpi=300)
+    
+    
+    
 def Analyze_Velocities():
     print os.getcwd()
     ny=[102,127,152,177,202,227]
@@ -281,11 +350,157 @@ def Analyze_Velocities():
         print prof[len(prof)/2]
         os.chdir("../..")
 
+def Analyze_Vectors():
+    from PyNGL import Ngl
+    from numpy import genfromtxt
+    print os.getcwd()
+    capillary_theor=numpy.array([0.03,0.05,0.08,0.1,0.2,0.4,0.6,0.8])
+    capillary_str=numpy.array(["3","5","8","10","20","40","60","80"])
+ 
+    good=[0,1,2,3,4,5,6,7]
+    good_value=[4]
+    style=["b-.","r--"]
+    #labels=[r'''$Ca='''+ca+r'''$''' for ca in numpy.array(capillary_theor[good_value],dtype=str)]
+    labels=[]    
+    #color=["b","r","c","y","b","g"]
+    #style_diff=["b-","r:","c-.","y--","b^","g<"]
+    
+    #ux=array['v'][0]
+    #center=array['phi'][ny[i]/2,:]
 
+    for counter,value in enumerate(good_value):
+        dir_temp="Results/"+capillary_str[value]
+        os.chdir(dir_temp)
+        name="capillary200000.npz"
+        array=numpy.load(name)
+        thicknesses=[]
+        dims=array['phi'].shape        
+        ux=array['v'][0]
+        uy=array['v'][1]
+        phase=array['phi']
+        x,y=numpy.mgrid[0:dims[0],0:dims[1]]        
+
+        
+        center=array['phi'][dims[0]/2,:]
+           
+        z1 = numpy.min(numpy.where(center < 0.0))
+        z2 = numpy.max(numpy.where(center < 0.0))
+        if z1==0:
+            z2=numpy.min(numpy.where(center>0.0))+dims[0]
+            z1=numpy.max(numpy.where(center>0.0))
+        print z1,z2
+
+        positive=numpy.where(phase>0.0)
+        negative=numpy.where(phase<0.0)
+        large=numpy.where(numpy.logical_or(x<20,x>dims[0]-20))
+        #bounds=numpy.where(numpy.logical_and(y>z1-5,y<z2%dims[2]+10))
+        print z1,z2 #,bounds
+        #print y<z1-30
+        #x_short=x[::3,::25]*deltay
+        #y_short=y[::3,::25]*deltax
+        #[numpy.where(phase_numpy>0.0)]
+        ux=ux-ux[dims[0]/2,z2%dims[1]]        
+        #ux[negative]=None
+        #ux[large]=None
+        #vz_diff_mask[bounds]=None
+        
+        ux_mask=ux[::5,::100]
+        uy_mask=uy[::5,::100]
+        x_mask=x[::5,::100]
+        y_mask=y[::5,::100]
+
+        
+        #pylab.figure(figsize=(20,10))
+        #pylab.quiver(y_mask,x_mask,ux_mask,uy_mask,headwidth=6,minlength=0.1)
+        #pylab.contour(array['phi'],[0.0],linewidths=[3])
+        
+        wks_type = "eps"
+        wks = Ngl.open_wks(wks_type,"test")
+        resources = Ngl.Resources()
+     
+        #uvar = file.variables["U_GRD_6_ISBL"]
+        #vvar = file.variables["V_GRD_6_ISBL"]
+        #if hasattr(uvar,"units"):
+        #  resources.tiMainString = "GRD_6_ISBL (u,v " + uvar.units + ")"
+        #else:
+        #resources.tiMainString = "GRD_6_ISBL"
+        #if hasattr(uvar,"_FillValue"):
+        #    resources.vfMissingUValueV = uvar._FillValue
+        # if hasattr(vvar,"_FillValue"):
+        #    resources.vfMissingVValueV = vvar._FillValue
+   
+        resources.tiMainFont    = "Times-Roman"
+        resources.tiXAxisString = "streamlines"
+        resources.vpHeightF = 0.25 # Define height, width, and location of plot.
+        resources.vpWidthF  = 3*0.25
+        resources.nglFrame = False
+        
+        resources2=Ngl.Resources()
+        resources2.tiMainFont    = "Times-Roman"
+        resources2.tiXAxisString = "streamlines"
+        resources2.vpHeightF = 0.25 # Define height, width, and location of plot.
+        resources2.vpWidthF  = 3*0.25
+        resources2.nglFrame = False
+        
+        resources2.cnLineLabelsOn = False   # Turn off contour line labels.
+        #resources2.cnLinesOn      = False   # Turn off contour lines.
+        #resources2.cnFillOn       = True    # Turn on contour fill.
+
+        resources2.cnLevelSelectionMode = "ExplicitLevels"  # Select contour levels. 
+        resources2.cnMinLevelValF       = 0.0
+        #resources2.cnMaxLevelValF       = 0.001
+        #resources2.cnLevelSpacingF      = 0.0
+        resources2.cnLevelCount=1
+        resources2.cnLevels=[0.0]
+        
+        #plot = Ngl.streamline(wks,uvar[0,::2,::2],vvar[0,::2,::2],resources) 
+        #print vz_diff.shape
+        #print vy.shape
+        x,y=numpy.mgrid[0:dims[0],0:dims[1]]
+        #vx=numpy.sin(x)*numpy.sin(y)
+        #vy=numpy.cos(x)*numpy.cos(y)
+        plot=Ngl.streamline(wks,ux[::5,::50],uy[::5,::50],resources)
+        Ngl.contour(wks,phase[::5,::50],resources2)        
+        #plot=Ngl.streamline(wks,vx,vy,resources)
+        Ngl.end()
+        
+        print "Ya zdes'!"
+        #print thicknesses[((z1+z2)/2)%dims[1]-z1]        
+        #print numpy.std(thicknesses[300:-300])/thicknesses[((z1+z2)/2)%dims[1]-z1]        
+        #delta_x=15.0/(len(thicknesses)-1)
+        #x=delta_x*numpy.arange(0,len(thicknesses))*float(len(thicknesses))/3000.0
+        #pylab.plot(x,thicknesses,style[counter],linewidth=3)
+        #labels.append(r'''$Ca='''+str(ux[dims[0]/2,z2%dims[1]]*2.0/3.0/math.sqrt(8.0*0.04*0.04/9.0))[0:4]+r'''$''')
+        os.chdir("../..")
+    
+    #pylab.ylim(ymin=0.0,ymax=0.5)
+    #pylab.xlim(xmax=5.1)
+
+    #leg=pylab.legend(labels)
+    #legtext = leg.get_texts() # all the text.Text instance in the legend
+    #for text in legtext:
+    #    text.set_fontsize(20) 
+    ##set(ltext, fontsize='large') # the legend text fontsize
+
+    #fig.subplots_adjust(left=0.15,bottom=0.15)  
+    #pylab.xticks(fontsize=20)
+    #pylab.yticks(fontsize=20)
+    #pylab.xlabel(r'''$x$''',fontsize=30)
+    #pylab.ylabel(r'''$\delta$''',fontsize=30)
+    
+    #labels=[r'''$H_{eff}='''+str(value-2)+r'''$''' for value in ny]
+    #pylab.legend(["Simulations","Giavedoni","Heil"],loc=4)
+    #pylab.xlim(xmax=15)
+    #pylab.savefig("bubble_length.eps",format="EPS",dpi=300)
+
+        
+        
 if __name__=="__main__":
     
-    Analyze_Simulations()    
+    #Analyze_Simulations()    
     #Analyze_Velocities()
     #Run_Simulations()
     #Analyze_Bubble()
-    pylab.show()
+    #Analyze_Sehgal_Bubble()    
+    Analyze_Vectors()    
+ #   pylab.show()
