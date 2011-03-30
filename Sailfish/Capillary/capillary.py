@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 import subprocess
-#import pylab
+import pylab
 import numpy
 import math
  
@@ -122,7 +122,7 @@ def Analyze_Simulations():
 
     pylab.xlim(0.02,1.5)
     pylab.ylim(ymin=0.01)
-    numpy.savetxt("capillary.dat",zip(capillaries,widths))
+    numpy.savetxt("capillary.dat",zip(capillaries_real,widths_real))
     
     fig.subplots_adjust(left=0.15,bottom=0.15)  
     pylab.xticks(fontsize=20)
@@ -358,7 +358,7 @@ def Analyze_Vectors():
     capillary_str=numpy.array(["3","5","8","10","20","40","60","80"])
  
     good=[0,1,2,3,4,5,6,7]
-    good_value=[4]
+    good_value=[7]
     style=["b-.","r--"]
     #labels=[r'''$Ca='''+ca+r'''$''' for ca in numpy.array(capillary_theor[good_value],dtype=str)]
     labels=[]    
@@ -389,7 +389,7 @@ def Analyze_Vectors():
             z2=numpy.min(numpy.where(center>0.0))+dims[0]
             z1=numpy.max(numpy.where(center>0.0))
         print z1,z2
-
+        print "Capillary=",ux[dims[0]/2,z2%dims[1]]*2.0/3.0/math.sqrt(8.0*0.04*0.04/9.0)
         positive=numpy.where(phase>0.0)
         negative=numpy.where(phase<0.0)
         large=numpy.where(numpy.logical_or(x<20,x>dims[0]-20))
@@ -428,30 +428,55 @@ def Analyze_Vectors():
         #    resources.vfMissingUValueV = uvar._FillValue
         # if hasattr(vvar,"_FillValue"):
         #    resources.vfMissingVValueV = vvar._FillValue
-   
-        resources.tiMainFont    = "Times-Roman"
-        resources.tiXAxisString = "streamlines"
+        
+        
+        #resources.tiMainFont    = "Times-Roman"
+        #resources.tiMainOn=True
+        #resources.tiMainString="Ca=0.22 "
+           
+        #resources.tiXAxisString = "streamlines"
         resources.vpHeightF = 0.25 # Define height, width, and location of plot.
         resources.vpWidthF  = 3*0.25
+        resources.wkPaperSize="A5"
         resources.nglFrame = False
+        resources.vfXArray=numpy.linspace(0.0,15.0,len(ux[1,::50]))
+        resources.vfYArray=numpy.linspace(0.0,1.0,len(ux[::5,1]))
+        #resources.
+
+
+        
         
         resources2=Ngl.Resources()
-        resources2.tiMainFont    = "Times-Roman"
-        resources2.tiXAxisString = "streamlines"
+        #resources2.tiMainFont    = "Times-Roman"
+        #resources2.tiXAxisString = "streamlines"
+        #resources2.tiMainOn=True
+        #resources2.tiMainString="Ca=0.22"
+        
+        resources2.wkPaperSize="A5"
         resources2.vpHeightF = 0.25 # Define height, width, and location of plot.
         resources2.vpWidthF  = 3*0.25
         resources2.nglFrame = False
         
         resources2.cnLineLabelsOn = False   # Turn off contour line labels.
         #resources2.cnLinesOn      = False   # Turn off contour lines.
-        #resources2.cnFillOn       = True    # Turn on contour fill.
-
+        resources2.cnFillOn       = False    # Turn on contour fill.
+        resources2.cnInfoLabelOn   = False 
+  
+        
         resources2.cnLevelSelectionMode = "ExplicitLevels"  # Select contour levels. 
         resources2.cnMinLevelValF       = 0.0
         #resources2.cnMaxLevelValF       = 0.001
         #resources2.cnLevelSpacingF      = 0.0
         resources2.cnLevelCount=1
         resources2.cnLevels=[0.0]
+        #resources2.cnLineThicknesses=[3]
+        resources2.cnMonoLineThickness=True
+        resources2.cnLineThicknessF=3.0
+        
+        resources2.lbLabelBarOn=False
+        resources2.lbLabelsOn=False
+        resources2.sfXArray=numpy.linspace(0.0,15.0,len(ux[1,:]))
+        resources2.sfYArray=numpy.linspace(0.0,1.0,len(ux[:,1]))
         
         #plot = Ngl.streamline(wks,uvar[0,::2,::2],vvar[0,::2,::2],resources) 
         #print vz_diff.shape
@@ -460,7 +485,8 @@ def Analyze_Vectors():
         #vx=numpy.sin(x)*numpy.sin(y)
         #vy=numpy.cos(x)*numpy.cos(y)
         plot=Ngl.streamline(wks,ux[::5,::50],uy[::5,::50],resources)
-        Ngl.contour(wks,phase[::5,::50],resources2)        
+        #Ngl.contour(wks,phase[::5,::50],resources2)        
+        Ngl.contour(wks,phase,resources2)        
         #plot=Ngl.streamline(wks,vx,vy,resources)
         Ngl.end()
         
@@ -497,10 +523,10 @@ def Analyze_Vectors():
         
 if __name__=="__main__":
     
-    #Analyze_Simulations()    
+    Analyze_Simulations()    
     #Analyze_Velocities()
     #Run_Simulations()
     #Analyze_Bubble()
     #Analyze_Sehgal_Bubble()    
-    Analyze_Vectors()    
- #   pylab.show()
+    #Analyze_Vectors()    
+    pylab.show()

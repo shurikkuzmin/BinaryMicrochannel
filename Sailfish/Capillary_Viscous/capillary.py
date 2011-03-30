@@ -67,16 +67,29 @@ def Analyze_Simulations():
         #pylab.figure()
         name="capillary200000.npz"
         array=numpy.load(name)
-        prof=array['phi'][:,exam[i]]
+        dims=array['phi'].shape
         #x=numpy.arange(0.0,float(ny[i]))/ratio
         #pylab.imshow(array['phi'])
     
         if i in good:
             #pylab.plot(prof)
-            widths.append(Get_Zero(prof))
             vel=array['v'][0]
             vel_prof=vel[:,exam[i]]
-            velocities.append(vel_prof[len(vel_prof)/2])
+            center=array['phi'][dims[0]/2,:]
+             
+            
+            z1 = numpy.min(numpy.where(center < 0.0))
+            z2 = numpy.max(numpy.where(center < 0.0))
+            if z1==0:
+                z2=numpy.min(numpy.where(center>0.0))+dims[1]
+                z1=numpy.max(numpy.where(center>0.0))
+            print z1,z2
+ 
+            prof=array['phi'][:,((z1+z2)/2)%dims[1]]
+            widths.append(Get_Zero(prof))
+
+            
+            velocities.append(vel[dims[0]/2,z2%dims[1]])
         
         #pylab.plot(x[0:20],prof[0:20],color[i],linewidth=3)
         #pylab.plot(x,prof,style_diff[i],markersize=10,linewidth=3)

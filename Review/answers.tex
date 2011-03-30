@@ -7,6 +7,32 @@
 
 
 \begin{document}
+\section{Reviewer I}
+
+\textbf{Question:}
+\begin{quotation}
+The authors found that quite surprisingly at high viscosity ratio, the results are
+independent of any inertial effects. It is known that Lattice Boltzmann has some problem for high
+viscosity ratio binary fluids. It will be better if the authors provide some details how the high
+viscosity ratio is tackled in their LB code.
+\end{quotation}
+
+\textbf{Answer:} The reviewer is right that accuracy of the method deteriorate with the high
+viscosity ratio. However, the parameters we chose here as $\tau_{\mathrm{liq}}=3.5-7.5$ and with
+grids in the vertical direction as $N_y=202$ is sufficient to suppress effects. We have added all
+the necessary references in the text.
+
+\textbf{Question:}
+\begin{quotation}
+Figure 8 needs to redrawn. Also, there are some inconsistencies in other figures. Authors may
+want to review all the figures and ensure that they have uniform fonts, etc.
+\end{quotation}
+
+\textbf{Answer:} We redrawed all the curves. For the figure 8 the data was extracted from the
+figure and rescaled for the comparison reasons.
+
+\section{Reviewer II}
+
 \textbf{Question:}
 \begin{quotation}
 The main quantity that the paper focuses on is the thickness of the film between the bubbles and the
@@ -31,7 +57,7 @@ channel heights from the front bubble tip. This distance was shown sufficient fo
 film thickness to establish itself for the capillary number range $Ca<4$. We chose to measure
 the film thickness in the middle of the bubble, which is located at least at the distance of $2.5-3$
 channel heights from the front bubble tip.  Moreover, the film thickness examination, see Section
-\ref{section:film:thickness:variation}, shows that for the capillary range of interest, i.e.
+..., shows that for the capillary range of interest, i.e.
 $0.08\leq Ca \leq 1$, the standard deviation from the bubble middle film thickness is around $7$
  percent for small capillary numbers ($Ca=0.05$) and less than $1$ percent for larger ones
 ($Ca \geq 0.1$) at the distances ranging from one channel height from the rear tip upto one channel
@@ -235,7 +261,7 @@ denoted 5ξ in Table 1. The speed of the bubble is denoted Ububble in some place
 The variable Uin Equation 5 does not seem to be deﬁned.
 \end{quotation}
 
-\texbf{Answer:} We thoroughly corrected all the inconsistencies.
+\textbf{Answer:} We thoroughly corrected all the inconsistencies.
 
 \textbf{Question:}
 \begin{quotation}
@@ -303,7 +329,8 @@ be interesting if the Authors show some patterns of the ﬂow by plotting for in
 of velocity around the bubbles.
 \end{quotation}
 
-\textbf{Answer:} We added additional section which shows the change of flow pattern. 
+\textbf{Answer:} We added an additional paragraph which shows the change of flow pattern for the
+streamlines as it is indicated in literature.
 
 \textbf{Question:}
 \begin{quotation}
@@ -319,7 +346,34 @@ The Authors should discuss more their results (Sections 5-4, 5-5, 5-6). Did the 
 pressure drops at the front and rear interfaces of the bubbles?
 \end{quotation}
 
- 
+\textbf{Answer:} We added additional information about results to the corresponding sections. The
+pressure drop are not measured as they are influenced largely by Reynolds number which is beyond
+the scope of this work.
+
+\textbf{Question:}
+\begin{quotation}
+The Authors mention the shooting method. It is not clear if this method is really used or just
+mentioned as a part of the discussion.
+\end{quotation}
+
+\textbf{Answer:} This is a part of discussion to have a remedy for the velocity. The corresponding
+sentence is added.
+
+\textbf{Question:}
+\begin{quotation}
+It seems more appropriate to introduce the variables of the Bretherton’s problem as well as to plot
+Figure 1 elsewhere than in the Section ”Results”.
+\end{quotation}
+
+\textbf{Answer:} The corresponding figure for the classical Bretherton problem is added. We
+separate it from the numerical benchmark layout.
+
+\textbf{Question:}
+\begin{quotation}
+Minor corrections...
+\end{quotation}
+
+\textbf{Answer:} All the corrections are taken into the account.
 
 \bibliographystyle{unsrtnat}
 \bibliography{answers}
