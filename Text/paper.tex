@@ -82,6 +82,7 @@
 \journal{Chemical Engineering Journal}
 
 \newcommand{\Ca}{\mathrm{Ca}}
+\renewcommand{\Re}{\mathrm{Re}}
 \newcommand{\todo}[1]{{\color{red}#1}}
 
 \begin{document}
@@ -210,13 +211,13 @@ $\gamma$ is the interfacial tension between gas and liquid.
 \includegraphics[width=\textwidth]{Figures/benchmark_bretherton.eps}
 \caption{The classical Bretherton problem layout. The gas bubble
 propagates with the steady velocity $U_{\mathrm{bubble}}$ through the liquid media and deposits
-the film, where thickness to the height of the channel $H_{\mathrm{eff}}$ ratio is 
+the film, where the thickness to height of the channel $H_{\mathrm{eff}}$ ratio is 
 $\delta$.\label{fig:classical:bretherton}} 
 \end{figure}
 
 While there are many works which simulate the Bretherton problem by the boundary value approach
 \cite{ingham-plates,heil-bretherton}, those methods are of limited applicability for problems
-involving complex geometries, free interface motion, or for problems involving coalescence and/or
+involving complex geometries, free interface motion, or coalescence and/or
 droplet breakup. The continuous interface models are more flexible for those kinds of simulations.
 However, if the interface is smeared out over several grid nodes, the question of
 proper film resolution in comparison with the interface resolution arises.  This work is focused on
@@ -243,20 +244,18 @@ density. While the classical Bretherton problem is stated for gas and liquid, wh
 significantly
 different densities and viscosities, it was indicated \cite{bretherton} that inertia effects were
 negligible. Moreover, the results of \citet{giavedoni-numerical} and \citet{heil-bretherton} show
-{\color{red} insignificant} Reynolds number effects on the film thickness for a relatively wide
+{\color{red} insignificant} Reynolds number ($\Re$) effects on the film thickness for a relatively wide
 range of Reynolds
 numbers. 
 {\color{red} For example, \citet{giavedoni-numerical} suggested that the Reynolds number effects
-are negligible for $\Ca\leq0.05$ and have moderate changes for $\Ca>0.05$ in the range of Reynolds
-number from $0$ to $70$. Later on, \citet{heil-bretherton} extended results upto Reynolds number
-$300$. The indicate that while the influence of the established film thickness is insignificant
-($7$ percent from the film thickness measured at $Re=0$). However, the Reynolds number influence
-significantly the pressure distrubution and the flow field near the front bubble tip. In the present
-simulations the largest Reynolds number we achieve is less than $20$ and it allows to neglect 
-inertia effects.} 
-Therefore, the major governing parameter for microchannel Bretherton flows is not the density ratio,
+are negligible for $\Ca\leq0.05$ and have moderate impact for $\Ca>0.05$ in the range of Reynolds
+number from $0$ to $70$. Later on, \citet{heil-bretherton} extended these results up to
+$\Re = 300$. This indicates that while the Reynolds number influence on the established film thickness is insignificant
+($7$ percent from the film thickness measured at $\Re=0$), the pressure distribution and the flow field near the front bubble tip
+can be affected by changes in $\Re$.  Since in the present work we only deal with flows with $\Re < 20$, we can safely
+neglect any inertia effects and conclude that the major governing parameter for microchannel Bretherton flows is not the density ratio,
 but the
-viscosity ratio. Moreover, the results based on uniform density, as in the case of the LBM
+viscosity ratio}. Moreover, the results based on uniform density, as in the case of the LBM
 binary liquid model, are in good agreement with other simulations
 \cite{giavedoni-numerical,heil-bretherton} in which inertia effects were taken into account.
 
@@ -318,22 +317,23 @@ the lattice Boltzmann method. A thorough parametric study for this approach
 has not been done to the best of the authors' knowledge.
 
 One should acknowledge the work of \citet{pagonabarraga-fingers} on menisci
-in thin films for fingering phenomena. \citet{sehgal-microchannel} performed lattice Boltzmann
+in thin films for fingering phenomena, as well as the work of \citet{sehgal-microchannel} who
+performed lattice Boltzmann
 simulations of two-dimensional channel flows for relatively large capillary numbers, and
 found discrepancies with the classical Bretherton theory, which
-is limited to the low capillary number regime \cite{giavedoni-numerical}. These authors didn't take
+is limited to the low capillary number regime \cite{giavedoni-numerical}. These authors did not take
 into
-the account recent studies extending microchannel simulations for the capillary numbers
+account recent studies extending microchannel simulations for the capillary numbers
 beyond the Bretherton regime. Thus, the comparison with other established CFD methods is limited.
 \citeauthor{sehgal-microchannel} used the Shan-Chen model \cite{Shan-chen:extended} to simulate the
-multiphase behavior. It is also
-the continuous interface model, but the study of grid dependence is absent.
+multiphase behavior. The Shan-Chen model is also a
+continuous interface model, but the above-mentioned paper does not contain a study of grid dependence.
 
 {\color{red}
-Level set method is represented by a number of works \cite{fukugata-levelset,
-lakehal-micro, carlson-comparison}. While the bubble shapes  were found in a good agreeement
-with the experiments, the range of studied bubble lengths is confined to $2-3$ channels diameters.
-Thus, the bubble radius changes significantly and cannot be used as classical Bretherton problem
+The level set method is also represented by a number of works \cite{fukugata-levelset,
+lakehal-micro, carlson-comparison}. While the bubble shapes  were found to be in a good agreement
+with the experiments, the range of studied bubble lengths is confined to $2-3$ channel diameters.
+Thus, the bubble radius changes significantly and cannot be used as a classical Bretherton problem
 benchmark. However, the works provide insight to the bubble formation and to the way small bubbles
 flow in the
 microchannels.} 
@@ -358,8 +358,9 @@ F_i,&&\text{ collision step}\\
 \end{equation}
 where $f_i$ is the probability distribution function in the direction $\bm{c_i}$,
 {\color{red} $f_i^{eq}$ is the equilibrium probability distribution function}, $\omega$ is the
-relaxation parameter, and $F_i$ is the external force population.{\color{red} The force population
-is connected with the force and is implemented in the current work due to work \cite{guo}.} 
+relaxation parameter, and $F_i$ is the external force population. {\color{red} The force population
+is represents an texternal physical force and is implemented in the current work using the scheme
+outlined in \citet{guo}.} 
 
 The binary fluid LB model is
 based on a free-energy functional \cite{swift,landau}, and operates with two
@@ -439,13 +440,13 @@ $\nu_{\mathrm{liq}}=\frac{1}{3}\Bigl(\tau_{\mathrm{liq}}-\frac{1}{2}\Bigr)$ whil
 accordingly.
 
 {\color{red}
-While the lattice Boltzmann system has parameters as gas and liquid
-viscosities, the surface tension, etc., those parameters are not the representative and
+While the lattice Boltzmann system has parameters such as the surface tension, the gas and liquid
+viscosities, etc., those parameters are not the representative and
 proportional quantities of the parameters in a physical system. The parameters of the lattice
 Boltzmann are connected with the physical world's parameters only through the non-dimensional
-numbers governing the physics of the problem. In this case it is a capillary number $\Ca$ and a
+numbers governing the physics of the problem. In our case, these numbers are the capillary number $\Ca$ and the
 viscosity ratio $\frac{\mu_{\mathrm{liq}}}{\mu_{\mathrm{gas}}}$, which are
-obtained from the physical world and then they are matched through the lattice Boltzmann quantities.
+obtained from the physical world and then matched through the lattice Boltzmann quantities.
  The set of
 the fluid and phase equations \eqref{binary:fluid:system} is valid in the lattice Boltzmann space
 and in the physical domain. Therefore, one can substitute any quantity, i.e.
@@ -453,7 +454,7 @@ $U_{\mathrm{bubble}}$, in the physical units or in the lattice Boltzmann units a
 capillary number is the same in both worlds.} 
 
 %\section{Lattice Boltzmann benchmark}
-\section{Approach to benchmark}
+\section{Numerical benchmark procedure}
 To properly simulate and compare simulation results with the data
 published in the literature, one needs to design a numerical benchmark addressing
 the following challenges for the lattice Boltzmann method:
@@ -488,7 +489,7 @@ force and by
 pressure difference are small as far as the film
  thickness is concerned.  In this work we limit ourselves to the study
 of body force driven flows, because of their simplicity and better numerical stability. This
-implies that we can use the periodic boundary conditions in the streamwise direction. As soon as the
+implies that we can use periodic boundary conditions in the streamwise direction. As soon as the
 periodic boundary
 conditions are applied, not a single bubble but a bubble train is simulated. In this case one
 needs
@@ -556,7 +557,7 @@ x } ,
 \end{aligned}
 \end{equation}
 where $N_y$ is the number of nodes in the vertical direction. As will be discussed further, the
-effective channel width is defined as $H_{\mathrm{eff}}=N_y-2$ because of bounce-back nodes to
+effective channel width is defined as $H_{\mathrm{eff}}=N_y-2$ due to the use of bounce-back nodes to
 mimic no-slip conditions at the walls.
 For the Poiseuille profile one can estimate the body force (pressure gradient) through the
 capillary number and grid resolution:
@@ -567,12 +568,12 @@ capillary number and grid resolution:
 \end{aligned}
 \end{equation}
 In the simulations the body force (\ref{poiseuille:velocity:center}) causes the bubble
-velocity to differ from that implied by the Poiseuille relation because of the bubble presence in a
+velocity to differ from that implied by the Poiseuille relation because of the presence of a bubble in the
 flow. That is
-why an iteration procedure is needed to achieve the 
+why an iterative procedure is needed to achieve the 
 desired velocity and 
 capillary number. 
-However, the initialization body force as given by (\ref{poiseuille:velocity:center}) is a good
+However, the initial body force as given by (\ref{poiseuille:velocity:center}) is a good
 starting point. 
 
 After one calculates the parameters to run a simulation, one has to
@@ -637,7 +638,7 @@ film thickness is taken from correlations by \citet{heil-bretherton}
 , and for Reynolds number $40$ is in the range $0.06-0.07$.  
 \item[Grid choice] After specifying the film thickness, one needs to choose the associate
 number of nodes to resolve the film thickness. Note that for paremeters indicated above the
-interface thickness is spread over approximately $5$ lattice units. The study of the interface
+interface is spread over approximately $5$ lattice units. The study of the interface
 resolution to the film thickness, Section \ref{section:grid:refinement}, suggests to choose the
 film thickness to be $2-2.5$ times larger than the interface thickness. Therefore, we want to
   resolve $6\%$ of the whole channel width with $12$ lattice units.  Thus, the physical channel
@@ -663,7 +664,7 @@ viscosity dependent \cite{ginzburg-multireflection}.  The effective location of 
 wall for the
 multiphase models to the best authors' knowledge is not yet derived. Thus, the simulation grid size
 is $202\times 3000$. 
- \item[Velocity] The relaxation parameters are taken to be in the stable range for hte simulations.
+ \item[Velocity] The relaxation parameters are taken to be in the stable range for the simulations.
 In the present simulations the viscosity ratio is $\dfrac{\mu_{liq}}{\mu_{gas}}=10$ with the
 correspoding relaxation times $\tau_{liq}=2.5$ and $\tau_{gas}=0.7$. Given the viscosity of the
 liquid one can obtain the velocity of the bubble from the capillary number: 
@@ -793,11 +794,11 @@ reach the steady state. The grid was chosen as $202 \times 3000$. The body force
 10^{-6}$. The initial film thickness was taken as $12$ nodes. Table \ref{table:steady:state}
 summarizes the simulation results in terms of the film thickness in the middle of the bubble and the
 velocity of the interface. We can conclude it is enough to have $100000-300000$ iterations for
-bubble to approach the steady state.
+the bubble to approach the steady state.
 \begin{table}
 \begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|}
 \hline
-$N_\mathrm{iter}$&$\delta$&$U_{\mathrm{bubble}}$&{\color{red} $Re$}\\
+$N_\mathrm{iter}$&$\delta$&$U_{\mathrm{bubble}}$&{\color{red} $\Re$}\\
 \hline
 $10000$&$ 0.0655$&$0.0027$&$0.81$\\
 \hline
@@ -1062,7 +1063,7 @@ bubbles. In comparison with the axisymmetric circular geometry, for three-dimens
 microchannels \citet{heil-threedim} indicate the measurement of the film thickness at $5.5$
 channel heights from the front bubble tip. This distance was shown sufficient for the
 film thickness to establish itself for the capillary number range $\Ca<4$.
-\citet{giavedoni-numerical} showed that the film stabilizes at the distances as $2.6-4.0$ diameters
+\citet{giavedoni-numerical} showed that the film stabilizes at the distances of $2.6-4.0$ diameters
 from the front tip depending on the Reynolds number.  We chose to measure the film thickness in the
 middle of the bubble, which is located at least at a distance of $2.5-3$ channel heights from the 
 bubble tip. Moreover, the film thickness examination, see Section
@@ -1092,8 +1093,8 @@ Fig. \ref{fig:capillary:comparison}).
 reasonable agreement. The plots depict the film thickness as a function of the
 the capillary number. {\color{red} Data from \cite{giavedoni-numerical} was
 extracted with the help of ``Engauge Digitizer'', data from
-\citet{heil-bretherton} was extracted by hands using a set of curves involving interpolation and
-it's the reason for a data to exhibit a noisy trend.} \label{fig:capillary:comparison}}
+\citet{heil-bretherton} was extracted manuallys using a set of curves involving interpolation and
+is the reason while the data exhibits a noisy trend.} \label{fig:capillary:comparison}}
 \end{figure}
 
 \begin{table}
@@ -1168,7 +1169,7 @@ BGK collision operator used in the present scheme has residual error accuracy pr
 to $\Bigl(\tau-\frac{1}{2}\Bigr)^2$. That means that by increasing the viscosity one reduces the
 spatial
 accuracy of the method. To avoid this one needs to use advanced formulations of the LBM collision
-operator, as two-relaxation-times (TRT) and multiple-relaxation-times (MRT) collision operators
+operator, such as two-relaxation-times (TRT) and multiple-relaxation-times (MRT) collision operators
 \cite{ginzburg-main}. Although TRT and MRT collisions operators are studied for simple
 hydrodynamics solutions, their application to complex fluid flows is sparse and not studied
 well.
