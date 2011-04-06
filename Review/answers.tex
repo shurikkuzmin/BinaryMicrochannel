@@ -17,7 +17,7 @@ viscosity ratio binary fluids. It will be better if the authors provide some det
 viscosity ratio is tackled in their LB code.
 \end{quotation}
 
-\textbf{Answer:} The reviewer is right that accuracy of the method deteriorate with the high
+\textbf{Answer:} The reviewer is right that accuracy of the method deteriorates with the high
 viscosity ratio. However, the parameters we chose here as $\tau_{\mathrm{liq}}=3.5-7.5$ and with
 grids in the vertical direction as $N_y=202$ is sufficient to suppress effects. We have added all
 the necessary references in the text, lines $481-491$.
@@ -29,7 +29,7 @@ want to review all the figures and ensure that they have uniform fonts, etc.
 \end{quotation}
 
 \textbf{Answer:} We redrew all the figures. For the figure 8 the data was extracted from the
-figure and rescaled for the comparison reasons.
+figure and rescaled for comparison reasons.
 
 \section{Reviewer II}
 
@@ -118,7 +118,7 @@ The use of the variable $Ca_{lit}$ and the calculation of the corresponding pres
 estimations of the body force to apply and of the film thickness to choose grid resolution. The
 presentation
 of the corresponding procedure is repeated twice in Section 5-1 for $Ca=0.005$ and $Ca=0.05$. It is
-again described in a diﬀerent way in Section 5-4. Similar equations for the calculation of the
+again described in a different way in Section 5-4. Similar equations for the calculation of the
 pressure
 gradient are thus given in Equations 6, 14 and 16. The Authors should summarize these equations
 into one unless they explain their differences. In fact, it would probably be straightforward not to
@@ -129,7 +129,8 @@ say they control and impose directly the body force without describing all the e
 
 \textbf{Answer:} Thank you for the suggestion. We agree that there is redundant information
 about initialization and this was taken into account by reducing repetitive text and
-introducing step-by-step explations, see Section about initialization (lines 259-305). We also added
+introducing step-by-step explanations, see Section about initialization (lines $259-305$). We also
+added
 the
 recommendations for controlling parameters in the same section.  The
 dimensionalization of the problem and proper benchmarking is quite difficult in the lattice
@@ -150,11 +151,12 @@ gradient with the axisymmetric assumption instead of a Hele-Shaw flow (factor 1/
 in Equation 5).
 \end{quotation}
 
-\textbf{Answer:} The factor $1/8$ is taken for the maximum velocity for the Poiseille flow between
-plates. Our assumption that the bubble travels with the constant velocity which equals to the
+\textbf{Answer:} The factor $1/8$ in Eq. (5) is taken for the maximum velocity for the Poiseille
+flow between
+plates. Our assumption is that the bubble travels with the constant velocity which equals to the
 maximum velocity of the Poiseuille profile between plates. Factor $1/12$ comes from the averaging
 of the flow rate. However, bubble moves faster than the liquid, i.e. the average liquid velocity.
-That's why the factor $1/8$ was chosen. The simulations show that factor $1/8$ works reasonably
+That is why the factor $1/8$ was chosen. The simulations show that factor $1/8$ works reasonably
 well.
 
 \textbf{Question:}
@@ -175,8 +177,9 @@ its
 introduction in line 107.
 \end{quotation}
 
-\textbf{Answer:} We wrote an additional paragraph emphasizing the connection of the physical world
-parameters with the lattice Botlzmann parameters (lines $149-160$). As well more explanations are
+\textbf{Answer:} We wrote an additional paragraph emphasizing the connection of the
+physical parameters with the lattice Botlzmann parameters (lines $149-160$). As well more
+explanations are
 put towards the
 interface surface tension description (lines $136-139$). The reference to the
 continuity and the Navier-Stokes equations are added (lines $140-143$). The equation (2) is not
@@ -298,7 +301,7 @@ be interesting if the Authors show some patterns of the flow by plotting for ins
 of velocity around the bubbles.
 \end{quotation}
 
-\textbf{Answer:} We added a small steady-state study (lines $334-341$). We added an additional
+\textbf{Answer:} We added a steady-state study (lines $334-341$). We added an additional
 paragraph which shows the change of flow pattern for the
 streamlines as it is indicated in literature (lines $463-471$, Figure 8).
 
